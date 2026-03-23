@@ -40,3 +40,8 @@ body {
 .nav a:hover {
     color: #07393C;
 }
+
+.main {
+    color: #0A090C;
+    padding: 20px;
+}

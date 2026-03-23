@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Disabilities in Education</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/formstyling.css">
 </head>
 <body>
     <div class="content">
@@ -23,8 +24,89 @@
         </div>
         <div class="main">
             <h2>Adding new Student Record</h2>
-            <p>This page is for adding new student records to the system.</p>
+            <form>
+                <div class="form-group">
+                    <label class="form-label" for="studentFirstName">Student First Name:</label>
+                    <input class="form-input" type="text" id="studentFirstName" name="studentFirstName" placeholder="Joshua" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="studentLastName">Last Name:</label>
+                    <input class="form-input" type="text" id="studentLastName" name="studentLastName" placeholder="Sheridan">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="studentDOB">Date of Birth:</label>
+                    <input class="form-input" type="date" id="studentDOB" name="studentDOB" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="studentEmail">Email:</label>
+                    <input class="form-input" type="email" id="studentEmail" name="studentEmail" placeholder="jsheridan@qub.ac.uk" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="studentEmergencyContact">Emergency Phone Number: </label>
+                    <input class="form-input" type="tel" id="studentEmergencyContact" name="studentEmergencyContact" placeholder="07493287166" required>
+                </div>
+
+                <input type="submit" class="form-btn">
+            </form>
+
+            <div class="message" id="output"></div>
+            
         </div>
     </div>
+
+    <script src="js/useSQL.js"></script>
+    <script src="js/validation.js"></script>
+    <script>
+        const showMessage = (text, type) => {
+            const output = document.getElementById('output');
+            output.textContent = text;
+            output.className = `message ${type}`;
+        }
+
+        let form = document.querySelector('form');
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            let studentFirstName = document.getElementById('studentFirstName').value;
+            let studentLastName = document.getElementById('studentLastName').value;
+            let studentDOB = document.getElementById('studentDOB').value;
+            let studentEmail = document.getElementById('studentEmail').value;
+            let studentEmergencyContact = document.getElementById('studentEmergencyContact').value;
+
+            // waiting for database to be set up before i can add data to it.  for now just print to console.
+            const student = {
+                firstname: studentFirstName,
+                lastname: studentLastName,
+                dob: studentDOB,
+                email: studentEmail,
+                emergencyContact: studentEmergencyContact
+            }
+
+            const validationMessage = validateStudent(student);
+
+            if (validationMessage){
+                showMessage(validationMessage, 'error');
+            }
+
+            const sql = `
+            INSERT INTO student (firstName, lastName, dob, email, emergencyContact)
+            VALUES (
+                    '${escapeSql(studentFirstName)}', 
+                    '${escapeSql(studentLastName)}', 
+                    '${escapeSql(studentDOB)}', 
+                    '${escapeSql(studentEmail)}', 
+                    '${escapeSql(studentEmergencyContact)}'
+                )
+            `;
+
+            const result = await runQuery(sql);
+
+        })
+    </script>
 </body>
 </html>
