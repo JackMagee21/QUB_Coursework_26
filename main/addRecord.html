@@ -57,6 +57,7 @@
 
     <script src="js/useSQL.js"></script>
     <script src="js/validation.js"></script>
+    <script src="js/saveLocalVars.js"></script>
     <script>
 
         const showMessage = (text, type) => {
@@ -90,6 +91,7 @@
                 showMessage(validationMessage, 'error');
             } else {
                 console.log(AddStudentToTable(student));
+                clearLocalValues();
             }
 
         })
