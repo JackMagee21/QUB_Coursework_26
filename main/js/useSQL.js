@@ -21,3 +21,22 @@ const runQuery = async (sql) => {
 const escapeSql = (value) => {
     return value.replace(/'/g, "''");
 }
+
+const AddStudentToTable = (student) => {
+    const sql = `
+        INSERT INTO student (firstName, lastName, dob, email, emergencyContact)
+        VALUES (
+            '${escapeSql(student.firstName)}', 
+            '${escapeSql(student.lastName)}', 
+            '${escapeSql(student.dob)}', 
+            '${escapeSql(student.email)}', 
+            '${escapeSql(student.emergencyContact)}'
+        )
+    `;
+
+    /*
+    Update this hopefully to fit the outcome of the database ( will change )
+    */
+    runQuery(sql);
+    return "Student successfully added!";
+}
