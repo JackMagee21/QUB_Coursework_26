@@ -61,3 +61,30 @@ h2 {
     color: #008631;
     border-color: #008631;
 }
+
+.checkbox-group {
+    display: inline-block;
+    text-align: center;
+}
+
+#checkbox-container {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+
+.checkbox-group {
+    display: inline-block;
+    text-align: center;
+}
+
+#checkbox-container {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 10px;
+}
