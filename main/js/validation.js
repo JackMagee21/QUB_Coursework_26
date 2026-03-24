@@ -36,8 +36,9 @@ const validateStudent = (student) => {
     }
 
     if (!emergencyContact) {
-        return "Emergency phone number is required.";
+        return "Emergency contact phone number is required.";
     }
+
 
     if (!/^\d{11}$/.test(String(emergencyContact))) {
         return "Emergency phone number must be a valid 11 digit number.";

@@ -1,6 +1,8 @@
 table {
 	border-collapse: collapse;
     font-family: Tahoma, Geneva, sans-serif;
+	width: 90%;
+	margin: 5px 5%;
 }
 
 table td {

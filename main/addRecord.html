@@ -43,18 +43,134 @@
                     <input class="form-input" type="email" id="studentEmail" name="studentEmail" placeholder="jsheridan@qub.ac.uk" required>
                 </div>
 
-            <div class="checkbox-group">
-              <label for="depression" class="control control--checkbox"
-                >Depression
-                <input
-                  type="checkbox"
-                  id="depression"
-                  name="depression"
-                  value="Depression"
-                />
-                <div class="control__indicator"></div>
-              </label>
+                <div class="form-group">
+                  <label for="emergencyContact" class="form-label">Emergency Contact Phone Number:</label>
+                  <input type="text" class="form-input" id="emergencyContact" name="emergencyContact" placeholder="12345678901" required>
+                </div>
+
+            <div class="form-group" id="checkbox-container">
+              <div class="checkbox-group">
+                <label for="paraplegia" class="control control--checkbox"
+                  >Paraplegia
+                  <input
+                    type="checkbox"
+                    id="paraplegia"
+                    name="paraplegia"
+                    value="Paraplegia"
+                  />
+                  <div class="control__indicator"></div>
+                </label>
+              </div>
+              <div class="checkbox-group">
+                <label for="arthritis" class="control control--checkbox"
+                  >Arthritis
+                  <input
+                    type="checkbox"
+                    id="arthritis"
+                    name="arthritis"
+                    value="Arthritis"
+                  />
+                  <div class="control__indicator"></div>
+                </label>
+              </div>
+              <div class="checkbox-group">
+                <label for="blindness" class="control control--checkbox"
+                  >Blindness
+                  <input
+                    type="checkbox"
+                    id="blindness"
+                    name="blindness"
+                    value="Blindness"
+                  />
+                  <div class="control__indicator"></div>
+                </label>
+              </div>
+              <div class="checkbox-group">
+                <label for="partialSight" class="control control--checkbox"
+                  >Partial Sight
+                  <input
+                    type="checkbox"
+                    id="partialSight"
+                    name="partialSight"
+                    value="Partial Sight"
+                  />
+                  <div class="control__indicator"></div>
+                </label>
+              </div>
+              <div class="checkbox-group">
+                <label for="deafness" class="control control--checkbox"
+                  >Deafness
+                  <input
+                    type="checkbox"
+                    id="deafness"
+                    name="deafness"
+                    value="Deafness"
+                  />
+                  <div class="control__indicator"></div>
+                </label>
+              </div>
+              <div class="checkbox-group">
+                <label for="hardOfHearing" class="control control--checkbox"
+                  >Hard of Hearing
+                  <input
+                    type="checkbox"
+                    id="hardOfHearing"
+                    name="hardOfHearing"
+                    value="Hard of Hearing"
+                  />
+                  <div class="control__indicator"></div>
+                </label>
+              </div>
+              <div class="checkbox-group">
+                <label for="dyslexia" class="control control--checkbox"
+                  >Dyslexia
+                  <input
+                    type="checkbox"
+                    id="dyslexia"
+                    name="dyslexia"
+                    value="Dyslexia"
+                  />
+                  <div class="control__indicator"></div>
+                </label>
+              </div>
+              <div class="checkbox-group">
+                <label for="adhd" class="control control--checkbox"
+                  >ADHD
+                  <input
+                    type="checkbox"
+                    id="adhd"
+                    name="adhd"
+                    value="ADHD"
+                  />
+                  <div class="control__indicator"></div>
+                </label>
+              </div>
+              <div class="checkbox-group">
+                <label for="anxiety" class="control control--checkbox"
+                  >Anxiety Disorder
+                  <input
+                    type="checkbox"
+                    id="anxiety"
+                    name="anxiety"
+                    value="Anxiety Disorder"
+                  />
+                  <div class="control__indicator"></div>
+                </label>
+              </div>
+              <div class="checkbox-group">
+                <label for="depression" class="control control--checkbox"
+                  >Depression
+                  <input
+                    type="checkbox"
+                    id="depression"
+                    name="depression"
+                    value="Depression"
+                  />
+                  <div class="control__indicator"></div>
+                </label>
+              </div>
             </div>
+
           </div>
 
           <input type="submit" class="form-btn" />
@@ -106,7 +222,7 @@
                 showMessage(validationMessage, 'error');
             } else {
                 console.log(AddStudentToTable(student));
-                clearLocalValues();
+                clearLocalValues
             }
 
         })
