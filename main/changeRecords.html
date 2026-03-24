@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Disabilities in Education</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/formstyling.css">
+    <link rel="stylesheet" href="css/tableStyling.css">
 </head>
 <body>
     <div class="content">
@@ -23,8 +25,203 @@
         </div>
         <div class="main">
             <h2>Editing Student Details</h2>
-            <p>This page is for editing existing student records in the system.</p>
+
+            <div id="table-output"></div>
+
+            <h2>Edit Selected Record</h2>
+
+            <p id="selectedStudentText" class="muted">Choose a student from the table first.</p>
+
+            <form id="edit-form">
+                <div class="form-group">
+                    <label class="form-label" for="studentName">Name</label>
+                    <input class="form-input" type="text" id="studentFirstName" name="studentName" placeholder="First Name" required>
+                    <input class="form-input" type="text" id="studentLastName" name="studentName" placeholder="Last Name" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="studentDOB">Date of Birth:</label>
+                    <input class="form-input" type="date" id="studentDOB" name="studentDOB" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="studentEmail">Email:</label>
+                    <input class="form-input" type="email" id="studentEmail" name="studentEmail" placeholder="jsheridan@qub.ac.uk" required>
+                </div>
+
+            <div class="form-group" id="checkbox-container">
+              <div class="checkbox-group">
+                <label for="paraplegia" class="control control--checkbox"
+                  >Paraplegia
+                  <input
+                    type="checkbox"
+                    id="paraplegia"
+                    name="paraplegia"
+                    value="Paraplegia"
+                  />
+                  <div class="control__indicator"></div>
+                </label>
+              </div>
+              <div class="checkbox-group">
+                <label for="arthritis" class="control control--checkbox"
+                  >Arthritis
+                  <input
+                    type="checkbox"
+                    id="arthritis"
+                    name="arthritis"
+                    value="Arthritis"
+                  />
+                  <div class="control__indicator"></div>
+                </label>
+              </div>
+              <div class="checkbox-group">
+                <label for="blindness" class="control control--checkbox"
+                  >Blindness
+                  <input
+                    type="checkbox"
+                    id="blindness"
+                    name="blindness"
+                    value="Blindness"
+                  />
+                  <div class="control__indicator"></div>
+                </label>
+              </div>
+              <div class="checkbox-group">
+                <label for="partialSight" class="control control--checkbox"
+                  >Partial Sight
+                  <input
+                    type="checkbox"
+                    id="partialSight"
+                    name="partialSight"
+                    value="Partial Sight"
+                  />
+                  <div class="control__indicator"></div>
+                </label>
+              </div>
+              <div class="checkbox-group">
+                <label for="deafness" class="control control--checkbox"
+                  >Deafness
+                  <input
+                    type="checkbox"
+                    id="deafness"
+                    name="deafness"
+                    value="Deafness"
+                  />
+                  <div class="control__indicator"></div>
+                </label>
+              </div>
+              <div class="checkbox-group">
+                <label for="hardOfHearing" class="control control--checkbox"
+                  >Hard of Hearing
+                  <input
+                    type="checkbox"
+                    id="hardOfHearing"
+                    name="hardOfHearing"
+                    value="Hard of Hearing"
+                  />
+                  <div class="control__indicator"></div>
+                </label>
+              </div>
+              <div class="checkbox-group">
+                <label for="dyslexia" class="control control--checkbox"
+                  >Dyslexia
+                  <input
+                    type="checkbox"
+                    id="dyslexia"
+                    name="dyslexia"
+                    value="Dyslexia"
+                  />
+                  <div class="control__indicator"></div>
+                </label>
+              </div>
+              <div class="checkbox-group">
+                <label for="adhd" class="control control--checkbox"
+                  >ADHD
+                  <input
+                    type="checkbox"
+                    id="adhd"
+                    name="adhd"
+                    value="ADHD"
+                  />
+                  <div class="control__indicator"></div>
+                </label>
+              </div>
+              <div class="checkbox-group">
+                <label for="anxiety" class="control control--checkbox"
+                  >Anxiety Disorder
+                  <input
+                    type="checkbox"
+                    id="anxiety"
+                    name="anxiety"
+                    value="Anxiety Disorder"
+                  />
+                  <div class="control__indicator"></div>
+                </label>
+              </div>
+              <div class="checkbox-group">
+                <label for="depression" class="control control--checkbox"
+                  >Depression
+                  <input
+                    type="checkbox"
+                    id="depression"
+                    name="depression"
+                    value="Depression"
+                  />
+                  <div class="control__indicator"></div>
+                </label>
+              </div>
+          </div>
+
+          <input type="submit" class="form-btn" />
+        </form>
+
+        <div class="message" id="output"></div>
         </div>
     </div>
+
+    <script src="js/useSQL.js"></script>
+    <script src="js/validation.js"></script>
+    <script src="js/saveLocalVars.js"></script>
+    <script>
+        let selectedStudentID = null;
+
+        const showMessage = (text, type) => {
+          const output = document.querySelector("#output");
+          output.textContent = text;
+          output.className = `message ${type}`;
+        };
+
+        const clearMessage = () => {
+          const output = document.querySelector("#output");
+          output.textContent = "";
+          output.className = "message";
+        };
+
+        const resetForm = () => {
+            const form = document.querySelector("#edit-form")
+            const selectedStudentText = document.querySelector("#selectedStudentText");
+            
+            form.reset();
+
+            selectedStudentID = null;
+            selectedStudentText.textContent = "Choose a student from the table first.";
+        }
+
+        const selectStudent = (student) => {
+            const selectedStudentText = document.querySelector("#selectedStudentText");
+
+            selectedStudentID = Number(student.Student_ID);
+            document.querySelector("#studentID").value = student.studentID;
+            document.querySelector("#studentFirstName").value = student.Forename;
+            document.querySelector("#studentLastName").value = student.Surname;
+            document.querySelector("#studentDOB").value = student.Date_of_Birth;
+            document.querySelector("#studentEmail").value = student.Email;
+            // Check the checkboxes that match the student's disabilities.
+            
+            document.querySelectorAll("input[type=checkbox]").forEach((checkbox) => {
+                checkbox.checked = student.Disabilities.includes(checkbox.value);
+            });
+        }   
+    </script>
 </body>
 </html>
