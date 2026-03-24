@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Disabilities in Education</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/tableStyling.css">
 </head>
 <body>
     <div class="content">
@@ -22,9 +23,45 @@
             </p>
         </div>
         <div class="main">
-            <h2>Reading Student Records</h2>
-            <p>This page is for viewing existing student records in the system.</p>
+            <h2>Student Records</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Student ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Emergency Contact</th>
+
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- Student records will be dynamically inserted here -->
+                </tbody>
+            </table>
         </div>
     </div>
+
+    <script src="js/useSQL.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const sql = "SELECT * FROM Student;";
+            const result = await runQuery(sql);
+            const students = result.data;
+
+            console.log(students);
+
+            for (student of students){
+                let tableBody = document.querySelector('#tableBody');
+                let newRow = tableBody.insertRow();
+                newRow.insertCell(0).textContent = student.Student_ID;
+                newRow.insertCell(1).textContent = student.Forename + " " + student.Surname;
+                newRow.insertCell(2).textContent = student.Email;
+                newRow.insertCell(3).textContent = student.Emergency_Contact;
+            }
+        });
+
+        
+
+    </script>
 </body>
 </html>

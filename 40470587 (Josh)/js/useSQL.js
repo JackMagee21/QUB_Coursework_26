@@ -1,6 +1,6 @@
 const runQuery = async (sql) => {
     try{
-        const url = "http://jsheridan12.webhosting1.eeecs.qub.ac.uk/dbConnector.php";
+        const url = "https://jsheridan12.webhosting1.eeecs.qub.ac.uk/courseworkDbConnector.php";
 
         const response = await fetch(url, {
             method: "POST", 
