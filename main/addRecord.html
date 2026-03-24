@@ -1,97 +1,203 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Disabilities in Education</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/formstyling.css">
-</head>
-<body>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/formstyling.css" />
+  </head>
+  <body>
     <div class="content">
-        <div class="banner">
-            <h1>Disabilities in Education</h1>
-            <p>The effects on learning and development for students with disabilities</p>
-        </div>
-        <div class="nav">
-            <p>
-                <a href="index.html">Home</a> |
-                <a href="addRecord.html">Add new Student Record</a> |
-                <a href="readRecords.html">Read Student Records</a> |
-                <a href="changeRecords.html">Edit/Delete Student Details</a> | 
-                <a href="reports.html">Reports</a>
-            </p>
-        </div>
-        <div class="main">
-            <h2>Adding new Student Record</h2>
-            <form>
-                <div class="form-group">
-                    <label class="form-label" for="studentName">Name</label>
-                    <input class="form-input" type="text" id="studentFirstName" name="studentName" placeholder="First Name" required>
-                    <input class="form-input" type="text" id="studentLastName" name="studentName" placeholder="Last Name" required>
-                </div>
+      <div class="banner">
+        <h1>Disabilities in Education</h1>
+        <p>
+          The effects on learning and development for students with disabilities
+        </p>
+      </div>
+      <div class="nav">
+        <p>
+          <a href="index.html">Home</a> |
+          <a href="addRecord.html">Add new Student Record</a> |
+          <a href="readRecords.html">Read Student Records</a> |
+          <a href="changeRecords.html">Edit/Delete Student Details</a> |
+          <a href="reports.html">Reports</a>
+        </p>
+      </div>
+      <div class="main">
+        <h2>Adding new Student Record</h2>
+        <form>
+          <div class="form-group">
+            <label class="form-label" for="studentName">Name</label>
+            <input
+              class="form-input"
+              type="text"
+              id="studentFirstName"
+              name="studentName"
+              placeholder="First Name"
+              required
+            />
+            <input
+              class="form-input"
+              type="text"
+              id="studentLastName"
+              name="studentName"
+              placeholder="Last Name"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="studentDOB">Date of Birth:</label>
+            <input
+              class="form-input"
+              type="date"
+              id="studentDOB"
+              name="studentDOB"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="studentEmail">Email:</label>
+            <input
+              class="form-input"
+              type="email"
+              id="studentEmail"
+              name="studentEmail"
+              placeholder="jsheridan@qub.ac.uk"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="studentEmergencyContactName"
+              >Emergency Contact Name:
+            </label>
+            <input
+              class="form-input"
+              type="text"
+              id="studentEmergencyContactName"
+              name="studentEmergencyContactName"
+              placeholder="John Doe"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="studentEmergencyContactPNum"
+              >Emergency Phone Number:
+            </label>
+            <input
+              class="form-input"
+              type="tel"
+              id="studentEmergencyContactPNum"
+              name="studentEmergencyContactPNum"
+              placeholder="07493287166"
+              required
+            />
+          </div>
 
-                <div class="form-group">
-                    <label class="form-label" for="studentDOB">Date of Birth:</label>
-                    <input class="form-input" type="date" id="studentDOB" name="studentDOB" required>
-                </div>
+          <p class="form-label">Disabilities:</p>
+          <div class="form-group" id="checkbox-container">
 
-                <div class="form-group">
-                    <label class="form-label" for="studentEmail">Email:</label>
-                    <input class="form-input" type="email" id="studentEmail" name="studentEmail" placeholder="jsheridan@qub.ac.uk" required>
-                </div>
+            <div class="checkbox-group">
+                <label for="paraplegia" class="form-label">Paraplegia</label>
+                <input type="checkbox" id="paraplegia" name="paraplegia" value="Paraplegia">
+            </div> 
 
-                <div class="form-group">
-                    <label class="form-label" for="studentEmergencyContact">Emergency Phone Number: </label>
-                    <input class="form-input" type="tel" id="studentEmergencyContact" name="studentEmergencyContact" placeholder="07493287166" required>
-                </div>
+            <div class="checkbox-group">
+                <label for="arthritis" class="form-label">Arthritis</label>
+                <input type="checkbox" id="arthritis" name="arthritis" value="Arthritis">
+            </div> 
 
-                <input type="submit" class="form-btn">
-            </form>
+            <div class="checkbox-group">
+                <label for="blindness" class="form-label">Blindness</label>
+                <input type="checkbox" id="blindness" name="blindness" value="Blindness">
+            </div> 
 
-            <div class="message" id="output"></div>
-            
-        </div>
+            <div class="checkbox-group">
+                <label for="partial-sight" class="form-label">Partial Sight</label>
+                <input type="checkbox" id="partial-sight" name="partial-sight" value="Partial Sight">
+            </div> 
+
+            <div class="checkbox-group">
+                <label for="deafness" class="form-label">Deafness</label>
+                <input type="checkbox" id="deafness" name="deafness" value="Deafness">
+            </div>
+
+            <div class="checkbox-group">
+                <label for="hearing-impairment" class="form-label">Hard of Hearing</label>
+                <input type="checkbox" id="hearing-impairment" name="hearing-impairment" value="Hard of Hearing">
+            </div>
+
+            <div class="checkbox-group">
+                <label for="dyslexia" class="form-label">Dyslexia</label>
+                <input type="checkbox" id="dyslexia" name="dyslexia" value="Dyslexia">
+            </div>
+
+            <div class="checkbox-group">
+                <label for="adhd" class="form-label">ADHD</label>
+                <input type="checkbox" id="adhd" name="adhd" value="ADHD">
+            </div>
+
+            <div class="checkbox-group">
+                <label for="anxiety" class="form-label">Anxiety</label>
+                <input type="checkbox" id="anxiety" name="anxiety" value="Anxiety">
+            </div>
+
+            <div class="checkbox-group">
+                <label for="depression" class="form-label">Depression</label>
+                <input type="checkbox" id="depression" name="depression" value="Depression">
+            </div>
+          </div>
+
+          <input type="submit" class="form-btn" />
+        </form>
+
+        <div class="message" id="output"></div>
+      </div>
     </div>
 
     <script src="js/useSQL.js"></script>
     <script src="js/validation.js"></script>
     <script>
+      const showMessage = (text, type) => {
+        const output = document.getElementById("output");
+        output.textContent = text;
+        output.className = `message ${type}`;
+      };
 
-        const showMessage = (text, type) => {
-            const output = document.getElementById('output');
-            output.textContent = text;
-            output.className = `message ${type}`;
+      let form = document.querySelector("form");
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        let studentFirstName =
+          document.getElementById("studentFirstName").value;
+        let studentLastName = document.getElementById("studentLastName").value;
+        let studentDOB = document.getElementById("studentDOB").value;
+        let studentEmail = document.getElementById("studentEmail").value;
+        let studentEmergencyContactName = document.getElementById(
+          "studentEmergencyContactName",
+        ).value;
+        let studentEmergencyContactPNum = document.getElementById(
+          "studentEmergencyContactPNum",
+        ).value;
+
+        // waiting for database to be set up before i can add data to it.  for now just print to console.
+        const student = {
+          firstName: studentFirstName,
+          lastName: studentLastName,
+          dob: studentDOB,
+          email: studentEmail,
+          emergencyContact:
+            studentEmergencyContactName + " - " + studentEmergencyContactPNum,
+        };
+
+        const validationMessage = validateStudent(student);
+
+        if (validationMessage) {
+          showMessage(validationMessage, "error");
+        } else {
+          console.log(AddStudentToTable(student));
         }
-
-        let form = document.querySelector('form');
-        form.addEventListener('submit', async (event) => {
-            event.preventDefault();
-
-            let studentFirstName = document.getElementById('studentFirstName').value;
-            let studentLastName = document.getElementById('studentLastName').value;
-            let studentDOB = document.getElementById('studentDOB').value;
-            let studentEmail = document.getElementById('studentEmail').value;
-            let studentEmergencyContact = document.getElementById('studentEmergencyContact').value;
-
-            // waiting for database to be set up before i can add data to it.  for now just print to console.
-            const student = {
-                firstName: studentFirstName,
-                lastName: studentLastName,
-                dob: studentDOB,
-                email: studentEmail,
-                emergencyContact: studentEmergencyContact
-            }
-
-            const validationMessage = validateStudent(student);
-
-            if (validationMessage){
-                showMessage(validationMessage, 'error');
-            } else {
-                console.log(AddStudentToTable(student));
-            }
-
-        })
+      });
     </script>
-</body>
+  </body>
 </html>
