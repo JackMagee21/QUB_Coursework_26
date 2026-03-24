@@ -48,8 +48,6 @@
             const result = await runQuery(sql);
             const students = result.data;
 
-            console.log(students);
-
             for (student of students){
                 let tableBody = document.querySelector('#tableBody');
                 let newRow = tableBody.insertRow();
