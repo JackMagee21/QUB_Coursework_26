@@ -184,29 +184,28 @@
     <script src="js/validation.js"></script>
     <script src="js/saveLocalVars.js"></script>
     <script>
+
+      // define function to show message to user
       const showMessage = (text, type) => {
         const output = document.getElementById("output");
         output.textContent = text;
         output.className = `message ${type}`;
       };
 
+      // select form
       let form = document.querySelector("form");
+      //add event listener for form submit button press
       form.addEventListener("submit", async (event) => {
-        event.preventDefault();
+        event.preventDefault(); // prevent default operations from form submit
 
-        let studentFirstName =
-          document.getElementById("studentFirstName").value;
+        //store input values in variables
+        let studentFirstName = document.getElementById("studentFirstName").value;
         let studentLastName = document.getElementById("studentLastName").value;
         let studentDOB = document.getElementById("studentDOB").value;
         let studentEmail = document.getElementById("studentEmail").value;
-        let studentEmergencyContactName = document.getElementById(
-          "studentEmergencyContactName",
-        ).value;
-        let studentEmergencyContactPNum = document.getElementById(
-          "studentEmergencyContactPNum",
-        ).value;
+        let studentEmergencyContactPNum = document.getElementById("studentEmergencyContactPNum").value;
 
-        // waiting for database to be set up before i can add data to it.  for now just print to console.
+        // store data in an object to pass to validation function
         const student = {
           firstName: studentFirstName,
           lastName: studentLastName,
@@ -218,12 +217,19 @@
 
         const validationMessage = validateStudent(student);
 
-            if (validationMessage){
-                showMessage(validationMessage, 'error');
+        if (validationMessage){
+            showMessage(validationMessage, 'error');
+        } else {
+            const result = await addStudentToTable(student);
+
+            //check if query was successful
+            if (result && result.success) {
+                showMessage("Student added successfully!", "success");
             } else {
-                console.log(AddStudentToTable(student));
-                clearLocalValues
+                showMessafe("Unable to add student.  Please try again.", "error");
             }
+            clearLocalValues()
+        }
 
         })
     </script>
