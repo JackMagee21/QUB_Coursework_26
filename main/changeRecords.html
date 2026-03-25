@@ -54,6 +54,11 @@
                     <input class="form-input" type="email" id="studentEmail" name="studentEmail" placeholder="jsheridan@qub.ac.uk" required>
                 </div>
 
+                <div class="form-group">
+                  <label for="emergencyContact" class="form-label">Emergency Contact Phone Number:</label>
+                  <input type="text" class="form-input" id="emergencyContact" name="emergencyContact" placeholder="12345678901" required>
+                </div>
+
             <div class="form-group" id="checkbox-container">
               <div class="checkbox-group">
                 <label for="Paraplegia" class="control control--checkbox"
@@ -246,7 +251,7 @@
             const output = document.querySelector("#table-output");
             output.textContent = "";
 
-            const sql = "SELECT s.Student_ID, s.Forename, s.Surname, s.Email, s.Emergency_Contact, GROUP_CONCAT(DISTINCT d.Disability_Name SEPARATOR ', ') AS Disabilities FROM Student_Disability_Support sds JOIN Disability d ON sds.Disability_ID = d.Disability_ID JOIN Student s ON sds.Student_ID = s.Student_ID GROUP BY s.Student_ID ORDER BY s.Student_ID;";
+            const sql = "SELECT s.Student_ID, s.Forename, s.Surname, s.Email, s.Emergency_Contact, GROUP_CONCAT(DISTINCT d.Disability_Name SEPARATOR ', ') AS Disabilities, GROUP_CONCAT(DISTINCT a.Assistance_Name SEPARATOR ', ') AS Assistance FROM Student_Disability_Support sds JOIN Disability d ON sds.Disability_ID = d.Disability_ID JOIN Student s ON sds.Student_ID = s.Student_ID JOIN Assistance a ON sds.Assistance_ID = a.Assistance_ID GROUP BY s.Student_ID ORDER BY s.Student_ID;";
             const result = await runQuery(sql);
             const data = result.data;
 
@@ -262,11 +267,13 @@
 
             // create the table and the header row
             const table = document.createElement("table");
+            const thead = document.createElement("thead");
+            table.appendChild(thead);
             const headerRow = document.createElement("tr");
-            table.appendChild(headerRow);
+            thead.appendChild(headerRow);
 
             // create column headings
-            const headings = ["Student ID", "First Name", "Last Name", "Email", "Emergency Contact", "Disabilities", "Action"];
+            const headings = ["Student ID", "First Name", "Last Name", "Email", "Emergency Contact", "Disabilities", "Assistance", "Action"];
 
             for (let heading of headings) {
                 const th = document.createElement("th");
@@ -274,11 +281,14 @@
                 headerRow.appendChild(th);
             }
 
+            const tbody = document.createElement("tbody");
+            table.appendChild(tbody);
+
             // add each row returned from sql query to table
             for (let row of rows) {
 
                 //create the row
-                const tr = document.createElement("tr");
+                const tr = table.insertRow();
                 
                 //create a cell for each value in the row
                 const tdStudentID = document.createElement("td");
@@ -305,6 +315,10 @@
                 tdDisabilities.textContent = row.Disabilities;
                 tr.appendChild(tdDisabilities);
 
+                const tdAssistance = document.createElement("td");
+                tdAssistance.textContent = row.Assistance;
+                tr.appendChild(tdAssistance);
+
                 const tdAction = document.createElement("td");
 
                 //create the edit button
@@ -314,6 +328,8 @@
                     // select this student
                     selectStudent(row);
                 });
+
+                editButton.classList.add("table-btn", "blue-table-btn");
 
                 tdAction.appendChild(editButton);
 
@@ -348,10 +364,14 @@
                         showMessage("Unable to delete the record.", "error");
                     }
                 });
+
+
+                deleteButton.classList.add("table-btn", "red-table-btn");
+
                 tdAction.appendChild(deleteButton);
                 tr.appendChild(tdAction);
 
-                table.appendChild(tr);
+                tbody.appendChild(tr);
             }
 
             output.appendChild(table);
@@ -379,7 +399,8 @@
                 firstName: document.querySelector("#studentFirstName").value,
                 lastName: document.querySelector("#studentLastName").value,
                 email: document.querySelector("#studentEmail").value,
-                disabilities: Array.from(document.querySelectorAll("input[type=checkbox]:checked")).map((checkbox) => checkbox.value)
+                disabilities: Array.from(document.querySelectorAll("input[name=disabilities]:checked")).map((checkbox) => checkbox.value),
+                assistance: Array.from(document.querySelectorAll("input[name=assistance]:checked")).map((checkbox) => checkbox.value)
             }
 
             
@@ -391,6 +412,7 @@
                 return;
             }
 
+            // waiting for database to be finalised before writing the update query
             /*
             // update student record in database
             const updateSQL =`
@@ -419,6 +441,8 @@
                 showMessage("Unable to update the record.", "error");
             }
             */
+
+
         });
     });
 

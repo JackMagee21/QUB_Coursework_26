@@ -51,6 +51,18 @@ const addStudentToTable = (student) => {
 
 }
 
-const updateDisability = (disabilies) => {
+const updateStudentDisabilitySupportTable = (studentId, Disability_ID, Support_ID) => {
     
+    for (let disability of disabilities) {
+        const sql = `
+            INSERT INTO Student_Disability_Support (Student_ID, Disability_ID)
+            VALUES (
+                ${studentId}, 
+                ${Disability_ID},
+                ${Support_ID}
+            );
+        `;
+
+        // need to finish this function but my brain isnt working right now.  
+    }
 }
