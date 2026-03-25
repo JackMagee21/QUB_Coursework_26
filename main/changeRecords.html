@@ -33,10 +33,15 @@
             <p id="selectedStudentText" class="muted">Choose a student from the table first.</p>
 
             <form id="edit-form">
+
                 <div class="form-group">
-                    <label class="form-label" for="studentName">Name</label>
-                    <input class="form-input" type="text" id="studentFirstName" name="studentName" placeholder="First Name" required>
-                    <input class="form-input" type="text" id="studentLastName" name="studentName" placeholder="Last Name" required>
+                    <label for="studentID" class="form-label">Student ID</label>
+                    <input type="number" class="form-input" id="studentID" name="studentID" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="studentFirstName">Name</label>
+                    <input class="form-input" type="text" id="studentFirstName" name="studentFirstName" placeholder="First Name" required>
+                    <input class="form-input" type="text" id="studentLastName" name="studentLastName" placeholder="Last Name" required>
                 </div>
 
                 <div class="form-group">
@@ -51,121 +56,121 @@
 
             <div class="form-group" id="checkbox-container">
               <div class="checkbox-group">
-                <label for="paraplegia" class="control control--checkbox"
+                <label for="Paraplegia" class="control control--checkbox"
                   >Paraplegia
                   <input
                     type="checkbox"
-                    id="paraplegia"
+                    id="Paraplegia"
                     name="paraplegia"
-                    value="Paraplegia"
+                    value="1"
                   />
                   <div class="control__indicator"></div>
                 </label>
               </div>
               <div class="checkbox-group">
-                <label for="arthritis" class="control control--checkbox"
+                <label for="Arthritis" class="control control--checkbox"
                   >Arthritis
                   <input
                     type="checkbox"
-                    id="arthritis"
+                    id="Arthritis"
                     name="arthritis"
-                    value="Arthritis"
+                    value="2"
                   />
                   <div class="control__indicator"></div>
                 </label>
               </div>
               <div class="checkbox-group">
-                <label for="blindness" class="control control--checkbox"
+                <label for="Blindness" class="control control--checkbox"
                   >Blindness
                   <input
                     type="checkbox"
-                    id="blindness"
+                    id="Blindness"
                     name="blindness"
-                    value="Blindness"
+                    value="3"
                   />
                   <div class="control__indicator"></div>
                 </label>
               </div>
               <div class="checkbox-group">
-                <label for="partialSight" class="control control--checkbox"
+                <label for="PartialSight" class="control control--checkbox"
                   >Partial Sight
                   <input
                     type="checkbox"
-                    id="partialSight"
+                    id="PartialSight"
                     name="partialSight"
-                    value="Partial Sight"
+                    value="4"
                   />
                   <div class="control__indicator"></div>
                 </label>
               </div>
               <div class="checkbox-group">
-                <label for="deafness" class="control control--checkbox"
+                <label for="Deafness" class="control control--checkbox"
                   >Deafness
                   <input
                     type="checkbox"
-                    id="deafness"
+                    id="Deafness"
                     name="deafness"
-                    value="Deafness"
+                    value="5"
                   />
                   <div class="control__indicator"></div>
                 </label>
               </div>
               <div class="checkbox-group">
-                <label for="hardOfHearing" class="control control--checkbox"
+                <label for="Hard Of Hearing" class="control control--checkbox"
                   >Hard of Hearing
                   <input
                     type="checkbox"
-                    id="hardOfHearing"
+                    id="Hard Of Hearing"
                     name="hardOfHearing"
-                    value="Hard of Hearing"
+                    value="6"
                   />
                   <div class="control__indicator"></div>
                 </label>
               </div>
               <div class="checkbox-group">
-                <label for="dyslexia" class="control control--checkbox"
+                <label for="Dyslexia" class="control control--checkbox"
                   >Dyslexia
                   <input
                     type="checkbox"
-                    id="dyslexia"
+                    id="Dyslexia"
                     name="dyslexia"
-                    value="Dyslexia"
+                    value="7"
                   />
                   <div class="control__indicator"></div>
                 </label>
               </div>
               <div class="checkbox-group">
-                <label for="adhd" class="control control--checkbox"
+                <label for="ADHD" class="control control--checkbox"
                   >ADHD
                   <input
                     type="checkbox"
-                    id="adhd"
+                    id="ADHD"
                     name="adhd"
-                    value="ADHD"
+                    value="8"
                   />
                   <div class="control__indicator"></div>
                 </label>
               </div>
               <div class="checkbox-group">
-                <label for="anxiety" class="control control--checkbox"
+                <label for="Anxiety" class="control control--checkbox"
                   >Anxiety Disorder
                   <input
                     type="checkbox"
-                    id="anxiety"
+                    id="Anxiety"
                     name="anxiety"
-                    value="Anxiety Disorder"
+                    value="9"
                   />
                   <div class="control__indicator"></div>
                 </label>
               </div>
               <div class="checkbox-group">
-                <label for="depression" class="control control--checkbox"
+                <label for="Depression" class="control control--checkbox"
                   >Depression
                   <input
                     type="checkbox"
-                    id="depression"
+                    id="Depression"
                     name="depression"
-                    value="Depression"
+                    value="10"
                   />
                   <div class="control__indicator"></div>
                 </label>
@@ -181,22 +186,26 @@
 
     <script src="js/useSQL.js"></script>
     <script src="js/validation.js"></script>
-    <script src="js/saveLocalVars.js"></script>
+    <!-- <script src="js/saveLocalVars.js"></script> -->
     <script>
+        // initialize variable for keeping track of the student the user wants to edit/delete/
         let selectedStudentID = null;
 
+        // show message to user after they perfom an action
         const showMessage = (text, type) => {
           const output = document.querySelector("#output");
           output.textContent = text;
           output.className = `message ${type}`;
         };
 
+        // clears the message so user wont get confused after doing multiple things in a row
         const clearMessage = () => {
           const output = document.querySelector("#output");
           output.textContent = "";
           output.className = "message";
         };
 
+        // resets all form elements
         const resetForm = () => {
             const form = document.querySelector("#edit-form")
             const selectedStudentText = document.querySelector("#selectedStudentText");
@@ -207,21 +216,212 @@
             selectedStudentText.textContent = "Choose a student from the table first.";
         }
 
-        const selectStudent = (student) => {
-            const selectedStudentText = document.querySelector("#selectedStudentText");
 
-            selectedStudentID = Number(student.Student_ID);
-            document.querySelector("#studentID").value = student.studentID;
+        const selectStudent = (student) => {
+            resetForm();
+            const selectedStudentText = document.querySelector("#selectedStudentText");
+            
+            // copy the values from the chosen student into the form so they can be edited
+            selectedStudentID = Number(student.StudentID);
+            document.querySelector("#studentID").value = student.Student_ID;
             document.querySelector("#studentFirstName").value = student.Forename;
             document.querySelector("#studentLastName").value = student.Surname;
             document.querySelector("#studentDOB").value = student.Date_of_Birth;
             document.querySelector("#studentEmail").value = student.Email;
-            // Check the checkboxes that match the student's disabilities.
             
-            document.querySelectorAll("input[type=checkbox]").forEach((checkbox) => {
-                checkbox.checked = student.Disabilities.includes(checkbox.value);
-            });
-        }   
+            // Check the checkboxes that match the student's disabilities
+            const disabilities = student.Disabilities ? student.Disabilities.split(", ") : [];
+            for (let disability of disabilities) {
+                const checkbox = document.querySelector(`input[type=checkbox][id="${disability}"]`);
+                if (checkbox) {
+                    checkbox.checked = true;
+                }
+            }
+
+            selectedStudentText.textContent = `Editing student #${student.Student_ID}: ${student.Forename} ${student.Surname}`;
+            clearMessage();
+        };
+
+        const printTable = async () => {
+            const output = document.querySelector("#table-output");
+            output.textContent = "";
+
+            const sql = "SELECT s.Student_ID, s.Forename, s.Surname, s.Email, s.Emergency_Contact, GROUP_CONCAT(DISTINCT d.Disability_Name SEPARATOR ', ') AS Disabilities FROM Student_Disability_Support sds JOIN Disability d ON sds.Disability_ID = d.Disability_ID JOIN Student s ON sds.Student_ID = s.Student_ID GROUP BY s.Student_ID ORDER BY s.Student_ID;";
+            const result = await runQuery(sql);
+            const data = result.data;
+
+
+
+            // check if the data was returned properly
+            if (!result || !result.data || result.data.length === 0) {
+                output.textContent = "No student records found.";
+                return;
+            }
+
+            const rows = result.data;
+
+            // create the table and the header row
+            const table = document.createElement("table");
+            const headerRow = document.createElement("tr");
+            table.appendChild(headerRow);
+
+            // create column headings
+            const headings = ["Student ID", "First Name", "Last Name", "Email", "Emergency Contact", "Disabilities", "Action"];
+
+            for (let heading of headings) {
+                const th = document.createElement("th");
+                th.textContent = heading;
+                headerRow.appendChild(th);
+            }
+
+            // add each row returned from sql query to table
+            for (let row of rows) {
+
+                //create the row
+                const tr = document.createElement("tr");
+                
+                //create a cell for each value in the row
+                const tdStudentID = document.createElement("td");
+                tdStudentID.textContent = row.Student_ID;
+                tr.appendChild(tdStudentID);
+
+                const tdFirstName = document.createElement("td");
+                tdFirstName.textContent = row.Forename;
+                tr.appendChild(tdFirstName);
+
+                const tdLastName = document.createElement("td");
+                tdLastName.textContent = row.Surname;
+                tr.appendChild(tdLastName);
+
+                const tdEmail = document.createElement("td");
+                tdEmail.textContent = row.Email;
+                tr.appendChild(tdEmail);
+
+                const tdEmergencyContact = document.createElement("td");
+                tdEmergencyContact.textContent = row.Emergency_Contact;
+                tr.appendChild(tdEmergencyContact);
+
+                const tdDisabilities = document.createElement("td");
+                tdDisabilities.textContent = row.Disabilities;
+                tr.appendChild(tdDisabilities);
+
+                const tdAction = document.createElement("td");
+
+                //create the edit button
+                const editButton = document.createElement("button");
+                editButton.textContent = "Edit";
+                editButton.addEventListener("click", () => {
+                    // select this student
+                    selectStudent(row);
+                });
+
+                tdAction.appendChild(editButton);
+
+                // create delete button
+                const deleteButton = document.createElement("button");
+                deleteButton.textContent = "Delete";
+                deleteButton.addEventListener("click", async () => {
+                    // ask user for confirmation before deleting a student permanently
+                    const confrimed = confirm(`Delete student #${row.Student_ID}: ${row.Forename} ${row.Surname}? This action cannot be undone.`);
+                    if (!confirmed) {
+                        return;
+                    }
+
+                    // delete student record
+                    const deleteSQL = `DELETE FROM Student WHERE Student_ID = ${row.Student_ID};`;
+                    const deleteResult = await runQuery(deleteSQL);
+
+                    if (deleteResult && deleteResult.success) {
+                        showMessage("Student record permanently deleted.", "success");
+
+                        if (selectedStudentID === Number(row.Student_ID)) {
+                            resetForm();
+                        }
+
+                        printTable();
+                        return;
+                    }
+
+                    if (deleteResult && deleteResult.error) {
+                        showMessage(deleteResult.error, "error");
+                    } else {
+                        showMessage("Unable to delete the record.", "error");
+                    }
+                });
+                tdAction.appendChild(deleteButton);
+                tr.appendChild(tdAction);
+
+                table.appendChild(tr);
+            }
+
+            output.appendChild(table);
+    };
+
+    // wait for page to load before adding event listeners to elements and creating the table
+    document.addEventListener("DOMContentLoaded", () => {
+        const form = document.querySelector("#edit-form");
+
+        resetForm();
+        printTable();
+
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            // check if student has been selected
+            if (selectedSyudentID === null) {
+                showMessage("Please choose a student to edit.", "error");
+                return;
+            }
+
+            // create object for student details
+            const student = {
+                studentID: Number(document.querySelector("#studentID").value),
+                firstName: document.querySelector("#studentFirstName").value,
+                lastName: document.querySelector("#studentLastName").value,
+                email: document.querySelector("#studentEmail").value,
+                disabilities: Array.from(document.querySelectorAll("input[type=checkbox]:checked")).map((checkbox) => checkbox.value)
+            }
+
+            
+            // validate student details
+            const validationMessage = validateStudent(student);
+
+            if(validationMessage) {
+                showMessage(validationMessage, "error");
+                return;
+            }
+
+            /*
+            // update student record in database
+            const updateSQL =`
+            UPDATE Student
+            SET
+                studentID = ${escapeSql(student.studentID)},
+                Forename = "${escapeSql(student.firstName)}",
+                Surname = "${escapeSql(student.lastName)}",
+                Email = "${escapeSql(student.email)}",
+                Disabilities = "${escapeSql(student.disabilities.join(","))}"
+            WHERE Student_ID = ${escapeSql(selectedStudentID)};
+            `;
+
+            const updateStudentResult = await runQuery(updateSQL);
+
+            if (updateStudentResult && updateStudentResult.success) {
+                showMessage("Student record updated successfully.", "success");
+                resetForm();
+                printTable();
+            } 
+            
+            
+            if (updateStudentResult && updateStudentResult.error) {
+                showMessage(updateStudentResult.error, "error");
+            } else {
+                showMessage("Unable to update the record.", "error");
+            }
+            */
+        });
+    });
+
     </script>
 </body>
 </html>
