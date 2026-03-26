@@ -86,7 +86,7 @@
           </div>
 
           <p class="form-label">Select any disabilities that apply:</p>
-          <div class="form-group" id="checkbox-container">
+          <div class="form-group checkbox-container">
             <div class="checkbox-group">
               <label for="paraplegia" class="control control--checkbox"
                 >Paraplegia
@@ -220,7 +220,7 @@
           </div>
 
           <p class="form-label">Select any support needs that apply:</p>
-          <div class="form-group" id="checkbox-container">
+          <div class="form-group checkbox-container">
             <div class="checkbox-group">
               <label for="wheelchairAccess" class="control control--checkbox"
                 >Wheelchair Access
@@ -393,8 +393,8 @@
         let studentDOB = document.getElementById("studentDOB").value;
         let studentEmail = document.getElementById("studentEmail").value;
         let studentEmergencyContactPNum = document.getElementById("emergencyContact").value;
-        let studentDisabilities = Array.from(document.querySelectorAll('input[type="checkbox"][class="disability-checkbox"]:checked')).map(checkbox => checkbox.value);
-        let studentSupportNeeds = Array.from(document.querySelectorAll('input[type="checkbox"][class="support-checkbox"]:checked')).map(checkbox => checkbox.value);
+        let studentDisabilities = Array.from(document.querySelectorAll('input[type="checkbox"][class="disability-checkbox"]:checked')).map(checkbox => checkbox.value); // check which disability checkboxes are ticked and add those values to an array
+        let studentSupportNeeds = Array.from(document.querySelectorAll('input[type="checkbox"][class="support-checkbox"]:checked')).map(checkbox => checkbox.value); // same here but for support needs
 
         // store data in an object to pass to validation function
         const student = {

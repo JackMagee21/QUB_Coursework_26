@@ -6,7 +6,7 @@ table {
 }
 
 table td {
-	padding: 15px;
+	padding: 5px 15px;
     text-align: center;
 }
 
@@ -35,8 +35,7 @@ table tbody tr:nth-child(odd) {
 }
 
 .table-btn {
-	margin-top: 1.2em;
-    margin-bottom: 2em;
+	margin: 0.5em auto;
     display: block;
 	width: 70px;
     color: white;
@@ -48,8 +47,8 @@ table tbody tr:nth-child(odd) {
     cursor: pointer;
 }
 
-.blue-table-btn {
-	background-color: #2C666E;
+.green-table-btn {
+	background-color: #228B22;
 }
 
 .red-table-btn {

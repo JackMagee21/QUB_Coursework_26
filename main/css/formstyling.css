@@ -62,7 +62,7 @@ h2 {
     border-color: #008631;
 }
 
-#checkbox-container {
+.checkbox-container {
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
