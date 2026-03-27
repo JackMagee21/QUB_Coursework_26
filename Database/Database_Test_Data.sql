@@ -22,17 +22,17 @@ INSERT INTO Disability (Disability_Type, Disability_Name, Disability_Desc) VALUE
 ('Mental Health', 'Anxiety Disorder', 'Persistent excessive worry'),
 ('Mental Health', 'Depression', 'Persistent low mood and loss of interest');
 
-INSERT INTO Student (Forename, Surname, Email, Emergency_Contact) VALUES
-('James', 'O\'Connor', 'j.oconnor@student.edu', 'Anne O\'Connor - 07700123456'),
-('Emma', 'McBride', 'e.mcbride@student.edu', 'John McBride - 07700987654'),
-('Liam', 'Murphy', 'l.murphy@student.edu', 'Sarah Murphy - 07700345678'),
-('Sophie', 'Kelly', 's.kelly@student.edu', 'Paul Kelly - 07700234567'),
-('Noah', 'Campbell', 'n.campbell@student.edu', 'Mary Campbell - 07700876543'),
-('Olivia', 'Stewart', 'o.stewart@student.edu', 'David Stewart - 07700111222'),
-('Jack', 'Wilson', 'j.wilson@student.edu', 'Linda Wilson - 07700999111'),
-('Ava', 'Brown', 'a.brown@student.edu', 'Chris Brown - 07700444555'),
-('Charlie', 'Davis', 'c.davis@student.edu', 'Emma Davis - 07700666777'),
-('Grace', 'Evans', 'g.evans@student.edu', 'Mark Evans - 07700888999');
+INSERT INTO Student (Forename, Surname, Email, Emergency_Contact,DOB) VALUES
+('James', 'O\'Connor', 'j.oconnor@student.edu', 'Anne O\'Connor - 07700123456','2015-01-01'),
+('Emma', 'McBride', 'e.mcbride@student.edu', 'John McBride - 07700987654','2008-02-01'),
+('Liam', 'Murphy', 'l.murphy@student.edu', 'Sarah Murphy - 07700345678','2009-01-06'),
+('Sophie', 'Kelly', 's.kelly@student.edu', 'Paul Kelly - 07700234567','2010-04-13'),
+('Noah', 'Campbell', 'n.campbell@student.edu', 'Mary Campbell - 07700876543','2011-02-22'),
+('Olivia', 'Stewart', 'o.stewart@student.edu', 'David Stewart - 07700111222','2012-10-10'),
+('Jack', 'Wilson', 'j.wilson@student.edu', 'Linda Wilson - 07700999111','2013-11-25'),
+('Ava', 'Brown', 'a.brown@student.edu', 'Chris Brown - 07700444555','2014-07-06'),
+('Charlie', 'Davis', 'c.davis@student.edu', 'Emma Davis - 07700666777','2010-01-04'),
+('Grace', 'Evans', 'g.evans@student.edu', 'Mark Evans - 07700888999','2010-09-01');
 
 INSERT INTO Subject (Subject_Name, Subject_Desc, Required_Subject) VALUES
 ('Mathematics', 'Core mathematics including algebra and calculus', NULL),
