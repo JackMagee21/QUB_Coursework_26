@@ -24,6 +24,15 @@ const runQuery = async (sql) => {
     }
 }
 
+const runMultipleQueries = async (queries) => {
+    let results = [];
+    for (let sql of queries) {
+        const result = await runQuery(sql);
+        results.push(result);
+    }
+    return results;
+}
+
 const escapeSql = (value) => {
     // This function allows for apostophies in the database
     return value.replace(/'/g, "''");
