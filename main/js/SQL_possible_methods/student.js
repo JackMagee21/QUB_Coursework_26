@@ -41,12 +41,15 @@ const deleteStudentFromTable = async (studentId) => {
     `;
     
     result = await runQuery(sql);
-    console.log(result);
-    return result;
+    if(result.success == true)
+        return true;
+    else
+        return false;
 }
 
 const editStudentFromTable = (studentId, newStudentRecords) => {
     
+    console.log(newStudentRecords);
     const sql = `
         UPDATE Student 
         SET

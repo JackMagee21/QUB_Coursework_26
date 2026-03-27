@@ -15,6 +15,7 @@ const validateStudent = (student) => {
     const email = typeof student.email === 'string' ? student.email.trim() : "";
     const emergencyContact = String(student.emergencyContact ?? "").trim();
 
+    console.log(firstName);
     // check if first name is provided
     if (firstName == "") {
         return "First name is required.";

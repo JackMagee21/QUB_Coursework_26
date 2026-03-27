@@ -341,20 +341,6 @@
         // initialize variable for keeping track of the student the user wants to edit/delete/
         let selectedStudentID = null;
 
-        // show message to user after they perfom an action
-        const showMessage = (text, type) => {
-          const output = document.querySelector("#output");
-          output.textContent = text;
-          output.className = `message${type}`;
-        };
-
-        // clears the message so user wont get confused after doing multiple things in a row
-        const clearMessage = () => {
-          const output = document.querySelector("#output");
-          output.textContent = "";
-          output.className = "message";
-        };
-
         // resets all form elements
         const resetForm = () => {
             const form = document.querySelector("#edit-form")
@@ -366,13 +352,26 @@
             selectedStudentText.textContent = "Choose a student from the table first.";
         }
 
+        const showMessage = (text, type) => {
+          const output = document.querySelector("#output");
+          output.textContent = text;
+          output.className = `message${type}`;
+        };
 
+        // clears the message so user wont get confused after doing multiple things in a row
+        
+        const clearMessage = () => {
+          const output = document.querySelector("#output");
+          output.textContent = "";
+          output.className = "message";
+        };
+
+        // -- Student selection --
         const selectStudent = (student) => {
             resetForm();
-            const selectedStudentText = document.querySelector("#selectedStudentText");
-            console.log(student);
+
             // copy the values from the chosen student into the form so they can be edited
-            selectedStudentID = Number(student.StudentID);
+            selectedStudentID = Number(student.Student_ID);
             document.querySelector("#studentID").value = student.Student_ID;
             document.querySelector("#studentFirstName").value = student.Forename;
             document.querySelector("#studentLastName").value = student.Surname;
@@ -380,254 +379,159 @@
             document.querySelector("#studentEmail").value = student.Email;
             document.querySelector("#emergencyContact").value = student.Emergency_Contact;
             
-            // Check the checkboxes that match the student's disabilities
+
             const disabilities = student.Disabilities ? student.Disabilities.split(", ") : [];
-            for (let disability of disabilities) {
-                const checkbox = document.querySelector(`input[type=checkbox][value*="${disability}"]`);
-                if (checkbox) {
-                    checkbox.checked = true;
-                }
+            const assistances = student.Assistance ? student.Assistance.split(", ") : [];
+            
+            const ticks = [...disabilities, ...assistances]; // Combines the two arrays into one
+
+            for(const tick of ticks){
+              const checkbox = document.querySelector('input[type=checkbox][value*="${tag}"]');
             }
 
-            const assistances = student.Assistance ? student.Assistance.split(", ") : [];
-            console.log(assistances);
-            for (let assistance of assistances) {
-                const checkbox = document.querySelector(`input[type=checkbox][value*="${assistance}"]`);
-                if (checkbox) {
-                    checkbox.checked = true;
-                }            
-              }
-
-            selectedStudentText.textContent = `Editing student #${student.Student_ID}: ${student.Forename} ${student.Surname}`;
+            document.querySelector("#selectedStudentText").textContent = `
+              Editing student #${student.Student_ID}: ${student.Forename} ${student.Surname}
+            `;
             clearMessage();
         };
 
+        // -- Table --
+
+        const createCell = (text) => {
+          const td = document.createElement("td");
+          td.textContent = text ?? "";
+          return td;
+        };
+
         const printTable = async () => {
+
             const output = document.querySelector("#table-output");
             output.textContent = "";
+            
+            const sql = "SELECT s.Student_ID, s.Forename, s.Surname, s.Email, s.Emergency_Contact, GROUP_CONCAT(DISTINCT d.Disability_Name SEPARATOR ', ') AS Disabilities, GROUP_CONCAT(DISTINCT a.Assistance_Name SEPARATOR ', ') AS Assistance, DATE_FORMAT(s.DOB, '%Y-%m-%d') AS DOB FROM Student s LEFT JOIN Student_Disability_Support sds ON s.Student_ID = sds.Student_ID LEFT JOIN Assistance a ON sds.Assistance_ID = a.Assistance_ID LEFT JOIN Disability d ON sds.Disability_ID = d.Disability_ID GROUP BY s.Student_ID ORDER BY s.Student_ID";
 
-            const sql = "SELECT s.Student_ID, s.Forename, s.Surname, s.Email, s.Emergency_Contact, GROUP_CONCAT(DISTINCT d.Disability_Name SEPARATOR ', ') AS Disabilities, GROUP_CONCAT(DISTINCT a.Assistance_Name SEPARATOR ', ') AS Assistance, DATE_FORMAT(s.DOB, '%d/%m/%Y') AS DOB FROM Student s LEFT JOIN Student_Disability_Support sds ON s.Student_ID = sds.Student_ID LEFT JOIN Assistance a ON sds.Assistance_ID = a.Assistance_ID LEFT JOIN Disability d ON sds.Disability_ID = d.Disability_ID GROUP BY s.Student_ID ORDER BY s.Student_ID;";
             const result = await runQuery(sql);
-            const data = result.data;
-
             console.log(result);
-
-
-
             // check if the data was returned properly
-            if (!result || !result.data || result.data.length === 0) {
-                output.textContent = "No student records found.";
-                return;
+            if(!result?.data?.length) {
+              output.textContent = "No student records found";
+              return;
             }
 
-            const rows = result.data;
-
-            // create the table and the header row
             const table = document.createElement("table");
-            const thead = document.createElement("thead");
-            table.appendChild(thead);
-            const headerRow = document.createElement("tr");
-            thead.appendChild(headerRow);
+
+            const headings = ["Student ID", 
+            "First Name", 
+            "Last Name", 
+            "Email", 
+            "DOB", 
+            "Emergency Contact", 
+            "Disabilities", 
+            "Assistance", 
+            "Action"];
+
+            const thead = table.createTHead();
+            const headerRow = thead.insertRow();
 
             // create column headings
-            const headings = ["Student ID", "First Name", "Last Name", "Email", "DOB", "Emergency Contact", "Disabilities", "Assistance", "Action"];
-
             for (let heading of headings) {
                 const th = document.createElement("th");
                 th.textContent = heading;
                 headerRow.appendChild(th);
             }
 
-            const tbody = document.createElement("tbody");
-            table.appendChild(tbody);
+            const tbody = table.createTBody();
 
             // add each row returned from sql query to table
-            for (let row of rows) {
+            for(const row of result.data) {
+              const tr = tbody.insertRow();
 
-                //create the row
-                const tr = table.insertRow();
-                
-                //create a cell for each value in the row
-                const tdStudentID = document.createElement("td");
-                tdStudentID.textContent = row.Student_ID;
-                tr.appendChild(tdStudentID);
-
-                const tdFirstName = document.createElement("td");
-                tdFirstName.textContent = row.Forename;
-                tr.appendChild(tdFirstName);
-
-                const tdLastName = document.createElement("td");
-                tdLastName.textContent = row.Surname;
-                tr.appendChild(tdLastName);
-
-                const tdEmail = document.createElement("td");
-                tdEmail.textContent = row.Email;
-                tr.appendChild(tdEmail);
-
-                const tdDOB = document.createElement("td");
-                tdDOB.textContent = row.DOB;
-                tr.appendChild(tdDOB);
-
-                const tdEmergencyContact = document.createElement("td");
-                tdEmergencyContact.textContent = row.Emergency_Contact;
-                tr.appendChild(tdEmergencyContact);
-
-                const tdDisabilities = document.createElement("td");
-                tdDisabilities.textContent = row.Disabilities;
-                tr.appendChild(tdDisabilities);
-
-                const tdAssistance = document.createElement("td");
-                tdAssistance.textContent = row.Assistance;
-                tr.appendChild(tdAssistance);
-
-                const tdAction = document.createElement("td");
-
-                //create the edit button
-                const editButton = document.createElement("button");
-                editButton.textContent = "Edit";
-                editButton.addEventListener("click", () => {
-                    // select this student
-                    selectStudent(row);
-                });
-
-                editButton.classList.add("table-btn", "green-table-btn");
-
-                tdAction.appendChild(editButton);
-
-                // create delete button
-                const deleteButton = document.createElement("button");
-                deleteButton.textContent = "Delete";
-                deleteButton.addEventListener("click", async () => {
-                    // ask user for confirmation before deleting a student permanently
-                    const confirmed = confirm(`Delete student #${row.Student_ID}: ${row.Forename} ${row.Surname}? This action cannot be undone.`);
-                    if (!confirmed) {
-                        return;
-                    }
-
-                    // delete student record
-                    const deleteSQL = [`DELETE FROM Student_Disability_Support WHERE Student_ID=${row.Student_ID};`,
-                    `DELETE FROM Test_Student WHERE Student_ID=${row.Student_ID};`,
-                    `DELETE FROM Student WHERE Student_ID=${row.Student_ID};`];
-
-                    console.log(deleteSQL);
-
-                    const deleteResult = await runMultipleQueries(deleteSQL);
-
-                    let allSuccessful = true;
-                    let errorMessage = "";
-
-                    
-
-                    if (deleteResult && allSuccessful) {
-                        showMessage("Student record permanently deleted.", "success");
-
-                        if (selectedStudentID === Number(row.Student_ID)) {
-                            resetForm();
-                        }
-
-                        printTable();
-                        return;
-                    }
-
-                    if (deleteResult && deleteResult.error) {
-                        showMessage(deleteResult.error, "error");
-                    } else {
-                        showMessage("Unable to delete the record.", "error");
-                    }
-                });
-
-
-                deleteButton.classList.add("table-btn", "red-table-btn");
-
-                tdAction.appendChild(deleteButton);
-                tr.appendChild(tdAction);
-
-                tbody.appendChild(tr);
+              tr.append(
+                createCell(row.Student_ID),
+                createCell(row.Forename),
+                createCell(row.Surname),
+                createCell(row.Email),
+                createCell(row.DOB),
+                createCell(row.Emergency_Contact),
+                createCell(row.Disabilities),
+                createCell(row.Assistance),
+                createActionCell(row)
+              );
             }
 
             output.appendChild(table);
     };
 
+    const createActionCell = (row) => {
+      const td = document.createElement("td");
+
+      const editButton = document.createElement("button");
+      editButton.textContent = "Edit";
+      editButton.classList.add("table-btn", "green-table-btn");
+      editButton.addEventListener("click", () => selectStudent(row));
+
+      const deleteButton = document.createElement("button");
+      deleteButton.textContent = "Delete";
+      deleteButton.classList.add("table-btn", "red-table-btn");
+      deleteButton.addEventListener("click", () => handleDelete(row));
+
+      td.append(editButton, deleteButton);
+      return td;
+    }
+
+    const handleDelete = async (row) => {
+      const confirmed = confirm(`Delete student #${row.Student_ID}: ${row.Forename} ${row.Surname}? This action cannot be undone.`);
+      if(!confirmed) return;
+
+      const result = await deleteStudentFromTable(row.Student_ID);
+
+      if(result?.success) {
+        showMessage("Student record permanently deleted.", "success");
+        if(selectedStudentID === Number(row.Student_ID)) resetForm();
+        printTable();
+      } else {
+        showMessage(result?.error ?? "Unable to delete the record.", "error");
+      }
+    }
+
     // wait for page to load before adding event listeners to elements and creating the table
     document.addEventListener("DOMContentLoaded", () => {
-        const form = document.querySelector("#edit-form");
-
         resetForm();
         printTable();
 
-        form.addEventListener("submit", async (event) => {
-            event.preventDefault();
+        document.querySelector("#edit-form").addEventListener("submit", async (event) => {
+          event.preventDefault();
 
-            // check if student has been selected
-            if (selectedStudentID === null) {
-                showMessage("Please choose a student to edit.", "error");
-                return;
-            }
+          if (selectedStudentID === null) {
+            showMessage("Please choose a student to edit.", "error");
+            return;
+          }
 
-            // create object for student details
-            const student = {
-                studentID: Number(document.querySelector("#studentID").value),
-                firstName: document.querySelector("#studentFirstName").value,
-                lastName: document.querySelector("#studentLastName").value,
-                email: document.querySelector("#studentEmail").value,
-                dob: document.querySelector("#studentDOB").value,
-                emergencyContact: document.getElementById("emergencyContact").value,
-                disabilities: Array.from(document.querySelectorAll("input[name=disabilities]:checked")).map((checkbox) => checkbox.value),
-                assistance: Array.from(document.querySelectorAll("input[name=assistance]:checked")).map((checkbox) => checkbox.value)
-            }
+          const student = {
+            studentID: Number(document.querySelector("#studentID").value),
+            firstName: document.querySelector("#studentFirstName").value,
+            lastName: document.querySelector("#studentLastName").value,
+            email: document.querySelector("#studentEmail").value,
+            dob: document.querySelector("#studentDOB").value,
+            emergencyContact: document.getElementById("emergencyContact").value,
+            disabilities: Array.from(document.querySelectorAll("input[name=disabilities]:checked")).map((checkbox) => checkbox.value),
+            assistance: Array.from(document.querySelectorAll("input[name=assistance]:checked")).map((checkbox) => checkbox.value)
+          };
 
-            console.log(student.emergencyContact);
-            //console.log(Emergency_Contact);
-            // validate student details
-            const validationMessage = validateStudent(student);
+          const validationMessage = validateStudent(student);
+          if(validationMessage) {
+            showMessage(validationMessage, "error");
+            return;
+          }
 
-            if(validationMessage) {
-                showMessage(validationMessage, "error");
-                return;
-            }
+          console.log(student.disabilities);
+          const result = await editStudentFromTable(document.querySelector("#studentID").value, student);
 
-            let studentId = document.getElementById("studentID").value;
-
-            const updateStudentResult = await editStudentFromTable(studentId, student);
-            console.log(updateStudentResult);
-            if (updateStudentResult && updateStudentResult.success) {
-                showMessage("Student record updated successfully.", "success");
-                resetForm();
-                printTable();
-            } 
-            
-
-            // waiting for database to be finalised before writing the update query
-            /*
-            // update student record in database
-            const updateSQL =`
-            UPDATE Student
-            SET
-                studentID = ${escapeSql(student.studentID)},
-                Forename = "${escapeSql(student.firstName)}",
-                Surname = "${escapeSql(student.lastName)}",
-                Email = "${escapeSql(student.email)}",
-                Disabilities = "${escapeSql(student.disabilities.join(","))}"
-            WHERE Student_ID = ${escapeSql(selectedStudentID)};
-            `;
-
-            const updateStudentResult = await runQuery(updateSQL);
-
-            if (updateStudentResult && updateStudentResult.success) {
-                showMessage("Student record updated successfully.", "success");
-                resetForm();
-                printTable();
-            } 
-            
-            
-            if (updateStudentResult && updateStudentResult.error) {
-                showMessage(updateStudentResult.error, "error");
-            } else {
-                showMessage("Unable to update the record.", "error");
-            }
-            */
-
-
+          if(result?.success) {
+            showMessage("Student record updated successfully.", "success");
+            resetForm();
+            printTable();
+          }
         });
     });
 
