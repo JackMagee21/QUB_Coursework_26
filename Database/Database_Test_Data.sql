@@ -100,5 +100,7 @@ INSERT INTO Test_Student (Student_ID, Test_ID, Grade, Pass_Fail) VALUES
 (8, 10, 52.00, TRUE),
 (9, 11, 45.00, FALSE),
 (10, 12, 61.00, TRUE);
-INSERT INTO Test_Student (Name) VALUES 
-SELECT Name FROM Test WHERE Test_Student(Test_ID) = Test(Test_ID)
+Select Test.Name
+FROM Test
+INNER JOIN Test_Student ON
+Test.Test_ID = Test_Student.Test_ID
