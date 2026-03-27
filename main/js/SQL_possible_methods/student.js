@@ -4,13 +4,13 @@ Adding students, editting sudents and deleteing student methods
 */
 const addStudentToTable = (student) => {
     const sql = `
-        INSERT INTO student (firstName, lastName, dob, email, emergencyContact)
+        INSERT INTO Student (Forename, Surname, Email, Emergency_Contact, DOB)
         VALUES (
             '${escapeSql(student.firstName)}', 
             '${escapeSql(student.lastName)}', 
-            '${escapeSql(student.dob)}', 
             '${escapeSql(student.email)}', 
-            '${escapeSql(student.emergencyContact)}'
+            '${escapeSql(student.emergencyContact)}', 
+            '${escapeSql(student.dob)}'
         )
     `;
 
@@ -22,9 +22,15 @@ const addStudentToTable = (student) => {
 }
 
 const deleteStudentFromTable = (studentId) => {
-    
+
+    const deleteDisabilites = `
+        DELETE FROM Student_Disability_Support WHERE Student_ID='${escapeSql(studentId)}' 
+    `;
+
+    console.log(runQuery(deleteDisabilites)); // Removes this student from the Student_Disability_Support table
+
     const sql = `
-        DELETE FROM student WHERE Student_ID='${escapeSql(studentId)}' 
+        DELETE FROM Student WHERE Student_ID='${escapeSql(studentId)}' 
     `;
 
     return runQuery(sql);
@@ -58,11 +64,9 @@ These are methods to get lists of students back based on certain criteria such a
 I will make any further suggestions
 */
 
-const getAllStudents = () => {
+const getAllStudents = async () => {
 
-    const sql = `
-        SELECT * FROM student
-    `;
+    const sql = 'SELECT * FROM Student;';
 
     return runQuery(sql);
 }
