@@ -18,7 +18,8 @@ CREATE TABLE Student (
     Forename VARCHAR(100),
     Surname VARCHAR(100),
     Email VARCHAR(150),
-    Emergency_Contact VARCHAR(150)
+    Emergency_Contact VARCHAR(150),
+    DOB DATE
 );
 
 
