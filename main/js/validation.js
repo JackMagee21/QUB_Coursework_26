@@ -36,7 +36,7 @@ const validateStudent = (student) => {
     }
 
     // check if dob is a valid date
-    if (isNaN(dob.getTime())) {
+    if (isNaN(dob.getDate())) {
         return "Date of birth must be a valid date.";
     }
 
