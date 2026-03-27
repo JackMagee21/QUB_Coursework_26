@@ -344,7 +344,7 @@
         const showMessage = (text, type) => {
           const output = document.querySelector("#output");
           output.textContent = text;
-          output.className = `message ${type}`;
+          output.className = `message${type}`;
         };
 
         // clears the message so user wont get confused after doing multiple things in a row
@@ -497,14 +497,21 @@
                 deleteButton.textContent = "Delete";
                 deleteButton.addEventListener("click", async () => {
                     // ask user for confirmation before deleting a student permanently
-                    const confrimed = confirm(`Delete student #${row.Student_ID}: ${row.Forename} ${row.Surname}? This action cannot be undone.`);
+                    const confirmed = confirm(`Delete student #${row.Student_ID}: ${row.Forename} ${row.Surname}? This action cannot be undone.`);
                     if (!confirmed) {
                         return;
                     }
 
                     // delete student record
-                    const deleteSQL = `DELETE FROM Student WHERE Student_ID = ${row.Student_ID};`;
-                    const deleteResult = await runQuery(deleteSQL);
+                    const deleteSQL = [`DELETE FROM Student_Disability_Support WHERE Student_ID=${row.Student_ID};`,
+                    `DELETE FROM Test_Student WHERE Student_ID=${row.Student_ID};`,
+                    `DELETE FROM Student WHERE Student_ID=${row.Student_ID};`];
+
+                    console.log(deleteSQL);
+
+                    const deleteResult = await runMultipleQueries(deleteSQL);
+
+                    console.log(deleteResult);
 
                     if (deleteResult && deleteResult.success) {
                         showMessage("Student record permanently deleted.", "success");
@@ -547,7 +554,7 @@
             event.preventDefault();
 
             // check if student has been selected
-            if (selectedSyudentID === null) {
+            if (selectedStudentID === null) {
                 showMessage("Please choose a student to edit.", "error");
                 return;
             }
