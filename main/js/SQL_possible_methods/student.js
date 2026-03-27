@@ -21,32 +21,41 @@ const addStudentToTable = (student) => {
     return runQuery(sql);
 }
 
-const deleteStudentFromTable = (studentId) => {
+const deleteStudentFromTable = async (studentId) => {
 
-    const deleteDisabilites = `
+    const deleteDisabilities = `
         DELETE FROM Student_Disability_Support WHERE Student_ID='${escapeSql(studentId)}' 
     `;
 
-    console.log(runQuery(deleteDisabilites)); // Removes this student from the Student_Disability_Support table
+    await runQuery(deleteDisabilities);
+
+    const deleteTest = `
+        DELETE FROM Test_Student WHERE Student_ID='${escapeSql(studentId)}'
+    `;
+
+    await runQuery(deleteTest);
+
 
     const sql = `
         DELETE FROM Student WHERE Student_ID='${escapeSql(studentId)}' 
     `;
-
-    return runQuery(sql);
+    
+    result = await runQuery(sql);
+    console.log(result);
+    return result;
 }
 
 const editStudentFromTable = (studentId, newStudentRecords) => {
     
     const sql = `
-        UPDATE student 
+        UPDATE Student 
         SET
-        firstName = '${escapeSql(newStudentRecords.firstName)}',
-        lastName = '${escapeSql(newStudentRecords.lastName)}',
-        dob = '${escapeSql(newStudentRecords.dob)}',
-        email = '${escapeSql(newStudentRecords.email)}',
-        emergencyContact = '${escapeSql(newStudentRecords.emergencyContact)}'
-        WHERE Student_ID = ${escapeSql(studentId)};
+        Forename = '${escapeSql(newStudentRecords.firstName)}',
+        Surname = '${escapeSql(newStudentRecords.lastName)}',
+        DOB = '${escapeSql(newStudentRecords.dob)}',
+        Email = '${escapeSql(newStudentRecords.email)}',
+        Emergency_Contact = '${escapeSql(newStudentRecords.emergencyContact)}'
+        WHERE Student_ID='${escapeSql(studentId)}';
     `;
 
     return runQuery(sql);
