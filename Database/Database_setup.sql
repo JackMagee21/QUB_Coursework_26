@@ -69,5 +69,4 @@ CREATE TABLE Test_Student (
     PRIMARY KEY (Student_ID, Test_ID),
     FOREIGN KEY (Student_ID) REFERENCES Student(Student_ID),
     FOREIGN KEY (Test_ID) REFERENCES Test(Test_ID),
-    (Name) REFERENCES Test(Name)
 );
