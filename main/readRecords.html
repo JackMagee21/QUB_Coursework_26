@@ -43,11 +43,14 @@
     </div>
 
     <script src="js/useSQL.js"></script>
+    <script src="js/SQL_possible_methods/student.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", async () => {
-            const sql = "SELECT * FROM Student;";
-            const result = await runQuery(sql);
+            const result = await getAllStudents();
+            console.log(result);
             const students = result.data;
+
+            console.log(result);
 
             for (student of students){
                 let tableBody = document.querySelector('#tableBody');

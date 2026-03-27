@@ -1,0 +1,16 @@
+#reportSelector {
+    width: 200px;
+    height: 40px;
+    border-radius: 20px;
+    margin: 5px auto;
+    display: block;
+    padding: 10px;
+}
+
+.select-label {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
