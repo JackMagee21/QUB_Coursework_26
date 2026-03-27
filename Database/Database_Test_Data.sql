@@ -59,19 +59,19 @@ INSERT INTO Class (Class_Name, Subject_ID) VALUES
 ('Psychology - A', 9),
 ('Business - A', 10);
 
-INSERT INTO Test (Subject_ID, Percent_of_subject, Total_Marks, Pass_Marks) VALUES
-(1, 40.00, 100, 40),
-(1, 60.00, 100, 50),
-(2, 100.00, 100, 50),
-(3, 50.00, 100, 50),
-(3, 50.00, 100, 50),
-(4, 100.00, 100, 45),
-(5, 100.00, 100, 50),
-(6, 100.00, 100, 50),
-(7, 100.00, 100, 45),
-(8, 100.00, 100, 45),
-(9, 100.00, 100, 50),
-(10, 100.00, 100, 50);
+INSERT INTO Test (Subject_ID, Name, Percent_of_subject, Total_Marks, Pass_Marks) VALUES
+(1, 'Maths Test - 1A',40.00, 100, 40),
+(1, 'Maths Test - 2A',60.00, 100, 50),
+(2, 'Maths Test - 1B',100.00, 100, 50),
+(3, 'CS Test - 1A',50.00, 100, 50),
+(3, 'CS Test - 2A',50.00, 100, 50),
+(4, 'Biology Test - 1A',100.00, 100, 45),
+(5, 'Chemistry Test - 1A',100.00, 100, 50),
+(6, 'Physics Test - 1A',100.00, 100, 50),
+(7, 'History Test - 1A',100.00, 100, 45),
+(8, 'Geography Test - 1A',100.00, 100, 45),
+(9, 'Psychology Test - 1A',100.00, 100, 50),
+(10, 'Business Test - 1A',100.00, 100, 50);
 
 INSERT INTO Student_Disability_Support (Student_ID, Disability_ID, Assistance_ID) VALUES
 (1, 1, 1),
@@ -100,3 +100,5 @@ INSERT INTO Test_Student (Student_ID, Test_ID, Grade, Pass_Fail) VALUES
 (8, 10, 52.00, TRUE),
 (9, 11, 45.00, FALSE),
 (10, 12, 61.00, TRUE);
+INSERT INTO Test_Student (Name) VALUES 
+SELECT Name FROM Test WHERE Test_Student(Test_ID) = Test(Test_ID)

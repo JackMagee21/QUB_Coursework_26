@@ -42,6 +42,7 @@ CREATE TABLE Class (
 CREATE TABLE Test (
     Test_ID INT AUTO_INCREMENT PRIMARY KEY,
     Subject_ID INT,
+    Name TEXT,
     Percent_of_subject DECIMAL(5,2),
     Total_Marks INT,
     Pass_Marks INT,
@@ -62,9 +63,10 @@ CREATE TABLE Student_Disability_Support (
 CREATE TABLE Test_Student (
     Student_ID INT,
     Test_ID INT,
+    Name TEXT,
     Grade DECIMAL(5,2),
     Pass_Fail BOOLEAN,
     PRIMARY KEY (Student_ID, Test_ID),
     FOREIGN KEY (Student_ID) REFERENCES Student(Student_ID),
-    FOREIGN KEY (Test_ID) REFERENCES Test(Test_ID)
+    FOREIGN KEY (Test_ID) REFERENCES Test(Test_ID),
 );
