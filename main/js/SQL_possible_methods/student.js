@@ -58,13 +58,12 @@ These are methods to get lists of students back based on certain criteria such a
 I will make any further suggestions
 */
 
-const getAllStudents = () => {
+const getAllStudents = async () => {
 
-    const sql = `
-        SELECT * FROM student
-    `;
+    const sql = "SELECT * FROM Student;";
 
-    return runQuery(sql);
+    const result = await runQuery(sql);
+    return result;
 }
 
 const getAllStudentsBasedOnADisability = (disabilityName) => {

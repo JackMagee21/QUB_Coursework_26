@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Disabilities in Education</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/reportStyling.css">
 </head>
 <body>
     <div class="content">
@@ -22,25 +23,42 @@
             </p>
         </div>
         <div class="main">
-            <h2>Reports</h2>
+            <h2 ">Reports</h2>
+            <label class="select-label" for="reportSelector">Select a report to view:</label>
             <select name="report" id="reportSelector">
-                <option value=""></option>
-                <option value=""></option>
-                <option value=""></option>
-                <option value=""></option>
-                <option value=""></option>
-                <option value=""></option>
-                <option value=""></option>
-                <option value=""></option>
-                <option value=""></option>
-                <option value=""></option>
-                <option value=""></option>
-                <option value=""></option>
-                <option value=""></option>
-                <option value=""></option>
-                <option value=""></option>
+                <option value="">Choose an option</option>
+                <option value="report1">Report 1</option>
+                <option value="report2">Report 2</option>
+                <option value="report3">Report 3</option>
+                <option value="report4">Report 4</option>
+                <option value="report5">Report 5</option>
+                <option value="report6">Report 6</option>
+                <option value="report7">Report 7</option>
+                <option value="report8">Report 8</option>
+                <option value="report9">Report 9</option>
+                <option value="report10">Report 10</option>
+                <option value="report11">Report 11</option>
+                <option value="report12">Report 12</option>
+                <option value="report13">Report 13</option>
+                <option value="report14">Report 14</option>
             </select>
+
+            <div class="reportOutput"></div>
         </div>
     </div>
+
+    <script src="js/useSQL"></script>
+    <script src="js/SQL_possible_methods/student.js"></script>
+    <script>
+        const selectTag = document.querySelector('#reportSelector');
+        const reportOutput = document.querySelector('.reportOutput');
+
+        selectTag.addEventListener('change', (event) => {
+            event.preventDefault();
+
+            const selectedReport = event.target.value;
+            reportOutput.textContent = `You have selected ${selectedReport}`;
+        })
+    </script>
 </body>
 </html>
