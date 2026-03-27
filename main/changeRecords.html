@@ -511,9 +511,12 @@
 
                     const deleteResult = await runMultipleQueries(deleteSQL);
 
-                    console.log(deleteResult);
+                    let allSuccessful = true;
+                    let errorMessage = "";
 
-                    if (deleteResult && deleteResult.success) {
+                    
+
+                    if (deleteResult && allSuccessful) {
                         showMessage("Student record permanently deleted.", "success");
 
                         if (selectedStudentID === Number(row.Student_ID)) {

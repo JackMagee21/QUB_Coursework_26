@@ -26,11 +26,22 @@ const runQuery = async (sql) => {
 
 const runMultipleQueries = async (queries) => {
     let results = [];
+    let allSuccessful = true;
+    let errorMessage = "";
+
     for (let sql of queries) {
         const result = await runQuery(sql);
         results.push(result);
     }
-    return results;
+
+    for (let result of deleteResult) {
+        if (!result || result.error) {
+            allSuccessful = false;
+            errorMessage += (result && result.error) ? result.error : "Unknown error occurred. ";
+        }
+    }
+    
+    return allSuccessful ? { success: true, results } : { success: false, error: errorMessage.trim() };
 }
 
 const escapeSql = (value) => {
