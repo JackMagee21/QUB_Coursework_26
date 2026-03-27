@@ -404,7 +404,7 @@
             const output = document.querySelector("#table-output");
             output.textContent = "";
 
-            const sql = "SELECT s.Student_ID, s.Forename, s.Surname, s.Email, s.Emergency_Contact, GROUP_CONCAT(DISTINCT d.Disability_Name SEPARATOR ', ') AS Disabilities, GROUP_CONCAT(DISTINCT a.Assistance_Name SEPARATOR ', ') AS Assistance FROM Student_Disability_Support sds JOIN Disability d ON sds.Disability_ID = d.Disability_ID JOIN Student s ON sds.Student_ID = s.Student_ID JOIN Assistance a ON sds.Assistance_ID = a.Assistance_ID GROUP BY s.Student_ID ORDER BY s.Student_ID;";
+            const sql = "SELECT s.Student_ID, s.Forename, s.Surname, s.Email, s.Emergency_Contact, GROUP_CONCAT(DISTINCT d.Disability_Name SEPARATOR ', ') AS Disabilities, GROUP_CONCAT(DISTINCT a.Assistance_Name SEPARATOR ', ') AS Assistance, s.DOB FROM Student_Disability_Support sds JOIN Disability d ON sds.Disability_ID = d.Disability_ID JOIN Student s ON sds.Student_ID = s.Student_ID JOIN Assistance a ON sds.Assistance_ID = a.Assistance_ID GROUP BY s.Student_ID ORDER BY s.Student_ID;";
             const result = await runQuery(sql);
             const data = result.data;
 
@@ -426,7 +426,7 @@
             thead.appendChild(headerRow);
 
             // create column headings
-            const headings = ["Student ID", "First Name", "Last Name", "Email", "Emergency Contact", "Disabilities", "Assistance", "Action"];
+            const headings = ["Student ID", "First Name", "Last Name", "Email", "DOB", "Emergency Contact", "Disabilities", "Assistance", "Action"];
 
             for (let heading of headings) {
                 const th = document.createElement("th");
@@ -459,6 +459,10 @@
                 const tdEmail = document.createElement("td");
                 tdEmail.textContent = row.Email;
                 tr.appendChild(tdEmail);
+
+                const tdDOB = document.createElement("td");
+                tdDOB.textContent = row.DOB;
+                tr.appendChild(tdDOB);
 
                 const tdEmergencyContact = document.createElement("td");
                 tdEmergencyContact.textContent = row.Emergency_Contact;

@@ -30,6 +30,7 @@
                         <th>Student ID</th>
                         <th>Name</th>
                         <th>Email</th>
+                        <th>DOB</th>
                         <th>Emergency Contact</th>
 
                     </tr>
@@ -54,7 +55,8 @@
                 newRow.insertCell(0).textContent = student.Student_ID;
                 newRow.insertCell(1).textContent = student.Forename + " " + student.Surname;
                 newRow.insertCell(2).textContent = student.Email;
-                newRow.insertCell(3).textContent = student.Emergency_Contact;
+                newRow.insertCell(3).textContent = student.DOB;
+                newRow.insertCell(4).textContent = student.Emergency_Contact;
             }
         });
 
