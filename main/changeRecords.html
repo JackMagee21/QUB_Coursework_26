@@ -335,6 +335,7 @@
 
     <script src="js/useSQL.js"></script>
     <script src="js/validation.js"></script>
+    <script src="js/SQL_possible_methods/student.js"></script>
     <!-- <script src="js/saveLocalVars.js"></script> -->
     <script>
         // initialize variable for keeping track of the student the user wants to edit/delete/
@@ -369,14 +370,15 @@
         const selectStudent = (student) => {
             resetForm();
             const selectedStudentText = document.querySelector("#selectedStudentText");
-            
+            console.log(student);
             // copy the values from the chosen student into the form so they can be edited
             selectedStudentID = Number(student.StudentID);
             document.querySelector("#studentID").value = student.Student_ID;
             document.querySelector("#studentFirstName").value = student.Forename;
             document.querySelector("#studentLastName").value = student.Surname;
-            document.querySelector("#studentDOB").value = student.Date_of_Birth;
+            document.querySelector("#studentDOB").value = student.DOB;
             document.querySelector("#studentEmail").value = student.Email;
+            document.querySelector("#emergencyContact").value = student.Emergency_Contact;
             
             // Check the checkboxes that match the student's disabilities
             const disabilities = student.Disabilities ? student.Disabilities.split(", ") : [];
@@ -568,11 +570,14 @@
                 firstName: document.querySelector("#studentFirstName").value,
                 lastName: document.querySelector("#studentLastName").value,
                 email: document.querySelector("#studentEmail").value,
+                dob: document.querySelector("#studentDOB").value,
+                emergencyContact: document.getElementById("emergencyContact").value,
                 disabilities: Array.from(document.querySelectorAll("input[name=disabilities]:checked")).map((checkbox) => checkbox.value),
                 assistance: Array.from(document.querySelectorAll("input[name=assistance]:checked")).map((checkbox) => checkbox.value)
             }
 
-            
+            console.log(student.emergencyContact);
+            //console.log(Emergency_Contact);
             // validate student details
             const validationMessage = validateStudent(student);
 
@@ -580,6 +585,17 @@
                 showMessage(validationMessage, "error");
                 return;
             }
+
+            let studentId = document.getElementById("studentID").value;
+
+            const updateStudentResult = await editStudentFromTable(studentId, student);
+            console.log(updateStudentResult);
+            if (updateStudentResult && updateStudentResult.success) {
+                showMessage("Student record updated successfully.", "success");
+                resetForm();
+                printTable();
+            } 
+            
 
             // waiting for database to be finalised before writing the update query
             /*

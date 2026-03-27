@@ -378,6 +378,7 @@
 
     <script src="js/useSQL.js"></script>
     <script src="js/validation.js"></script>
+    <script src="js/SQL_possible_methods/student.js"></script>
     <script>
       // define function to show message to user
       const showMessage = (text, type) => {
@@ -422,7 +423,7 @@
         if (validationMessage) {
           showMessage(validationMessage, "error");
         } else {
-          // const result = await addStudentToTable(student);
+          const result = await addStudentToTable(student);
 
           //check if query was successful
           if (result && result.success) {

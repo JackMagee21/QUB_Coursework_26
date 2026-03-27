@@ -13,7 +13,7 @@ const validateStudent = (student) => {
     const lastName = typeof student.lastName === 'string' ? student.lastName.trim() : "";
     const dob = new Date(student.dob);
     const email = typeof student.email === 'string' ? student.email.trim() : "";
-    const emergencyContact = typeof student.emergencyContact === 'string' ? student.emergencyContact.trim() : "";
+    const emergencyContact = String(student.emergencyContact ?? "").trim();
 
     // check if first name is provided
     if (firstName == "") {
@@ -34,7 +34,7 @@ const validateStudent = (student) => {
     if (!lastName.length > 50) {
         return "Last name cannot exceed 50 characters.";
     }
-
+    console.log(dob);
     // check if dob is a valid date
     if (isNaN(dob.getDate())) {
         return "Date of birth must be a valid date.";
@@ -46,6 +46,7 @@ const validateStudent = (student) => {
     }
 
     // check if emergency contact is provided
+    console.log(emergencyContact);
     if (!emergencyContact) {
         return "Emergency contact phone number is required.";
     }
