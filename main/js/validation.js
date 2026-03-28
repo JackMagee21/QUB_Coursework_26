@@ -93,3 +93,28 @@ const validateStudent = (student) => {
     // return empty string as error message if all checks are passed
     return "";
 }
+
+const validateTestResult = (testResult) => {
+    if (!testResult || typeof testResult !== 'object') {
+        return "Test result data is invalid.";
+    }
+
+    const studentId = typeof testResult.studentId === 'number' ? testResult.studentId : null;
+    const result = typeof testResult.result === 'number' ? testResult.result : null;
+
+    if (studentId === null) {
+        return "Student ID must be a number.";
+    }
+
+    if (result === null) {
+        return "Test result must be a number.";
+    }
+
+    if (result < 0) {
+        return "Test result cannot be negative.";
+    }
+
+    // return empty string as error message if all checks are passed
+    return "";
+
+}

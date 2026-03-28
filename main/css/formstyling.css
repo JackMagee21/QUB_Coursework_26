@@ -16,7 +16,9 @@ h2 {
     padding: 2%;
     margin-bottom: 15px;
     position: relative;
-    max-height: 20px;
+    height: 18px;
+    font-size: 20px;
+    width: 200px;
 }
 
 .form-input:focus {
@@ -62,18 +64,33 @@ h2 {
     border-color: #008631;
 }
 
-.checkbox-container {
+.checkbox-container, .radio-container {
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
     justify-content: space-between;
+}
+
+.checkbox-container {
     gap: 2%;
 }
 
-.checkbox-group {
+.radio-container {
+    gap: 1.6%;
+}
+
+
+.checkbox-group, .radiobutton-group {
     box-sizing: border-box;
     align-items: left;
+}
+
+.checkbox-group {
     width: 18%;
+}
+
+.radiobutton-group {
+    width: 15%;
 }
 
 
@@ -97,7 +114,7 @@ h2 {
     left: 0;
     height: 20px;
     width: 20px;
-    background: #e6e6e6;
+    background: #F0EDEE;
 }
 
 .checkbox-group .control:hover input ~ .control__indicator,
@@ -106,16 +123,16 @@ h2 {
 }
 
 .checkbox-group .control input:checked ~ .control__indicator {
-    background: #2aa1c0;
+    background: #90DDF0;
 }
 
 .checkbox-group .control:hover input:not([disabled]):checked ~ .control__indicator,
 .checkbox-group .control input:checked:focus ~ .control__indicator {
-    background: #0e647d;
+    background: #2C666E;
 }
 
 .checkbox-group .control input:disabled ~ .control__indicator {
-    background: #e6e6e6;
+    background: #F0EDEE;
     opacity: 0.6;
     pointer-events: none;
 }
@@ -142,4 +159,74 @@ h2 {
 
 .checkbox-group .control--checkbox input:disabled ~ .control__indicator:after {
     border-color: #7b7b7b;
+}
+
+
+.radiobutton-group .radio-label {
+    display: block;
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 15px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.radiobutton-group .radio-input {
+    position: absolute;
+    z-index: -1;
+    opacity: 0;
+    appearance: none;
+}
+
+.radiobutton-group .radio__control__indicator {
+    position: absolute;
+    top: 2px;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background: #F0EDEE;
+    border-radius: 50%;
+}
+
+.radiobutton-group:hover input ~ .radio__control__indicator,
+.radiobutton-group input:focus ~ .radio__control__indicator {
+    background: #ccc;
+}
+
+.radiobutton-group input:checked ~ .radio__control__indicator {
+    background: #2C666E;
+}
+
+.radiobutton-group:hover input:not([disabled]):checked ~ .radio__control__indicator,
+.radiobutton-group input:checked:focus ~ .radio__control__indicator {
+    background: #90DDF0;
+}
+
+.radiobutton-group input:disabled ~ .radio__control__indicator {
+    background: #F0EDEE;
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+  .radiobutton-group .radio__control__indicator:after {
+    content: '';
+    position: absolute;
+    display: none;
+}
+
+.radiobutton-group input:checked ~ .radio__control__indicator:after {
+    display: block;
+}
+
+.radiobutton-group .radio__control__indicator:after {
+    left: 7px;
+    top: 7px;
+    height: 6px;
+    width: 6px;
+    border-radius: 50%;
+    background: #fff;
+}
+
+.radiobutton-group input:disabled ~ .radio__control__indicator:after {
+    background: #7b7b7b;
 }
