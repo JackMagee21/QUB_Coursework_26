@@ -13,7 +13,24 @@ const validateStudent = (student) => {
     const lastName = typeof student.lastName === 'string' ? student.lastName.trim() : "";
     const dob = new Date(student.dob);
     const email = typeof student.email === 'string' ? student.email.trim() : "";
-    const emergencyContact = String(student.emergencyContact ?? "").trim();
+
+    const emergencyContact = typeof student.emergencyContact === 'string' ? student.emergencyContact.trim() : "";
+    let emergencyContactName = "";
+    let emergencyContactPNum = "";
+
+    const supportNeeds = Array.isArray(student.supportNeeds) ? student.supportNeeds : [];
+    const disabilities = Array.isArray(student.disabilities) ? student.disabilities : [];
+
+    if (emergencyContact) {
+        // split parts of emergency contact info
+        const contactParts = emergencyContact.split(" - ");
+        
+        emergencyContactName = contactParts[0].trim();
+        emergencyContactPNum = contactParts[1].trim();
+        
+    } else {
+        return "Emergency contact is required.";
+    }
 
     console.log(firstName);
     // check if first name is provided
@@ -46,17 +63,33 @@ const validateStudent = (student) => {
         return "Email must be a valid email address.";
     }
 
-    // check if emergency contact is provided
-    console.log(emergencyContact);
-    if (!emergencyContact) {
+    // check if emergency contact phone number is provided
+    if (!emergencyContactPNum) {
         return "Emergency contact phone number is required.";
     }
 
+    // check if emergency contact name is too long
+    if (emergencyContactName.length > 100) {
+        return "Emergency contact name cannot exceed 100 characters.";
+    }
+
+    // check if emergency contact phone number correct length /**
+    if (emergencyContactPNum.length > 11) {
+        return "Emergency phone number must be 11 digits long.";
+    }
+
     // check if emergency contact is a valid 11 digit number
-    if (!/^\d{11}$/.test(String(emergencyContact))) {
+    if (!/^\d{11}$/.test(String(emergencyContactPNum))) {
         return "Emergency phone number must be a valid 11 digit number.";
     }
 
+    if (supportNeeds.length < 0) {
+        return "At least one support need is required.";
+    }
+
+    if (disabilities.length < 0) {
+        return "At least one disability is required.";
+    }
     // return empty string as error message if all checks are passed
     return "";
 }

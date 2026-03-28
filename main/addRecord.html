@@ -28,7 +28,7 @@
         <form>
           <h2>Adding new Student Record</h2>
           <div class="form-group">
-            <label class="form-label" for="studentName">Forname</label>
+            <label class="form-label" for="studentFirstName">First Name</label>
             <input
               class="form-input"
               type="text"
@@ -38,7 +38,7 @@
               required
               oninput="saveLocalValues()"
             />
-            <label class="form-label" for="studentName">Surname</label>
+            <label class="form-label" for="studentLastName">Surname</label>
             <input
               class="form-input"
               type="text"
@@ -75,17 +75,28 @@
             />
           </div>
 
-          div
+          <div class="form-group">
+            <label for="emergencyContactName" class="form-label">Emergency Contact Name:</label>
+            <input 
+            type="text" 
+            id="emergencyContactName" 
+            class="form-input" 
+            placeholder="John Smith"
+            name="emergencyContactName"
+            required
+            oninput="saveLocalValues()"
+            />
+          </div>
 
           <div class="form-group">
-            <label for="emergencyContact" class="form-label"
+            <label for="emergencyContactPNum" class="form-label"
               >Emergency Contact Phone Number:</label
             >
             <input
               type="text"
               class="form-input"
-              id="emergencyContact"
-              name="emergencyContact"
+              id="emergencyContactPNum"
+              name="emergencyContactPNum"
               placeholder="12345678901"
               required
               oninput="saveLocalValues()"
@@ -101,7 +112,7 @@
                   type="checkbox"
                   id="paraplegia"
                   name="paraplegia"
-                  value="Paraplegia"
+                  value="1"
                   class="disability-checkbox"
                 />
                 <div class="control__indicator"></div>
@@ -114,7 +125,7 @@
                   type="checkbox"
                   id="arthritis"
                   name="arthritis"
-                  value="Arthritis"
+                  value="2"
                   class="disability-checkbox"
                 />
                 <div class="control__indicator"></div>
@@ -127,7 +138,7 @@
                   type="checkbox"
                   id="blindness"
                   name="blindness"
-                  value="Blindness"
+                  value="3"
                   class="disability-checkbox"
                 />
                 <div class="control__indicator"></div>
@@ -140,7 +151,7 @@
                   type="checkbox"
                   id="partialSight"
                   name="partialSight"
-                  value="Partial Sight"
+                  value="4"
                   class="disability-checkbox"
                 />
                 <div class="control__indicator"></div>
@@ -153,7 +164,7 @@
                   type="checkbox"
                   id="deafness"
                   name="deafness"
-                  value="Deafness"
+                  value="5"
                   class="disability-checkbox"
                 />
                 <div class="control__indicator"></div>
@@ -166,7 +177,7 @@
                   type="checkbox"
                   id="hardOfHearing"
                   name="hardOfHearing"
-                  value="Hard of Hearing"
+                  value="6"
                   class="disability-checkbox"
                 />
                 <div class="control__indicator"></div>
@@ -179,7 +190,7 @@
                   type="checkbox"
                   id="dyslexia"
                   name="dyslexia"
-                  value="Dyslexia"
+                  value="7"
                   class="disability-checkbox"
                 />
                 <div class="control__indicator"></div>
@@ -192,7 +203,7 @@
                 type="checkbox" 
                 id="adhd" 
                 name="adhd" 
-                value="ADHD" 
+                value="8"
                 class="disability-checkbox"
                 />
                 <div class="control__indicator"></div>
@@ -205,7 +216,7 @@
                   type="checkbox"
                   id="anxiety"
                   name="anxiety"
-                  value="Anxiety Disorder"
+                  value="9"
                   class="disability-checkbox"
                 />
                 <div class="control__indicator"></div>
@@ -218,7 +229,7 @@
                   type="checkbox"
                   id="depression"
                   name="depression"
-                  value="Depression"
+                  value="10"
                   class="disability-checkbox"
                 />
                 <div class="control__indicator"></div>
@@ -235,7 +246,7 @@
                   type="checkbox"
                   id="wheelchairAccess"
                   name="wheelchairAccess"
-                  value="Wheelchair Access"
+                  value="1"
                   class="support-checkbox"
                 />
                 <div class="control__indicator"></div>
@@ -249,7 +260,7 @@
                   type="checkbox"
                   id="mobilityAid"
                   name="mobilityAid"
-                  value="Mobility Aid"
+                  value="2"
                   class="support-checkbox"
                 />
                 <div class="control__indicator"></div>
@@ -263,7 +274,7 @@
                   type="checkbox"
                   id="screenReader"
                   name="screenReader"
-                  value="Screen Reader"
+                  value="3"
                   class="support-checkbox"
                 />
                 <div class="control__indicator"></div>
@@ -277,7 +288,7 @@
                   type="checkbox"
                   id="largePrint"
                   name="largePrint"
-                  value="Large Print Materials"
+                  value="4"
                   class="support-checkbox"
                 />
                 <div class="control__indicator"></div>
@@ -291,7 +302,7 @@
                   type="checkbox"
                   id="signLanguage"
                   name="signLanguage"
-                  value="Sign Language Interpreter"
+                  value="5"
                   class="support-checkbox"
                 />
                 <div class="control__indicator"></div>
@@ -305,7 +316,7 @@
                   type="checkbox"
                   id="hearingLoop"
                   name="hearingLoop"
-                  value="Hearing Loop System"
+                  value="6"
                   class="support-checkbox"
                 />
                 <div class="control__indicator"></div>
@@ -319,7 +330,7 @@
                   type="checkbox"
                   id="extraTime"
                   name="extraTime"
-                  value="Extra Exam Time"
+                  value="7"
                   class="support-checkbox"
                 />
                 <div class="control__indicator"></div>
@@ -333,7 +344,7 @@
                   type="checkbox"
                   id="noteTaking"
                   name="noteTaking"
-                  value="Note Taking Assistance"
+                  value="8"
                   class="support-checkbox"
                 />
                 <div class="control__indicator"></div>
@@ -347,7 +358,7 @@
                   type="checkbox"
                   id="counselling"
                   name="counselling"
-                  value="Counselling Services"
+                  value="9"
                   class="support-checkbox"
                 />
                 <div class="control__indicator"></div>
@@ -361,7 +372,7 @@
                   type="checkbox"
                   id="studyRoom"
                   name="studyRoom"
-                  value="Quiet Study Room"
+                  value="10"
                   class="support-checkbox"
                 />
                 <div class="control__indicator"></div>
@@ -394,14 +405,18 @@
         event.preventDefault(); // prevent default operations from form submit
 
         //store input values in variables
-        let studentFirstName =
-          document.getElementById("studentFirstName").value;
+        let studentFirstName = document.getElementById("studentFirstName").value;
         let studentLastName = document.getElementById("studentLastName").value;
         let studentDOB = document.getElementById("studentDOB").value;
         let studentEmail = document.getElementById("studentEmail").value;
-        let studentEmergencyContactPNum = document.getElementById("emergencyContact").value;
+        let studentEmergencyContactName = document.getElementById("emergencyContactName").value;
+        let studentEmergencyContactPNum = document.getElementById("emergencyContactPNum").value;
         let studentDisabilities = Array.from(document.querySelectorAll('input[type="checkbox"][class="disability-checkbox"]:checked')).map(checkbox => checkbox.value); // check which disability checkboxes are ticked and add those values to an array
         let studentSupportNeeds = Array.from(document.querySelectorAll('input[type="checkbox"][class="support-checkbox"]:checked')).map(checkbox => checkbox.value); // same here but for support needs
+
+
+        console.log(studentDisabilities);
+        console.log(studentSupportNeeds);
 
         // store data in an object to pass to validation function
         const student = {
@@ -409,7 +424,7 @@
           lastName: studentLastName,
           dob: studentDOB,
           email: studentEmail,
-          emergencyContact: studentEmergencyContactPNum,
+          emergencyContact: `${studentEmergencyContactName} - ${studentEmergencyContactPNum}`,
           disabilities: studentDisabilities,
           supportNeeds: studentSupportNeeds,
         };
@@ -428,8 +443,9 @@
           //check if query was successful
           if (result && result.success) {
             showMessage("Student added successfully!", "success");
+            console.log(result);
           } else {
-            showMessafe("Unable to add student.  Please try again.", "error");
+            showMessage("Unable to add student.  Please try again.", "error");
           }
           clearLocalValues(); // Look at saveLocalVars.js for code
         }

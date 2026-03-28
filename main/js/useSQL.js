@@ -34,7 +34,8 @@ const runMultipleQueries = async (queries) => {
         results.push(result);
     }
 
-    for (let result of deleteResult) {
+    for (let result of results) {
+        console.log(result);
         if (!result || result.error) {
             allSuccessful = false;
             errorMessage += (result && result.error) ? result.error : "Unknown error occurred. ";
@@ -45,6 +46,6 @@ const runMultipleQueries = async (queries) => {
 }
 
 const escapeSql = (value) => {
-    // This function allows for apostophies in the database
+    // This function allows for apostrophes in the database
     return value.replace(/'/g, "''");
 }

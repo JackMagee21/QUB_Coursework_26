@@ -44,13 +44,15 @@ function saveLocalValues(){
     const surname = document.getElementById("studentLastName").value.trim();
     const dateOfBirth = document.getElementById("studentDOB").value.trim();
     const email = document.getElementById("studentEmail").value.trim();
-    const emergancyContact = document.getElementById("emergencyContact").value.trim();
+    const emergancyContactName = document.getElementById("emergencyContactName").value.trim();
+    const emergancyContactPNum = document.getElementById("emergencyContactPNum").value.trim();
 
     localStorage.setItem("savedForename", forename);
     localStorage.setItem("savedSurname", surname);
     localStorage.setItem("savedDOB", dateOfBirth);
     localStorage.setItem("savedEmail", email);
-    localStorage.setItem("savedContact", emergancyContact);
+    localStorage.setItem("savedContact", emergancyContactName);
+    localStorage.setItem("savedContact", emergancyContactPNum);
 }
 
 function loadLocalValues(){
@@ -58,7 +60,8 @@ function loadLocalValues(){
     document.getElementById("studentLastName").value = localStorage.getItem("savedSurname");
     document.getElementById("studentDOB").value = localStorage.getItem("savedDOB");
     document.getElementById("studentEmail").value = localStorage.getItem("savedEmail");
-    document.getElementById("emergencyContact").value = localStorage.getItem("savedContact");
+    document.getElementById("emergencyContactName").value = localStorage.getItem("savedContactName");
+    document.getElementById("emergencyContactPNum").value = localStorage.getItem("savedContactPNum");
 }
 
 function clearLocalValues(){
@@ -67,7 +70,8 @@ function clearLocalValues(){
     document.getElementById("studentLastName").value = "";
     document.getElementById("studentDOB").value = "";
     document.getElementById("studentEmail").value = "";
-    document.getElementById("emergencyContact").value = "";
+    document.getElementById("emergencyContactName").value = "";
+    document.getElementById("emergencyContactPNum").value = "";
     console.log("Values cleared");
 }
 
@@ -76,7 +80,8 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("studentLastName").addEventListener("input", saveLocalValues);
     document.getElementById("studentDOB").addEventListener("input", saveLocalValues);
     document.getElementById("studentEmail").addEventListener("input", saveLocalValues);
-    document.getElementById("emergencyContact").addEventListener("input", saveLocalValues);
+    document.getElementById("emergencyContactName").addEventListener("input", saveLocalValues);
+    document.getElementById("emergencyContactPNum").addEventListener("input", saveLocalValues);
 
     window.addEventListener("load", loadLocalValues);
     window.addEventListener("beforeunload", clearLocalValues);

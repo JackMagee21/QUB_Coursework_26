@@ -2,8 +2,8 @@
 /*
 Adding students, editting sudents and deleteing student methods
 */
-const addStudentToTable = (student) => {
-    const sql = `
+const addStudentToTable = async (student) => {
+    const studentSql = `
         INSERT INTO Student (Forename, Surname, Email, Emergency_Contact, DOB)
         VALUES (
             '${escapeSql(student.firstName)}', 
@@ -12,13 +12,46 @@ const addStudentToTable = (student) => {
             '${escapeSql(student.emergencyContact)}', 
             '${escapeSql(student.dob)}'
         )
-    `;
+    `.trim();
 
-    /*
-    Update this hopefully to fit the outcome of the database ( will change )
-    */
+    const StudentInsertResult = await runQuery(studentSql);
 
-    return runQuery(sql);
+    if (!StudentInsertResult || StudentInsertResult.error) {
+        console.log("Error adding student: ", StudentInsertResult ? StudentInsertResult.error : "Unknown error");
+        return { success: false, error: StudentInsertResult ? StudentInsertResult.error : "Unknown error" };
+    }
+
+    const getStudentIdResult = await getLastInsertedStudentId();
+
+    console.log(getStudentIdResult);
+
+    let studentId = null;
+
+    if (getStudentIdResult && getStudentIdResult.success) {
+        studentId = getStudentIdResult.data[0].Student_ID;
+    } else {
+        return { success: false, error: getStudentIdResult ? getStudentIdResult.error : "Unknown error retrieving student ID" };
+    }
+
+    console.log(studentId);
+
+    const numberOfSupports = student.supportNeeds.length;
+    const numberOfDisabilities = student.disabilities.length;
+    let sqlStatements = [];
+
+    for (let i = 0; i < Math.max(numberOfSupports, numberOfDisabilities); i++) {
+        sqlStatements.push(`
+            INSERT INTO Student_Disability_Support (Student_ID, Disability_ID, Assistance_ID)
+            VALUES (${studentId}, ${i < numberOfDisabilities ? student.disabilities[i] : numberOfDisabilities}, ${i < numberOfSupports ? student.supportNeeds[i] : numberOfSupports});`.trim());  
+    }
+
+    return await runMultipleQueries(sqlStatements);
+}
+
+const getLastInsertedStudentId = async () => {
+    const sql = "SELECT Student_ID FROM Student ORDER BY Student_ID DESC LIMIT 1;";
+    return await runQuery(sql);
+
 }
 
 const deleteStudentFromTable = async (studentId) => {
