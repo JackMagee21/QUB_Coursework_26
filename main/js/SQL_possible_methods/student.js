@@ -141,6 +141,12 @@ const getStudentByYear = (year) => {
     return runQuery(sql);
 }
 
+const getStudentById = async (studentId) => {
+    const sql = `SELECT * FROM Student WHERE Student_ID = ${escapeSql(studentId)}`;
+    let result = await runQuery(sql);
+    return result;
+}
+
 
 
 /* Move this to another file */
