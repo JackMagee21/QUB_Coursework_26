@@ -2,13 +2,10 @@
     display: block;
     color: #0A090C;
     margin-bottom: 2px;
-    text-align: center;
-    padding-top: 10px;
 }
 
 h2 {
     font-weight: 600;
-    text-align: center;
 }
 
 .form-input {
@@ -17,11 +14,9 @@ h2 {
     box-shadow: 0px 2px 2px #D6D6D6;
     border: none;
     padding: 2%;
-    margin: 0 auto 15px auto;
-    height: 18px;
-    font-size: 20px;
-    display: block;
-    width: 50%;     
+    margin-bottom: 15px;
+    position: relative;
+    max-height: 20px;
 }
 
 .form-input:focus {
@@ -67,169 +62,29 @@ h2 {
     border-color: #008631;
 }
 
-.checkbox-container, .radio-container {
+.checkbox-group {
+    display: inline-block;
+    text-align: center;
+}
+
+#checkbox-container {
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
     justify-content: space-between;
+    gap: 10px;
 }
 
-.checkbox-container {
-    gap: 2%;
-}
-
-.radio-container {
-    gap: 1.6%;
-}
-
-
-.checkbox-group, .radiobutton-group {
-    box-sizing: border-box;
-    align-items: left;
-}
 
 .checkbox-group {
-    width: 18%;
+    display: inline-block;
+    text-align: center;
 }
 
-.radiobutton-group {
-    width: 15%;
-}
-
-
-.checkbox-group .control {
-    display: block;
-    position: relative;
-    padding-left: 30px;
-    cursor: pointer;
-    font-size: 18px;
-}
-
-.checkbox-group .control input {
-    position: absolute;
-    z-index: -1;
-    opacity: 0;
-}
-
-.checkbox-group .control__indicator {
-    position: absolute;
-    top: 2px;
-    left: 0;
-    height: 20px;
-    width: 20px;
-    background: #F0EDEE;
-}
-
-.checkbox-group .control:hover input ~ .control__indicator,
-.checkbox-group .control input:focus ~ .control__indicator {
-    background: #ccc;
-}
-
-.checkbox-group .control input:checked ~ .control__indicator {
-    background: #90DDF0;
-}
-
-.checkbox-group .control:hover input:not([disabled]):checked ~ .control__indicator,
-.checkbox-group .control input:checked:focus ~ .control__indicator {
-    background: #2C666E;
-}
-
-.checkbox-group .control input:disabled ~ .control__indicator {
-    background: #F0EDEE;
-    opacity: 0.6;
-    pointer-events: none;
-}
-
-.checkbox-group .control__indicator:after {
-    content: '';
-    position: absolute;
-    display: none;
-}
-
-.checkbox-group .control input:checked ~ .control__indicator:after {
-    display: block;
-}
-
-.checkbox-group .control--checkbox .control__indicator:after {
-    left: 8px;
-    top: 4px;
-    width: 3px;
-    height: 8px;
-    border: solid #fff;
-    border-width: 0 2px 2px 0;
-    transform: rotate(45deg);
-}
-
-.checkbox-group .control--checkbox input:disabled ~ .control__indicator:after {
-    border-color: #7b7b7b;
-}
-
-
-.radiobutton-group .radio-label {
-    display: block;
-    position: relative;
-    padding-left: 30px;
-    margin-bottom: 15px;
-    cursor: pointer;
-    font-size: 18px;
-}
-
-.radiobutton-group .radio-input {
-    position: absolute;
-    z-index: -1;
-    opacity: 0;
-    appearance: none;
-}
-
-.radiobutton-group .radio__control__indicator {
-    position: absolute;
-    top: 2px;
-    left: 0;
-    height: 20px;
-    width: 20px;
-    background: #F0EDEE;
-    border-radius: 50%;
-}
-
-.radiobutton-group:hover input ~ .radio__control__indicator,
-.radiobutton-group input:focus ~ .radio__control__indicator {
-    background: #ccc;
-}
-
-.radiobutton-group input:checked ~ .radio__control__indicator {
-    background: #2C666E;
-}
-
-.radiobutton-group:hover input:not([disabled]):checked ~ .radio__control__indicator,
-.radiobutton-group input:checked:focus ~ .radio__control__indicator {
-    background: #90DDF0;
-}
-
-.radiobutton-group input:disabled ~ .radio__control__indicator {
-    background: #F0EDEE;
-    opacity: 0.6;
-    pointer-events: none;
-}
-
-  .radiobutton-group .radio__control__indicator:after {
-    content: '';
-    position: absolute;
-    display: none;
-}
-
-.radiobutton-group input:checked ~ .radio__control__indicator:after {
-    display: block;
-}
-
-.radiobutton-group .radio__control__indicator:after {
-    left: 7px;
-    top: 7px;
-    height: 6px;
-    width: 6px;
-    border-radius: 50%;
-    background: #fff;
-}
-
-.radiobutton-group input:disabled ~ .radio__control__indicator:after {
-    background: #7b7b7b;
+#checkbox-container {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 10px;
 }
