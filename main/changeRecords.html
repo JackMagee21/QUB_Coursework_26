@@ -483,10 +483,11 @@
     const handleDelete = async (row) => {
       const confirmed = confirm(`Delete student #${row.Student_ID}: ${row.Forename} ${row.Surname}? This action cannot be undone.`);
       if(!confirmed) return;
+      console.log(confirmed);
 
       const result = await deleteStudentFromTable(row.Student_ID);
 
-      if(result?.success) {
+      if(result == true) {
         showMessage("Student record permanently deleted.", "success");
         if(selectedStudentID === Number(row.Student_ID)) resetForm();
         printTable();
