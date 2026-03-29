@@ -74,6 +74,7 @@ const deleteStudentFromTable = async (studentId) => {
     `;
     
     result = await runQuery(sql);
+
     if(result.success == true)
         return true;
     else
