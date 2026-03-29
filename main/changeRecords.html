@@ -31,7 +31,7 @@
 
             <h2>Edit Selected Record</h2>
 
-            <p id="selectedStudentText" class="muted">Choose a student from the table first.</p>
+            <p id="selectedStudentText" class="form-label">Choose a student from the table first.</p>
 
             <form id="edit-form">
 
@@ -40,8 +40,10 @@
                     <input type="number" class="form-input" id="studentID" name="studentID" min="1" required>
                 </div>
                 <div class="form-group">
-                    <label class="form-label" for="studentFirstName">Name</label>
+                    <label class="form-label" for="studentFirstName">Forename</label>
                     <input class="form-input" type="text" id="studentFirstName" name="studentFirstName" placeholder="First Name" required>
+                    
+                    <label class="form-label" for="studentFirstName">Surname</label>
                     <input class="form-input" type="text" id="studentLastName" name="studentLastName" placeholder="Last Name" required>
                 </div>
 
@@ -337,6 +339,7 @@
     <script src="js/useSQL.js"></script>
     <script src="js/validation.js"></script>
     <script src="js/SQL_possible_methods/student.js"></script>
+    <script src="js/SQL_possible_methods/disabilities.js"></script>
     <!-- <script src="js/saveLocalVars.js"></script> -->
     <script>
         // initialize variable for keeping track of the student the user wants to edit/delete/
@@ -535,6 +538,32 @@
             printTable();
           }
         });
+    });
+
+    document.querySelector("#studentID").addEventListener("input", async (event) => {
+      event.preventDefault();
+      const currentStudentId = document.querySelector("#studentID").value;
+
+      console.log(currentStudentId);
+
+      const student = await getStudentById(currentStudentId);
+      const data = student.data[0];
+
+      console.log(data);
+      document.querySelector("#studentFirstName").value = data.Forename;
+      document.querySelector("#studentLastName").value = data.Surname;
+      document.querySelector("#studentEmail").value = data.Email
+      document.querySelector("#studentDOB").value = data.DOB
+      document.getElementById("emergencyContact").value = data.Emergency_Contact;
+
+      let disabilities = await getAllDisabilityNamesFromStudentId(currentStudentId);
+      disabilities = disabilities.data ?? [];
+      console.log(disabilities);
+      for(const disability of disabilities) {
+        const tickBox = document.querySelector(`input[type=checkbox][value*="${disability}"]`);
+        if(tickBox) tickBox.checked = true;
+      }
+
     });
 
     </script>
