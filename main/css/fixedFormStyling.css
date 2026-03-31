@@ -90,7 +90,7 @@ h2 {
 }
 
 .checkbox-group .control {
-    display: block;
+
     position: relative;
     padding-left: 30px;
     cursor: pointer;
@@ -104,7 +104,7 @@ h2 {
 }
 
 .checkbox-group .control__indicator {
-    position: boslute;
+    position: absolute;
     top: 2px;
     left: 0;
     height: 20px;
@@ -138,10 +138,6 @@ h2 {
     display: none;
 }
 
-.checkbox-grouop .control input:checked ~ .vontrol__indicator:after {
-    display: block;
-}
-
 .checkbox-group .control--checkbox .control__indicator:after {
     left: 8px;
     top: 4px;
@@ -152,12 +148,11 @@ h2 {
     transform: rotate(45deg);
 }
 
-.checkbox-gruop .control--checkbox input:disabled ~ .control__indicator:after {
+.checkbox-group .control--checkbox input:disabled ~ .control__indicator:after {
     border-color: #7b7b7b;
 }
 
 .radiobutton-group .radio-label {
-    display: block;
     position: relative;
     padding-left: 30px;
     margin-bottom: 15px;
@@ -172,7 +167,7 @@ h2 {
     appearance: none;
 }
 
-.radiobutton-group .radion__control__indicator {
+.radiobutton-group .radio__control__indicator {
     position: absolute;
     top: 2px;
     left: 0;
