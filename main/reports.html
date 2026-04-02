@@ -28,7 +28,7 @@
             <label class="select-label" for="reportSelector">Select a report to view:</label>
             <select name="report" id="reportSelector">
                 <option value="">Choose an option</option>
-                <option value="report1">Report 1</option>
+                <option value="report1">Average Grade by disability</option>
                 <option value="report2">Report 2</option>
                 <option value="report3">Report 3</option>
                 <option value="report4">Report 4</option>
@@ -44,22 +44,111 @@
                 <option value="report14">Report 14</option>
             </select>
 
-            <div class="reportOutput"></div>
+            <canvas id="reportOutput"></canvas>
         </div>
     </div>
 
-    <script src="js/useSQL"></script>
+    <script src="js/useSQL.js"></script>
     <script src="js/SQL_possible_methods/student.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         const selectTag = document.querySelector('#reportSelector');
-        const reportOutput = document.querySelector('.reportOutput');
+        const reportOutput = document.querySelector('#reportOutput');
+        let reportSelected;
 
-        selectTag.addEventListener('change', (event) => {
+        selectTag.addEventListener('change', async (event) => {
             event.preventDefault();
 
-            const selectedReport = event.target.value;
-            reportOutput.textContent = `You have selected ${selectedReport}`;
+            reportSelected = event.target.value;
+
+            switch (reportSelected) {
+                case 'report1':
+                    const sql = 'SELECT ROUND(AVG(ts.Grade), 2) AS Grade, d.Disability_Type FROM Student s JOIN Test_Student ts ON ts.Student_ID = s.Student_ID JOIN Test t ON t.Test_ID = ts.Test_ID JOIN Student_Disability_Support sds ON sds.Student_ID = s.Student_ID JOIN Disability d ON d.Disability_ID = sds.Disability_ID GROUP BY d.Disability_Type;';
+    
+                    const data = await getReportData(sql);
+    
+                    console.log(data);
+    
+                    new Chart(reportOutput, {
+                        type: 'bar',
+                        data: {
+                            labels: data.labels,
+                            datasets: [{
+                                label: 'Average Grade',
+                                data: data.data,
+                                backgroundColor: '#2C666E'
+                            }]
+                        }
+                    })
+                    break;
+                case 'report2':
+                    // code to generate report 2
+                    break;
+                case 'report3':
+                    // code to generate report 3
+                    break;
+                case 'report4':
+                    // code to generate report 4
+                    break;
+                case 'report5':
+                    // code to generate report 5
+                    break;
+                case 'report6':
+                    // code to generate report 6
+                    break;
+                case 'report7':
+                    // code to generate report 7
+                    break;
+                case 'report8':
+                    // code to generate report 8
+                    break;
+                case 'report9':
+                    // code to generate report 9
+                    break;
+                case 'report10':
+                    // code to generate report 10
+                    break;
+                case 'report11':
+                    // code to generate report 11
+                    break;
+                case 'report12':
+                    // code to generate report 12
+                    break;
+                case 'report13':
+                    // code to generate report 13
+                    break;
+                case 'report14':
+                    // code to generate report 14
+                    break;
+                default: 
+                    reportOutput.textContent = 'Please select a report to view.';
+            }
         })
+
+        const getReportData = async (sql) => {
+            const result = await runQuery(sql);
+
+            console.log(result);
+
+            if (!result || !result.success) {
+                console.error('Error fetching report data:', result ? result.error : 'No result returned');
+                return null;
+            }
+
+            const returnedData = result.data;
+
+            let grades = [];
+            let disabilityTypes = [];
+
+            for (let row of returnedData) {
+                grades.push(row.Grade);
+                disabilityTypes.push(row.Disability_Type);
+            }
+
+            return { labels: disabilityTypes, data: grades };
+        }
+
+        
     </script>
 </body>
 </html>
