@@ -5,16 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Disabilities in Education</title>
     <link rel="stylesheet" href="css/style.css" />
-    <link rel="stylesheet" href="css/FixedFormStyling.css" />
+    <link rel="stylesheet" href="css/fixedFormStyling.css" />
   </head>
   <body>
     <div class="content">
+
       <div class="banner">
         <h1>Disabilities in Education</h1>
-        <p>
-          The effects on learning and development for students with disabilities
-        </p>
+        <p>The effects on learning and development for students with disabilities</p>
       </div>
+
       <div class="nav">
         <p>
           <a href="index.html">Home</a> |
@@ -25,300 +25,225 @@
           <a href="reports.html">Reports</a>
         </p>
       </div>
+
       <div class="main">
         <h2>Add New Test Result</h2>
 
         <form>
-          <p>Select Test</p>
-          <div class="radio-container">
-            <div class="radiobutton-group">
-              <label for="maths1A" class="radio-label"
-                >Maths - 1A
-                <input
-                  type="radio"
-                  value=1
-                  class="radio-input"
-                  id="maths1A"
-                  name="test"
-                />
-                <div class="radio__control__indicator"></div>
-              </label>
-            </div>
-            <div class="radiobutton-group">
-              <label for="maths2A" class="radio-label"
-                >Maths - 2A
-                <input
-                  type="radio"
-                  value=2
-                  class="radio-input"
-                  id="maths2A"
-                  name="test"
-                />
-                <div class="radio__control__indicator"></div>
-              </label>
-            </div>
-            <div class="radiobutton-group">
-              <label for="maths1B" class="radio-label"
-                >Maths - 1B
-                <input
-                  type="radio"
-                  value=3
-                  class="radio-input"
-                  id="maths1B"
-                  name="test"
-                />
-                <div class="radio__control__indicator"></div>
-              </label>
-            </div>
-            <div class="radiobutton-group">
-              <label for="cs1A" class="radio-label"
-                >Computer Science - 1A
-                <input
-                  type="radio"
-                  value=4
-                  class="radio-input"
-                  id="cs1A"
-                  name="test"
-                />
-                <div class="radio__control__indicator"></div>
-              </label>
-            </div>
-            <div class="radiobutton-group">
-              <label for="cs2A" class="radio-label"
-                >Computer Science - 2A
-                <input
-                  type="radio"
-                  value=5
-                  class="radio-input"
-                  id="cs2A"
-                  name="test"
-                />
-                <div class="radio__control__indicator"></div>
-              </label>
-            </div>
-            <div class="radiobutton-group">
-              <label for="bio1A" class="radio-label"
-                >Biology - 1A
-                <input
-                  type="radio"
-                  value=6
-                  class="radio-input"
-                  id="bio1A"
-                  name="test"
-                />
-                <div class="radio__control__indicator"></div>
-              </label>
-            </div>
-            <div class="radiobutton-group">
-              <label for="chem1A" class="radio-label"
-                >Chemistry - 1A
-                <input
-                  type="radio"
-                  value=7
-                  class="radio-input"
-                  id="chem1A"
-                  name="test"
-                />
-                <div class="radio__control__indicator"></div>
-              </label>
-            </div>
-            <div class="radiobutton-group">
-              <label for="phys1A" class="radio-label"
-                >Physics - 1A
-                <input
-                  type="radio"
-                  value=8
-                  class="radio-input"
-                  id="phys1A"
-                  name="test"
-                />
-                <div class="radio__control__indicator"></div>
-              </label>
-            </div>
-            <div class="radiobutton-group">
-              <label for="history1A" class="radio-label"
-                >History - 1A
-                <input
-                  type="radio"
-                  value=9
-                  class="radio-input"
-                  id="history1A"
-                  name="test"
-                />
-                <div class="radio__control__indicator"></div>
-              </label>
-            </div>
-            <div class="radiobutton-group">
-              <label for="geo1A" class="radio-label"
-                >Geography - 1A
-                <input
-                  type="radio"
-                  value=10
-                  class="radio-input"
-                  id="geo1A"
-                  name="test"
-                />
-                <div class="radio__control__indicator"></div>
-              </label>
-            </div>
-            <div class="radiobutton-group">
-              <label for="psych1A" class="radio-label"
-                >Psychology - 1A
-                <input
-                  type="radio"
-                  value=11
-                  class="radio-input"
-                  id="psych1A"
-                  name="test"
-                />
-                <div class="radio__control__indicator"></div>
-              </label>
-            </div>
-            <div class="radiobutton-group">
-              <label for="business1A" class="radio-label"
-                >Business - 1A
-                <input
-                  type="radio"
-                  value=12
-                  class="radio-input"
-                  id="business1A"
-                  name="test"
-                />
-                <div class="radio__control__indicator"></div>
-              </label>
-            </div>
-          </div>
 
+          <!-- ── Test Selection ── -->
           <div class="form-group">
-            <label for="studentID" class="form-label">Student ID</label
-            ><input
-              type="number"
-              class="form-input"
-              id="studentID"
-              name="studentID"
-            />
+            <label for="testSelect" class="form-label">Select Test:</label>
+            <select id="testSelect" name="test" class="form-input form-select">
+              <option value="">-- Select a test --</option>
+              <option value="1">Maths - 1A</option>
+              <option value="2">Maths - 2A</option>
+              <option value="3">Maths - 1B</option>
+              <option value="4">Computer Science - 1A</option>
+              <option value="5">Computer Science - 2A</option>
+              <option value="6">Biology - 1A</option>
+              <option value="7">Chemistry - 1A</option>
+              <option value="8">Physics - 1A</option>
+              <option value="9">History - 1A</option>
+              <option value="10">Geography - 1A</option>
+              <option value="11">Psychology - 1A</option>
+              <option value="12">Business - 1A</option>
+            </select>
           </div>
 
+          <!-- ── Selected Test Info (populated by JS) ── -->
+          <div id="testDetails" class="test-details"></div>
+
+          <h2>Enter Test Result</h2>
+
+          <!-- ── Student Selection ── -->
           <div class="form-group">
-            <label for="testResult" class="form-label">Test Result</label
-            >
-            <div id="testDetials"></div>
-            <input
-              type="number"
-              class="form-input"
-              id="testResult"
-              name="testResult"
-              min="0"
-              max="100"
-            />
+            <label for="studentSelect" class="form-label">Select Student:</label>
+            <select id="studentSelect" name="studentID" class="form-input form-select">
+              <option value="">-- Loading students... --</option>
+            </select>
           </div>
 
-          <input type="submit" class="form-btn" />
+          <!-- ── Test Result ── -->
+          <div class="form-group">
+            <label for="testResult" class="form-label">Test Result:</label>
+                <select id="testResult" name="testResult" class="form-input form-select">
+              <option value="">-- Select a result --</option>
+            </select>
+          </div>
+
+          <input type="submit" class="form-btn" value="Submit" />
+
         </form>
 
         <div class="message" id="testMessage"></div>
-      </div>
-    </div>
+
+      </div><!-- /.main -->
+    </div><!-- /.content -->
 
     <script src="js/useSQL.js"></script>
     <script src="js/validation.js"></script>
+    <script src="js/SQL_possible_methods/student.js"></script>
+    <script src="js/SQL_possible_methods/test.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
+      document.addEventListener("DOMContentLoaded", async () => {
 
-        console.log( document.querySelectorAll('input[name="test"]'));
+        // ── Element references ──
+        let selectedTestId       = null;
+        const testSelect         = document.querySelector("#testSelect");
+        const studentSelect      = document.querySelector("#studentSelect");
+        const testDetailsElement = document.querySelector("#testDetails");
+        const messageDiv         = document.querySelector("#testMessage");
+        const form               = document.querySelector("form");
 
-        let selectedTestId = null;
-        const radioContainer = document.querySelector(".radio-container");
-        const testDetailsElement = document.querySelector("#testDetials");
-        const form = document.querySelector("form");
-        
+        // ── Helpers ──
+
         const showMessage = (message, type) => {
-            const messageDiv = document.querySelector("#testMessage");
-            messageDiv.textContent = message;
-            messageDiv.className = "message " + type;
-        }
-    
-      const getSelectedTestDetails = async () => {
-        if (!selectedTestId) {
-          testDetailsElement.textContent = "No test selected.";
-          return { error: "No test selected" };
-        }
-
-        const query =`SELECT Test_ID, Name, Total_Marks, Pass_Marks FROM Test WHERE Test_ID = ${selectedTestId};`;
-        const result = await runQuery(query);
-        return result;
-      };
-
-      radioContainer.addEventListener("change", async (event) => {
-        selectedTestId = event.target.value;
-
-        const getSelectedTestDetailsResult = await getSelectedTestDetails();
-
-        console.log(getSelectedTestDetailsResult);
-
-        if (!getSelectedTestDetailsResult || getSelectedTestDetailsResult.error) {
-          testDetailsElement.textContent = "Error fetching test details: " + (getSelectedTestDetailsResult ? getSelectedTestDetailsResult.error : "Unknown error");
-          return;
-        }
-
-        const testDetails = getSelectedTestDetailsResult.data[0];
-
-        if (testDetails) {
-          testDetailsElement.textContent = `Selected Test: ${testDetails.Name}, Total Marks: ${testDetails.Total_Marks}, Pass Marks: ${testDetails.Pass_Marks}`;
-        } else {
-          testDetailsElement.textContent = "Selected test details not found.";
-        }
-      });
-
-      form.addEventListener("submit", async (event) => {
-        event.preventDefault();
-
-        const selectedTestId = document.querySelector('input[name="test"]:checked',)?.value;
-        const studentId = document.querySelector("#studentID").value;
-        const testResult = document.querySelector("#testResult").value;
-
-        const testResults = {
-          studentId: parseInt(studentId),
-          testId: parseInt(selectedTestId),
-          result: parseFloat(testResult),
+          messageDiv.textContent = message;
+          messageDiv.className   = `message ${type}`;
         };
 
-        
-        const selectedTestDetaulsResult = await getSelectedTestDetails();
-        
-        if (!selectedTestDetaulsResult || selectedTestDetaulsResult.error) {
-            showMessage(
-                "Error fetching test details: " + (selectedTestDetaulsResult ? selectedTestDetaulsResult.error : "Unknown error"), "error");
+        const getSelectedTestDetails = async () => {
+          if (!selectedTestId) {
+            return { error: "No test selected" };
+          }
+          const query  = `SELECT Test_ID, Name, Total_Marks, Pass_Marks FROM Test WHERE Test_ID = ${selectedTestId};`;
+          const result = await runQuery(query);
+          return result;
+        };
+
+        const determinePassOrFail = (score, passMark = 60) => {
+          return score >= passMark ? 1 : 0;
+        };
+
+        // ── Populate test result dropdown on page load ──
+        const testResultSelect = document.querySelector("#testResult");
+
+        for (let i = 0; i <= 100; i = i + 10) {
+          const option = document.createElement("option");
+          option.value       = i;
+          switch (i) {
+            case 0:   option.textContent = "0% - No attempted (U)"; break;
+            case 10:  option.textContent = "10% - U"; break;
+            case 20:  option.textContent = "20% - G"; break;
+            case 30:  option.textContent = "30% - F"; break;
+            case 40:  option.textContent = "40% - E"; break;
+            case 50:  option.textContent = "50% - D"; break;
+            case 60:  option.textContent = "60% - C"; break;
+            case 70:  option.textContent = "70% - B"; break;
+            case 80:  option.textContent = "80% - A"; break;
+            case 90:  option.textContent = "90% - A*"; break;
+            case 100: option.textContent = "100% - A* (Perfect Score!)"; break;
+             default: option.textContent = `${i}%`; break;
+          }
+          testResultSelect.appendChild(option);
+        }
+
+        // ── Populate student dropdown on page load ──
+
+        const loadStudents = async () => {
+          const result = await getAllStudents();
+
+          if (!result || result.error) {
+            studentSelect.innerHTML = `<option value="">-- Error loading students --</option>`;
             return;
-        }
-            
-        const selectedTestDetails = selectedTestDetaulsResult.data[0];
-        const selectedTestPassMark = selectedTestDetails.Pass_Marks;
+          }
 
-        const validationMessage = validateTestResult(testResults);
+          studentSelect.innerHTML = `<option value="">-- Select a student --</option>`;
+          console.log("Loaded students:", result.data);
+          result.data.forEach(student => {
+            const option = document.createElement("option");
+            option.value       = student.Student_ID;
+            option.textContent = `${student.Surname}, ${student.Forename} (ID: ${student.Student_ID})`;
+            studentSelect.appendChild(option);
+          });
+        };
 
-        if (validationMessage) {      
-          showMessage(validationMessage, "error");
-          return;
-        }
+        await loadStudents();
 
-        const insertQuery = `
-          INSERT INTO Test_Student (Student_ID, Test_ID, Grade, Pass_Fail)
-          VALUES (${studentId}, ${selectedTestId}, ${testResult}, ${testResult >= selectedTestPassMark ? 1 : 0});
-        `;
+        // ── Test dropdown change: show test details ──
 
-        const insertResult = await runQuery(insertQuery);
+        testSelect.addEventListener("change", async (event) => {
+          selectedTestId = event.target.value;
 
-        if (!insertResult || insertResult.error) {
-            showMessage( "Database error" + (insertResult ? ": " + insertResult.error : ""), "error");
+          if (!selectedTestId) {
+            testDetailsElement.textContent = "";
             return;
-        } else {
-            showMessage("Test result added successfully!", "success");
-        }
+          }
 
-        form.reset();
+          const result = await getSelectedTestDetails();
+
+          if (!result || result.error) {
+            testDetailsElement.textContent = "Error fetching test details: " + (result?.error ?? "Unknown error");
+            return;
+          }
+
+          const testDetails = result.data[0];
+
+          if (testDetails) {
+            testDetailsElement.textContent =
+              `Selected Test: ${testDetails.Name} | ` +
+              `Total Marks: ${testDetails.Total_Marks} | ` +
+              `Pass Marks: ${testDetails.Pass_Marks}`;
+          } else {
+            testDetailsElement.textContent = "Selected test details not found.";
+          }
+        });
+
+        // ── Form submit ──
+
+        form.addEventListener("submit", async (event) => {
+          event.preventDefault();
+
+          const selectedTestId = document.querySelector("#testSelect").value;
+          const studentId      = document.querySelector("#studentSelect").value;
+          const testResult     = document.querySelector("#testResult").value;
+          console.log(studentId);
+          const testResults = {
+            studentId : studentId,
+            testId    : selectedTestId,
+            result    : testResult,
+
+          };
+
+          // Validate inputs
+          const validationMessage = validateTestResult(testResults);
+          if (validationMessage) {
+            showMessage(validationMessage, "error");
+            return;
+          }
+
+          // Fetch test details for pass mark
+          const detailsResult = await getSelectedTestDetails();
+          if (!detailsResult || detailsResult.error) {
+            showMessage("Error fetching test details: " + (detailsResult?.error ?? "Unknown error"), "error");
+            return;
+          }
+          console.log(testResults);
+          const insertResult = await AddTestResult(
+            testResults.studentId,
+            testResults.testId,
+            testResults.result,
+            determinePassOrFail(testResults.result, detailsResult.data[0].Pass_Marks)
+          );
+
+          console.log(insertResult);
+
+          if (!insertResult || insertResult.error) {
+            showMessage("Database error" + (insertResult ? ": " + insertResult.error : ""), "error");
+            return;
+          }
+
+          showMessage("Test result added successfully!", "success");
+          form.reset();
+          selectedTestId = null;
+          testDetailsElement.textContent = "";
+
+          // Reload students in case any were added
+          await loadStudents();
+        });
+
       });
-    });
     </script>
   </body>
 </html>
