@@ -26,10 +26,10 @@
         <div class="main">
             <h2 ">Reports</h2>
             <label class="select-label" for="reportSelector">Select a report to view:</label>
-            <select name="report" id="reportSelector">
+            <select name="report" id="reportSelector" default="Choose an option">
                 <option value="">Choose an option</option>
                 <option value="report1">Average Grade by disability</option>
-                <option value="report2">Report 2</option>
+                <option value="report2">Number of Students by Disability</option>
                 <option value="report3">Report 3</option>
                 <option value="report4">Report 4</option>
                 <option value="report5">Report 5</option>
@@ -44,7 +44,9 @@
                 <option value="report14">Report 14</option>
             </select>
 
-            <canvas id="reportOutput"></canvas>
+            <div id="chartContainer">
+                <canvas id="reportOutput"></canvas>
+            </div>
         </div>
     </div>
 
@@ -55,21 +57,26 @@
         const selectTag = document.querySelector('#reportSelector');
         const reportOutput = document.querySelector('#reportOutput');
         let reportSelected;
+        let chart;
+        let sql = '';
+        let data;
 
         selectTag.addEventListener('change', async (event) => {
             event.preventDefault();
+
+            if (chart) {
+                chart.destroy();
+            }
 
             reportSelected = event.target.value;
 
             switch (reportSelected) {
                 case 'report1':
-                    const sql = 'SELECT ROUND(AVG(ts.Grade), 2) AS Grade, d.Disability_Type FROM Student s JOIN Test_Student ts ON ts.Student_ID = s.Student_ID JOIN Test t ON t.Test_ID = ts.Test_ID JOIN Student_Disability_Support sds ON sds.Student_ID = s.Student_ID JOIN Disability d ON d.Disability_ID = sds.Disability_ID GROUP BY d.Disability_Type;';
+                    sql = 'SELECT ROUND(AVG(ts.Grade), 2) AS Grade, d.Disability_Type FROM Student s JOIN Test_Student ts ON ts.Student_ID = s.Student_ID JOIN Test t ON t.Test_ID = ts.Test_ID JOIN Student_Disability_Support sds ON sds.Student_ID = s.Student_ID JOIN Disability d ON d.Disability_ID = sds.Disability_ID GROUP BY d.Disability_Type;';
     
-                    const data = await getReportData(sql);
+                    data = await getReportData(sql);
     
-                    console.log(data);
-    
-                    new Chart(reportOutput, {
+                     chart = new Chart(reportOutput, {
                         type: 'bar',
                         data: {
                             labels: data.labels,
@@ -78,11 +85,51 @@
                                 data: data.data,
                                 backgroundColor: '#2C666E'
                             }]
+                        },
+                        options: {
+                            responsive: false,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    max: 100
+                                }
+                            }
                         }
-                    })
+                    });
+
+                    reportOutput.style.width = '600px';
+                    reportOutput.style.height = '400px';
                     break;
-                case 'report2':
-                    // code to generate report 2
+                    case 'report2':
+                        sql = 'SELECT COUNT(s.Student_ID) AS numStudents, d.Disability_Type FROM Student s JOIN Student_Disability_Support sds ON sds.Student_ID = s.Student_ID JOIN Disability d ON sds.Disability_ID = d.Disability_ID GROUP BY d.Disability_Type;';
+                        
+                        data = await getReportData(sql);
+                        
+                        chart = new Chart(reportOutput, {
+                            type: 'pie',
+                            data: {
+                                labels: data.labels,
+                                datasets: [{
+                                    label: 'Number of Students',
+                                    data: data.data
+                                }]
+                            },
+                            options: {
+                                responsive: false,
+                                plugins: {
+                                    legend: {
+                                        position: 'left',
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: 'Number of Students by Disability Type'
+                                    }
+                                }
+                        }                    
+                    });
+
+                    reportOutput.style.width = '500px';
+                    reportOutput.style.height = '500px';
                     break;
                 case 'report3':
                     // code to generate report 3
@@ -128,8 +175,6 @@
         const getReportData = async (sql) => {
             const result = await runQuery(sql);
 
-            console.log(result);
-
             if (!result || !result.success) {
                 console.error('Error fetching report data:', result ? result.error : 'No result returned');
                 return null;
@@ -137,15 +182,18 @@
 
             const returnedData = result.data;
 
-            let grades = [];
-            let disabilityTypes = [];
+            let data = [];
+            let labels = [];
 
             for (let row of returnedData) {
-                grades.push(row.Grade);
-                disabilityTypes.push(row.Disability_Type);
+                labels.push(Object.values(row)[1]);
+                data.push(Object.values(row)[0]);
             }
 
-            return { labels: disabilityTypes, data: grades };
+            console.log(labels);
+            console.log(data);
+
+            return { labels: labels, data: data };
         }
 
         
