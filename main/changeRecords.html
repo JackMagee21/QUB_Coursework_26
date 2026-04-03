@@ -27,6 +27,15 @@
         <div class="main">
             <h2>Editing Student Details</h2>
 
+            <div>
+              <label class="form-label"> Use the search option to find a student: </label>
+              <input 
+              type="text" 
+              id="searchInput" 
+              class="form-input" 
+              placeholder="Search by name or ID..."/>
+            </div>
+
             <div class="tableContainer"></div>
 
             <h2>Edit Selected Record</h2>
@@ -499,6 +508,78 @@
       }
     }
 
+    const filterTable = async (searchText) => {
+    resetForm();
+
+    const output = document.querySelector(".tableContainer");
+    output.textContent = ""; // clear the table first
+
+    // if search is empty, just show the full table
+    if(!searchText) {
+      printTable();
+      return;
+    }
+  
+    const sql = `SELECT s.Student_ID, s.Forename, s.Surname, s.Email, s.Emergency_Contact, 
+    GROUP_CONCAT(DISTINCT d.Disability_Name SEPARATOR ', ') AS Disabilities, 
+    GROUP_CONCAT(DISTINCT a.Assistance_Name SEPARATOR ', ') AS Assistance, 
+    DATE_FORMAT(s.DOB, '%Y-%m-%d') AS DOB 
+    FROM Student s 
+    LEFT JOIN Student_Disability_Support sds ON s.Student_ID = sds.Student_ID 
+    LEFT JOIN Assistance a ON sds.Assistance_ID = a.Assistance_ID 
+    LEFT JOIN Disability d ON sds.Disability_ID = d.Disability_ID 
+    WHERE s.Forename LIKE '${searchText}%' OR s.Surname LIKE '${searchText}%' 
+    GROUP BY s.Student_ID 
+    ORDER BY s.Student_ID`;
+
+    const result = await runQuery(sql);
+
+    if(!result?.data?.length) {
+        output.textContent = "No student records found";
+        return;
+    }
+
+    const table = document.createElement("table"); // create a new table
+
+    const headings = ["Student ID", 
+      "First Name", 
+      "Last Name", 
+      "Email", 
+      "DOB", 
+      "Emergency Contact", 
+      "Disabilities", 
+      "Assistance", 
+      "Action"];
+
+    const thead = table.createTHead();
+    const headerRow = thead.insertRow();
+
+    for (let heading of headings) {
+        const th = document.createElement("th");
+        th.textContent = heading;
+        headerRow.appendChild(th);
+    }
+
+    const tbody = table.createTBody();
+
+    for(const row of result.data) {
+      const tr = tbody.insertRow();
+
+      tr.append(
+        createCell(row.Student_ID),
+        createCell(row.Forename),
+        createCell(row.Surname),
+        createCell(row.Email),
+        createCell(row.DOB),
+        createCell(row.Emergency_Contact),
+        createCell(row.Disabilities),
+        createCell(row.Assistance),
+        createActionCell(row)
+      );
+    }
+
+    output.appendChild(table);
+}
     // wait for page to load before adding event listeners to elements and creating the table
     document.addEventListener("DOMContentLoaded", () => {
         resetForm();
@@ -564,6 +645,19 @@
         if(tickBox) tickBox.checked = true;
       }
 
+    });
+
+    document.querySelector("#searchInput").addEventListener("input", (event) => {
+      const searchText = event.target.value.trim();
+
+      clearTimeout(window.searchTimeout);
+      window.searchTimeout = setTimeout(() => {
+        if(searchText.length !== 0) {
+        filterTable(searchText);
+      } else {
+        printTable();
+      }
+      }, 300);
     });
 
     </script>
