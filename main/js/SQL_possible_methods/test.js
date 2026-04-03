@@ -3,3 +3,10 @@ const getAllTestsBasedOnSubject = (subjectId) => {
         SELECT * FROM Test WHERE Subject_ID = ${escapeSql(subjectId)}
     `;
 }
+
+
+const AddTestResult = async (Student_ID, Test_ID, Grade, Pass_Fail) => {
+    const sql = `INSERT INTO Test_Student (Student_ID, Test_ID, Grade, Pass_Fail) 
+    VALUES (${Student_ID},${Test_ID},${Grade},${Pass_Fail})`;
+    return await runQuery(sql);
+}

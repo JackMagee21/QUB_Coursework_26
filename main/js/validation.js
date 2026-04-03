@@ -98,19 +98,16 @@ const validateTestResult = (testResult) => {
     if (!testResult || typeof testResult !== 'object') {
         return "Test result data is invalid.";
     }
-
-    const studentId = typeof testResult.studentId === 'number' ? testResult.studentId : null;
-    const result = typeof testResult.result === 'number' ? testResult.result : null;
-
-    if (studentId === null) {
+    
+    if (testResult.studentId === null) {
         return "Student ID must be a number.";
     }
 
-    if (result === null) {
+    if (testResult.result === null) {
         return "Test result must be a number.";
     }
 
-    if (result < 0) {
+    if (testResult.result < 0) {
         return "Test result cannot be negative.";
     }
 
