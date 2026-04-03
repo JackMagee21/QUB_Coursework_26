@@ -195,7 +195,7 @@
         form.addEventListener("submit", async (event) => {
           event.preventDefault();
 
-          const selectedTestId = document.querySelector("#testSelect").value;
+          let selectedTestId = document.querySelector("#testSelect").value;
           const studentId      = document.querySelector("#studentSelect").value;
           const testResult     = document.querySelector("#testResult").value;
           console.log(studentId);
