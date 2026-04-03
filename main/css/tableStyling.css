@@ -1,8 +1,9 @@
 .tableContainer {
 	width: 90%;
-	height: 400px;
+	height: 420px;
 	overflow: auto;
 	margin: 0 auto;
+	border: 1px solid #0A090C;
 }
 
 table {
@@ -11,9 +12,13 @@ table {
 	width: 100%;
 }
 
-table thead {
+table thead, table thead th {
 	position: sticky;
 	top: 0;
+}
+
+table thead tr {
+	height: 70px;
 }
 
 table td {
@@ -39,6 +44,7 @@ table tbody td {
 
 table tbody tr {
 	background-color: #F0EDEE;
+	height: 120px;
 }
 
 table tbody tr:nth-child(odd) {
