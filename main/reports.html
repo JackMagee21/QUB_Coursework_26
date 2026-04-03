@@ -60,8 +60,6 @@
         const chartContainer = document.querySelector('#chartContainer');
         let reportSelected;
         let chart;
-        let sql = '';
-        let data;
 
         selectTag.addEventListener('change', async (event) => {
             event.preventDefault();
@@ -74,9 +72,9 @@
 
             switch (reportSelected) {
                 case 'report1': {
-                    sql = 'SELECT ROUND(AVG(ts.Grade), 2) AS Grade, d.Disability_Type FROM Student s JOIN Test_Student ts ON ts.Student_ID = s.Student_ID JOIN Test t ON t.Test_ID = ts.Test_ID JOIN Student_Disability_Support sds ON sds.Student_ID = s.Student_ID JOIN Disability d ON d.Disability_ID = sds.Disability_ID GROUP BY d.Disability_Type;';
+                    const sql = 'SELECT ROUND(AVG(ts.Grade), 2) AS Grade, d.Disability_Type FROM Student s JOIN Test_Student ts ON ts.Student_ID = s.Student_ID JOIN Test t ON t.Test_ID = ts.Test_ID JOIN Student_Disability_Support sds ON sds.Student_ID = s.Student_ID JOIN Disability d ON d.Disability_ID = sds.Disability_ID GROUP BY d.Disability_Type;';
     
-                    data = await getReportData(sql);
+                    const data = await getReportData(sql);
 
                     let labels = [];
                     let grades = [];
@@ -189,7 +187,8 @@
                                     label: 'Average Grade',
                                     data: avgGrades
                                 }
-                            ],
+                            ]
+                        },
                             options: {
                                 responsive: true,
                                 plugins: {
@@ -208,8 +207,7 @@
                                 }
                             }
                         }                    
-                    }
-                });
+                    });
 
                     reportOutput.style.width = '1000px';
                     reportOutput.style.height = '500px';
