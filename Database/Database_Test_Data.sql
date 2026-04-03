@@ -59,19 +59,19 @@ INSERT INTO Class (Class_Name, Subject_ID) VALUES
 ('Psychology - A', 9),
 ('Business - A', 10);
 
-INSERT INTO Test (Subject_ID, Name, Percent_of_subject, Total_Marks, Pass_Marks) VALUES
-(1, 'Maths Test - 1A',40.00, 100, 40),
-(1, 'Maths Test - 2A',60.00, 100, 50),
-(2, 'Maths Test - 1B',100.00, 100, 50),
-(3, 'CS Test - 1A',50.00, 100, 50),
-(3, 'CS Test - 2A',50.00, 100, 50),
-(4, 'Biology Test - 1A',100.00, 100, 45),
-(5, 'Chemistry Test - 1A',100.00, 100, 50),
-(6, 'Physics Test - 1A',100.00, 100, 50),
-(7, 'History Test - 1A',100.00, 100, 45),
-(8, 'Geography Test - 1A',100.00, 100, 45),
-(9, 'Psychology Test - 1A',100.00, 100, 50),
-(10, 'Business Test - 1A',100.00, 100, 50);
+INSERT INTO Test (Subject_ID, Name, Percent_of_subject, Total_Marks, Pass_Marks, Completion_Date) VALUES
+(1, 'Maths Test - 1A',40.00, 100, 40, '2026-03-15'),
+(1, 'Maths Test - 2A',60.00, 100, 50, '2026-11-15'),
+(2, 'Maths Test - 1B',100.00, 100, 50, '2026-03-15'),
+(3, 'CS Test - 1A',50.00, 100, 50, '2026-03-15'),
+(3, 'CS Test - 2A',50.00, 100, 50, '2026-11-15'),
+(4, 'Biology Test - 1A',100.00, 100, 45, '2026-03-21'),
+(5, 'Chemistry Test - 1A',100.00, 100, 50, '2026-03-31'),
+(6, 'Physics Test - 1A',100.00, 100, 50, '2026-03-11'),
+(7, 'History Test - 1A',100.00, 100, 45, '2026-03-13'),
+(8, 'Geography Test - 1A',100.00, 100, 45, '2026-03-24'),
+(9, 'Psychology Test - 1A',100.00, 100, 50, '2026-03-18'),
+(10, 'Business Test - 1A',100.00, 100, 50, '2026-03-27');
 
 INSERT INTO Student_Disability_Support (Student_ID, Disability_ID, Assistance_ID) VALUES
 (1, 1, 1),
