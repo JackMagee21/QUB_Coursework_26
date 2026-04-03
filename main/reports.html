@@ -6,6 +6,7 @@
     <title>Disabilities in Education</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/reportStyling.css">
+    <link rel="stylesheet" href="css/tableStyling.css">
 </head>
 <body>
     <div class="content">
@@ -30,7 +31,7 @@
                 <option value="">Choose an option</option>
                 <option value="report1">Average Grade by disability</option>
                 <option value="report2">Number of Students by Disability</option>
-                <option value="report3">Report 3</option>
+                <option value="report3">Grade Distribution for each Test</option>
                 <option value="report4">Report 4</option>
                 <option value="report5">Report 5</option>
                 <option value="report6">Report 6</option>
@@ -56,6 +57,7 @@
     <script>
         const selectTag = document.querySelector('#reportSelector');
         const reportOutput = document.querySelector('#reportOutput');
+        const chartContainer = document.querySelector('#chartContainer');
         let reportSelected;
         let chart;
         let sql = '';
@@ -71,23 +73,31 @@
             reportSelected = event.target.value;
 
             switch (reportSelected) {
-                case 'report1':
+                case 'report1': {
                     sql = 'SELECT ROUND(AVG(ts.Grade), 2) AS Grade, d.Disability_Type FROM Student s JOIN Test_Student ts ON ts.Student_ID = s.Student_ID JOIN Test t ON t.Test_ID = ts.Test_ID JOIN Student_Disability_Support sds ON sds.Student_ID = s.Student_ID JOIN Disability d ON d.Disability_ID = sds.Disability_ID GROUP BY d.Disability_Type;';
     
                     data = await getReportData(sql);
-    
-                     chart = new Chart(reportOutput, {
+
+                    let labels = [];
+                    let grades = [];
+
+                    for (let row of data) {
+                        labels.push(row.Disability_Type);
+                        grades.push(row.Grade);
+                    }
+
+                    chart = new Chart(reportOutput, {
                         type: 'bar',
                         data: {
-                            labels: data.labels,
+                            labels: labels,
                             datasets: [{
                                 label: 'Average Grade',
-                                data: data.data,
+                                data: grades,
                                 backgroundColor: '#2C666E'
                             }]
                         },
                         options: {
-                            responsive: false,
+                            responsive: true,
                             scales: {
                                 y: {
                                     beginAtZero: true,
@@ -100,22 +110,33 @@
                     reportOutput.style.width = '600px';
                     reportOutput.style.height = '400px';
                     break;
-                    case 'report2':
-                        sql = 'SELECT COUNT(s.Student_ID) AS numStudents, d.Disability_Type FROM Student s JOIN Student_Disability_Support sds ON sds.Student_ID = s.Student_ID JOIN Disability d ON sds.Disability_ID = d.Disability_ID GROUP BY d.Disability_Type;';
+                }
+                    case 'report2': {
+                        const sql = 'SELECT COUNT(s.Student_ID) AS numStudents, d.Disability_Type FROM Student s JOIN Student_Disability_Support sds ON sds.Student_ID = s.Student_ID JOIN Disability d ON sds.Disability_ID = d.Disability_ID GROUP BY d.Disability_Type;';
                         
-                        data = await getReportData(sql);
+                        const data = await getReportData(sql);
+
+                        console.log(data);
+
+                        let chartLabels = [];
+                        let numStudents = [];
+
+                        for (let row of data) {
+                            chartLabels.push(row.Disability_Type);
+                            numStudents.push(row.numStudents);
+                        }
                         
                         chart = new Chart(reportOutput, {
                             type: 'pie',
                             data: {
-                                labels: data.labels,
+                                labels: chartLabels,
                                 datasets: [{
                                     label: 'Number of Students',
-                                    data: data.data
+                                    data: numStudents
                                 }]
                             },
                             options: {
-                                responsive: false,
+                                responsive: true,
                                 plugins: {
                                     legend: {
                                         position: 'left',
@@ -131,9 +152,70 @@
                     reportOutput.style.width = '500px';
                     reportOutput.style.height = '500px';
                     break;
-                case 'report3':
-                    // code to generate report 3
+                }
+                case 'report3': {
+                    const sql = 'SELECT t.Test_ID, t.Name, MIN(ts.Grade) AS minGrade, MAX(ts.Grade) AS maxGrade, AVG(ts.Grade) AS avgGrade FROM Test t LEFT JOIN Test_Student ts ON t.Test_ID = ts.Test_ID GROUP BY t.Test_ID;';
+                        
+                    const data = await getReportData(sql);
+
+                    console.log(data);
+
+                    let chartLabels = [];
+                    let minGrades = [];
+                    let maxGrades = [];
+                    let avgGrades = [];
+
+                    for (let row of data) {
+                        chartLabels.push(row.Name);
+                        minGrades.push(row.minGrade);
+                        maxGrades.push(row.maxGrade);
+                        avgGrades.push(row.avgGrade);
+                    }
+                        
+                    chart = new Chart(reportOutput, {
+                        type: 'line',
+                        data: {
+                            labels: chartLabels,
+                            datasets: [
+                                {
+                                    label: 'Maximum Grade',
+                                    data: maxGrades
+                                },
+                                {
+                                    label: 'Minimum Grade',
+                                    data: minGrades
+                                },
+                                {
+                                    label: 'Average Grade',
+                                    data: avgGrades
+                                }
+                            ],
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    legend: {
+                                    position: 'top',
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Grade Range by Test'
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    max: 100
+                                }
+                            }
+                        }                    
+                    }
+                });
+
+                    reportOutput.style.width = '1000px';
+                    reportOutput.style.height = '500px';
+                    
                     break;
+                }
                 case 'report4':
                     // code to generate report 4
                     break;
@@ -145,6 +227,47 @@
                     break;
                 case 'report7':
                     // code to generate report 7
+
+
+
+                    const sql = 'SELECT s.Student_ID, s.Forename, s.Surname FROM Student s JOIN Test_Student ts ON ts.Student_ID = s.Student_ID WHERE ts.Pass_Fail = 0;';
+
+                    const data = await getReportData(sql);
+
+                    const table = document.createElement('table');
+                    const thead = document.createElement('thead');
+                    const tbody = document.createElement('tbody');
+
+                    const headerRow = document.createElement('tr');
+                    const headers = ['Student ID', 'Forename', 'Surname'];
+
+                    for (let header of headers) {
+                        const th = document.createElement('th');
+                        th.textContent = header;
+                        headerRow.appendChild(th);
+                    }
+                    thead.appendChild(headerRow);
+                    table.appendChild(thead);
+                    table.appendChild(tbody);
+
+                    for (let row of data) {
+                        const tr = document.createElement('tr');
+                        const tdId = document.createElement('td');
+                        tdId.textContent = row.Student_ID;
+                        const tdForename = document.createElement('td');
+                        tdForename.textContent = row.Forename;
+                        const tdSurname = document.createElement('td');
+                        tdSurname.textContent = row.Surname;
+
+                        tr.appendChild(tdId);
+                        tr.appendChild(tdForename);
+                        tr.appendChild(tdSurname);
+                        tbody.appendChild(tr);
+                    }
+
+                    chartContainer.appendChild(table);
+
+                    console.log('got here');
                     break;
                 case 'report8':
                     // code to generate report 8
@@ -168,7 +291,7 @@
                     // code to generate report 14
                     break;
                 default: 
-                    reportOutput.textContent = 'Please select a report to view.';
+                    chartContainer.textContent = 'Please select a report to view.';
             }
         })
 
@@ -180,20 +303,7 @@
                 return null;
             }
 
-            const returnedData = result.data;
-
-            let data = [];
-            let labels = [];
-
-            for (let row of returnedData) {
-                labels.push(Object.values(row)[1]);
-                data.push(Object.values(row)[0]);
-            }
-
-            console.log(labels);
-            console.log(data);
-
-            return { labels: labels, data: data };
+            return result.data;
         }
 
         
