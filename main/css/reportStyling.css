@@ -14,3 +14,13 @@
     margin-bottom: 10px;
     font-weight: 600;
 }
+
+#chartContainer {
+    width: 90%;
+    width: 800px;
+    margin: 0 auto;
+}
+
+#reportOutput {
+    margin: 0 auto;
+}
