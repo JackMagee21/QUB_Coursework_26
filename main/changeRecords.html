@@ -409,19 +409,22 @@
 
         const printTable = async () => {
 
+            // select div surrounding table
             const output = document.querySelector(".tableContainer");
-            output.textContent = "";
+            output.textContent = ""; // div surrounding table is reset
             
+            // required sql
             const sql = "SELECT s.Student_ID, s.Forename, s.Surname, s.Email, s.Emergency_Contact, GROUP_CONCAT(DISTINCT d.Disability_Name SEPARATOR ', ') AS Disabilities, GROUP_CONCAT(DISTINCT a.Assistance_Name SEPARATOR ', ') AS Assistance, DATE_FORMAT(s.DOB, '%Y-%m-%d') AS DOB FROM Student s LEFT JOIN Student_Disability_Support sds ON s.Student_ID = sds.Student_ID LEFT JOIN Assistance a ON sds.Assistance_ID = a.Assistance_ID LEFT JOIN Disability d ON sds.Disability_ID = d.Disability_ID GROUP BY s.Student_ID ORDER BY s.Student_ID";
 
             const result = await runQuery(sql);
-            console.log(result);
+
             // check if the data was returned properly
             if(!result?.data?.length) {
               output.textContent = "No student records found";
               return;
             }
 
+            //create a table element in the html
             const table = document.createElement("table");
 
             const headings = ["Student ID", 
@@ -434,6 +437,7 @@
             "Assistance", 
             "Action"];
 
+            // create the table headings row
             const thead = table.createTHead();
             const headerRow = thead.insertRow();
 
@@ -444,6 +448,7 @@
                 headerRow.appendChild(th);
             }
 
+            // create the body of the table
             const tbody = table.createTBody();
 
             // add each row returned from sql query to table
@@ -466,28 +471,34 @@
             output.appendChild(table);
     };
 
+
     const createActionCell = (row) => {
       const td = document.createElement("td");
 
+      // create a button to select a student for editing
       const editButton = document.createElement("button");
       editButton.textContent = "Edit";
       editButton.classList.add("table-btn", "green-table-btn");
       editButton.addEventListener("click", () => selectStudent(row));
 
+      // create a button to delete the student
       const deleteButton = document.createElement("button");
       deleteButton.textContent = "Delete";
       deleteButton.classList.add("table-btn", "red-table-btn");
       deleteButton.addEventListener("click", () => handleDelete(row));
 
+      // add buttons to row of the table
       td.append(editButton, deleteButton);
       return td;
     }
 
+
     const handleDelete = async (row) => {
+      // check with user before deleting the record as this action cannot be undone
       const confirmed = confirm(`Delete student #${row.Student_ID}: ${row.Forename} ${row.Surname}? This action cannot be undone.`);
       if(!confirmed) return;
-      console.log(confirmed);
 
+      
       const result = await deleteStudentFromTable(row.Student_ID);
 
       if(result == true) {
@@ -529,7 +540,6 @@
             return;
           }
 
-          console.log(student.disabilities);
           const result = await editStudentFromTable(document.querySelector("#studentID").value, student);
 
           if(result?.success) {
