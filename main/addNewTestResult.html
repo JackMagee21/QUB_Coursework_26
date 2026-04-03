@@ -33,7 +33,7 @@
 
           <!-- ── Test Selection ── -->
           <div class="form-group">
-            <label for="testSelect" class="form-label">Select Test:</label>
+            <label for="testSelect" class="form-label select-label">Select Test:</label>
             <select id="testSelect" name="test" class="form-input form-select">
               <option value="">-- Select a test --</option>
               <option value="1">Maths - 1A</option>
@@ -58,7 +58,7 @@
 
           <!-- ── Student Selection ── -->
           <div class="form-group">
-            <label for="studentSelect" class="form-label">Select Student:</label>
+            <label for="studentSelect" class="form-label select-label">Select Student:</label>
             <select id="studentSelect" name="studentID" class="form-input form-select">
               <option value="">-- Loading students... --</option>
             </select>
@@ -66,7 +66,7 @@
 
           <!-- ── Test Result ── -->
           <div class="form-group">
-            <label for="testResult" class="form-label">Test Result:</label>
+            <label for="testResult" class="form-label select-label">Test Result:</label>
                 <select id="testResult" name="testResult" class="form-input form-select">
               <option value="">-- Select a result --</option>
             </select>
@@ -195,7 +195,7 @@
         form.addEventListener("submit", async (event) => {
           event.preventDefault();
 
-          const selectedTestId = document.querySelector("#testSelect").value;
+          let selectedTestId = document.querySelector("#testSelect").value;
           const studentId      = document.querySelector("#studentSelect").value;
           const testResult     = document.querySelector("#testResult").value;
           console.log(studentId);
