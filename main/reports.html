@@ -53,6 +53,7 @@
     <script src="js/useSQL.js"></script>
     <script src="js/SQL_possible_methods/student.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/reports/Jack/report.js"></script>
     <script>
         const selectTag = document.querySelector('#reportSelector');
         const reportOutput = document.querySelector('#reportOutput');
@@ -134,8 +135,10 @@
                 case 'report3':
                     // code to generate report 3
                     break;
+                /* My reports (Jack) 🇧🇷🇧🇷🇧🇷🇧🇷🇧🇷*/
                 case 'report4':
-                    // code to generate report 4
+                        const studentsWithSupportNoDups = await getAllStudentsWithAssistanceNoDups();
+                        console.log(studentsWithSupportNoDups);
                     break;
                 case 'report5':
                     // code to generate report 5
@@ -186,6 +189,21 @@
             let labels = [];
 
             for (let row of returnedData) {
+                labels.push(Object.values(row)[1]);
+                data.push(Object.values(row)[0]);
+            }
+
+            console.log(labels);
+            console.log(data);
+
+            return { labels: labels, data: data };
+        }
+
+        const getReportDataFromSqlData = (sqlData) => {
+            let data = [];
+            let labels = [];
+
+            for (let row of sqlData.data) {
                 labels.push(Object.values(row)[1]);
                 data.push(Object.values(row)[0]);
             }
