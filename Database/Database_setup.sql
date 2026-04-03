@@ -46,6 +46,7 @@ CREATE TABLE Test (
     Percent_of_subject DECIMAL(5,2),
     Total_Marks INT,
     Pass_Marks INT,
+    Completion_Date Date,
     FOREIGN KEY (Subject_ID) REFERENCES Subject(Subject_ID)
 );
 
