@@ -34,7 +34,7 @@ CREATE TABLE Student_Class (
     Class_ID INT,
     Student_ID INT,
     PRIMARY KEY (Class_ID, Student_ID),
-    FOREIGN KEY (Class_ID) REFERENCES Class(Class_ID)
+    FOREIGN KEY (Class_ID) REFERENCES Class(Class_ID),
     FOREIGN KEY (Student_ID) REFERENCES Student(Student_ID)  
 );
 
