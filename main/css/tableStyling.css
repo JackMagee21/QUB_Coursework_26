@@ -1,8 +1,19 @@
+.tableContainer {
+	width: 90%;
+	height: 400px;
+	overflow: auto;
+	margin: 0 auto;
+}
+
 table {
 	border-collapse: collapse;
     font-family: Tahoma, Geneva, sans-serif;
-	width: 90%;
-	margin: 5px 5%;
+	width: 100%;
+}
+
+table thead {
+	position: sticky;
+	top: 0;
 }
 
 table td {
