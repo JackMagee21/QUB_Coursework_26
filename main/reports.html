@@ -214,15 +214,14 @@
                     reportOutput.style.height = '500px';
                     
                     break;
-<<<<<<< HEAD
-                /* My reports (Jack) 🇧🇷🇧🇷🇧🇷🇧🇷🇧🇷*/
-=======
                 }
->>>>>>> e2aadab8ce672f659701678119d266ff54fd5e17
-                case 'report4':
-                        const studentsWithSupportNoDups = await getAllStudentsWithAssistanceNoDups();
-                        console.log(studentsWithSupportNoDups);
+                /* My reports (Jack) 🇧🇷🇧🇷🇧🇷🇧🇷🇧🇷*/
+                case 'report4': {
+                    const assistance = await getAllStudentsWithAssistanceNoDups();
+                    console.log(assistance.data);
                     break;
+                }
+                    // code to generate report 4
                 case 'report5':
                     // code to generate report 5
                     break;
@@ -297,7 +296,7 @@
                 default: 
                     chartContainer.textContent = 'Please select a report to view.';
             }
-        })
+        });
 
         const getReportData = async (sql) => {
             const result = await runQuery(sql);
