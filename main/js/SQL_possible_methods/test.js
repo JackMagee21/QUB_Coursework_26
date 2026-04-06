@@ -8,3 +8,16 @@ const AddTestResult = async (Student_ID, Test_ID, Grade, Pass_Fail) => {
     VALUES (${Student_ID},${Test_ID},${Grade},${Pass_Fail})`;
     return await runQuery(sql);
 }
+
+
+const getAllTestIdsBasedOnStudent = (Student_ID) => {
+    const sql = `SELECT Test_ID FROM Test_Student WHERE Student_ID = ${escapeSql(Student_ID)}`;
+    return runQuery(sql);
+}
+
+
+const getStudentMarksForTest = async (Student_ID) => {
+    const sql = `SELECT Student_ID, Grade FROM Test_Student WHERE Student_ID = ${escapeSql(Student_ID)}`;
+    return await runQuery(sql);
+}
+

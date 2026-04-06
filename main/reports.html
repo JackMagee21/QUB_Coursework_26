@@ -55,6 +55,7 @@
     <script src="js/SQL_possible_methods/student.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="js/reports/Jack/report.js"></script>
+    <script src="js/SQL_possible_methods/test.js"></script>
     <script>
         const selectTag = document.querySelector('#reportSelector');
         const reportOutput = document.querySelector('#reportOutput');
@@ -217,8 +218,69 @@
                 }
                 /* My reports (Jack) 🇧🇷🇧🇷🇧🇷🇧🇷🇧🇷*/
                 case 'report4': {
+                    // With assistance
                     const assistance = await getAllStudentsWithAssistanceNoDups();
-                    console.log(assistance.data);
+                    assistanceData = assistance.data;
+
+                    const studentIds = assistanceData.map(record => record.Student_ID);
+
+                    const studentTestResults = await Promise.all(
+                        studentIds.map(studentId => getStudentMarksForTest(studentId))
+                    );
+                    const testResultsByStudent = studentTestResults.map(result => result.data);
+                    const averageMarksPerStudent = studentIds.map((studentId, index) => {
+                        const studentArray = testResultsByStudent[index];
+
+                        if(!studentArray || studentArray.length === 0){
+                            return {
+                                studentId,
+                                average: 0
+                            };
+                        }
+
+                        const total = studentArray.reduce(
+                            (sum, r) => sum + parseFloat(r.Grade),
+                            0
+                        );
+
+                        const ave = Number((total / studentArray.length).toFixed(2));
+
+                        return {
+                            studentId,
+                            average: ave
+                        };
+                    });
+                    const marks = averageMarksPerStudent.map(r => parseFloat(r.average));
+                    const totalAverageMarks = marks.reduce((sum, average) => sum + average, 0).toFixed(2);
+
+                    const averageMark = totalAverageMarks / studentIds.length;
+
+                    console.log(averageMark.toFixed(2));
+                    // Without assistance
+
+                    //Chart
+                    const label = 'With assistance'
+                    chart = new Chart(reportOutput, {
+                        type: 'bar',
+                        data:{
+                            labels: [label],
+                            datasets:[{
+                                label:'Average mark',
+                                data: [averageMark],
+                                backgroundColor:'#2C666E'
+                            }]
+                        },
+                        options: { 
+                            responsive: true, 
+                            scales: 
+                            { y: 
+                                { beginAtZero: true, max: 100 }
+                            } 
+                        }
+                    });
+
+                    reportOutput.style.width = '600px'; 
+                    reportOutput.style.height = '400px';
                     break;
                 }
                     // code to generate report 4
