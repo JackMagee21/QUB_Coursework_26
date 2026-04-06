@@ -15,3 +15,9 @@ const getAllStudentsWithAssistanceNoDups = async () => {
     const result = await runQuery(sql);
     return result;
 }
+
+const getAllStudentsWithoutAssistanceNoDups = async () => {
+    const sql = `SELECT s.Student_ID, s.Forename, s.Surname, GROUP_CONCAT(DISTINCT a.Assistance_Name SEPARATOR ', ') AS Assistance_Name FROM Student s JOIN Student_Disability_Support sds ON s.Student_ID = sds.Student_ID JOIN Assistance a ON sds.Assistance_ID = a.Assistance_ID WHERE sds.Assistance_ID IS NULL GROUP BY s.Student_ID, s.Forename, s.Surname`;
+    const result = await runQuery(sql);
+    return result;
+}
