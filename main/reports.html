@@ -32,7 +32,7 @@
                 <option value="report1">Average Grade by disability</option>
                 <option value="report2">Number of Students by Disability</option>
                 <option value="report3">Grade Distribution for each Test</option>
-                <option value="report4">Report 4</option>
+                <option value="report4">Average Marks with and without Assistance</option>
                 <option value="report5">Report 5</option>
                 <option value="report6">Report 6</option>
                 <option value="report7">Report 7</option>
@@ -216,57 +216,35 @@
                     
                     break;
                 }
-                /* My reports (Jack) 🇧🇷🇧🇷🇧🇷🇧🇷🇧🇷*/
+                /* My reports (Jack)*/
                 case 'report4': {
                     // With assistance
                     const assistance = await getAllStudentsWithAssistanceNoDups();
+                    const noAssistance = await getAllStudentsWithoutAssistanceNoDups();
+
                     assistanceData = assistance.data;
+                    noAssistanceData = noAssistance.data;
 
-                    const studentIds = assistanceData.map(record => record.Student_ID);
+                    const studentIdsWithAssistance = assistanceData.map(record => record.Student_ID);
+                    const studentIdsWithoutAssistance = noAssistanceData.map(record => record.Student_ID);
 
-                    const studentTestResults = await Promise.all(
-                        studentIds.map(studentId => getStudentMarksForTest(studentId))
-                    );
-                    const testResultsByStudent = studentTestResults.map(result => result.data);
-                    const averageMarksPerStudent = studentIds.map((studentId, index) => {
-                        const studentArray = testResultsByStudent[index];
+                    const averageMarkWithAssistance = await getAverageMarksFromStudentIds(studentIdsWithAssistance);
+                    const averageMarkWithoutAssistance = await getAverageMarksFromStudentIds(studentIdsWithoutAssistance);
 
-                        if(!studentArray || studentArray.length === 0){
-                            return {
-                                studentId,
-                                average: 0
-                            };
-                        }
-
-                        const total = studentArray.reduce(
-                            (sum, r) => sum + parseFloat(r.Grade),
-                            0
-                        );
-
-                        const ave = Number((total / studentArray.length).toFixed(2));
-
-                        return {
-                            studentId,
-                            average: ave
-                        };
-                    });
-                    const marks = averageMarksPerStudent.map(r => parseFloat(r.average));
-                    const totalAverageMarks = marks.reduce((sum, average) => sum + average, 0).toFixed(2);
-
-                    const averageMark = totalAverageMarks / studentIds.length;
-
-                    console.log(averageMark.toFixed(2));
+                    console.log(averageMarkWithAssistance);
+                    console.log(averageMarkWithoutAssistance);
                     // Without assistance
 
                     //Chart
-                    const label = 'With assistance'
+                    const label = ['With assistance', 'Without assistance'];
+                    const marks = [averageMarkWithAssistance, averageMarkWithoutAssistance];
                     chart = new Chart(reportOutput, {
                         type: 'bar',
                         data:{
-                            labels: [label],
+                            labels: label,
                             datasets:[{
                                 label:'Average mark',
-                                data: [averageMark],
+                                data: marks,
                                 backgroundColor:'#2C666E'
                             }]
                         },
@@ -384,6 +362,46 @@
             console.log(data);
 
             return { labels: labels, data: data };
+        }
+
+        const getAverageMarksFromStudentIds = async (studentIds) => {
+            
+            const studentTestResults = await Promise.all(
+                studentIds.map(studentId => getStudentMarksForTest(studentId))
+            );
+
+            const testResultsByStudent = studentTestResults.map(result => result.data);
+
+            const averageMarksPerStudent = studentIds.map((studentId, index) => {
+                const studentArray = testResultsByStudent[index];
+
+                if(!studentArray || studentArray.length === 0){
+                    return {
+                        studentId,
+                        average: 0
+                    };
+                }
+
+                const total = studentArray.reduce(
+                    (sum, r) => sum + parseFloat(r.Grade),
+                    0
+                );
+
+                const ave = Number((total / studentArray.length).toFixed(2));
+
+                return {
+                    studentId,
+                    average: ave
+                };
+            });
+                    
+            const marks = averageMarksPerStudent.map(r => parseFloat(r.average));
+                    
+            const totalAverageMarks = marks.reduce((sum, average) => sum + average, 0).toFixed(2);
+
+            const averageMark = totalAverageMarks / studentIds.length;
+
+            return averageMark;
         }
 
         
