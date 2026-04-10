@@ -15,12 +15,12 @@
     font-weight: 600;
 }
 
-#chartContainer {
+#tableContainer {
     width: 90%;
     width: 1000px;
     margin: 0 auto;
 }
 
-#reportOutput {
+#chartContainer {
     margin: 0 auto;
 }
