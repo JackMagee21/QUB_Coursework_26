@@ -45,9 +45,8 @@
                 <option value="report14">Report 14</option>
             </select>
 
-            <div id="chartContainer">
-                <canvas id="reportOutput"></canvas>
-            </div>
+            <div id="tableContainer"></div>
+            <canvas id="chartContainer"></canvas>
         </div>
     </div>
 
@@ -58,8 +57,8 @@
     <script src="js/SQL_possible_methods/test.js"></script>
     <script>
         const selectTag = document.querySelector('#reportSelector');
-        const reportOutput = document.querySelector('#reportOutput');
-        const chartContainer = document.querySelector('#chartContainer');
+        const reportOutput = document.querySelector('#chartContainer');
+        const tableContainer = document.querySelector('#tableContainer');
         let reportSelected;
         let chart;
 
@@ -69,6 +68,9 @@
             if (chart) {
                 chart.destroy();
             }
+            
+            tableContainer.innerHTML = '<canvas id="reportOutput"></canvas>';
+
 
             reportSelected = event.target.value;
 
@@ -308,7 +310,7 @@
                         tbody.appendChild(tr);
                     }
 
-                    chartContainer.appendChild(table);
+                    tableContainer.appendChild(table);
 
                     console.log('got here');
                     break;
@@ -334,7 +336,7 @@
                     // code to generate report 14
                     break;
                 default: 
-                    chartContainer.textContent = 'Please select a report to view.';
+                    tableContainer.textContent = 'Please select a report to view.';
             }
         });
 
