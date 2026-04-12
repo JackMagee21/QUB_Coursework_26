@@ -35,8 +35,8 @@
                 <option value="report4">Average Marks with and without Assistance</option>
                 <option value="report5">Report 5</option>
                 <option value="report6">Report 6</option>
-                <option value="report7">Report 7</option>
-                <option value="report8">Report 8</option>
+                <option value="report7">Students that have Failed atleast 1 Test</option>
+                <option value="report8">Test Pass Rates</option>
                 <option value="report9">Report 9</option>
                 <option value="report10">Report 10</option>
                 <option value="report11">Report 11</option>
@@ -271,11 +271,15 @@
                     // code to generate report 6
                     break;
                 case 'report7':
-                    // code to generate report 7
+                    //-- Report Title: Students at risk
+                    //-- Business Question: What students are at risk of failling specific subjects
+                    //-- Why this report is useful: Allows a view on students which may require more assistance in tests
+                    //-- Tables used: Student, Test, Test-Student
+                    // Ask the database for the three fields we want to show.
 
 
 
-                    const sql = 'SELECT s.Student_ID, s.Forename, s.Surname FROM Student s JOIN Test_Student ts ON ts.Student_ID = s.Student_ID WHERE ts.Pass_Fail = 0;';
+                    const sql = 'SELECT DISTINCT s.Student_ID, s.Forename, s.Surname FROM Student s JOIN Test_Student ts ON ts.Student_ID = s.Student_ID WHERE ts.Pass_Fail = 0;';
 
                     const data = await getReportData(sql);
 
@@ -315,7 +319,59 @@
                     console.log('got here');
                     break;
                 case 'report8':
-                    // code to generate report 8
+                    //-- Report Title: Test pass rates
+                    //-- Business Question: What is the most difficult test?
+                    //-- Why this report is useful: Allows a view on test past rates
+                    //-- Tables used: Student, Test, Test-Student
+                    // Ask the database for the three fields we want to show.
+                    const pass_Sql = 'SELECT t.Test_ID, t.Name, COUNT(ts.Pass_Fail) AS Total_Pass_Fail, 100 * AVG( (CASE WHEN ts.Pass_Fail = 1 THEN 1.0 ELSE 0.0 END) ) AS Percentage_Pass FROM Test t LEFT JOIN Test_Student ts ON t.Test_ID = ts.Test_ID GROUP BY t.Test_ID;';
+
+                    const pass_Data = await getReportData(pass_Sql);
+
+                    console.log(pass_Data);
+
+                    let chart_Labels = [];
+                    let pass_Rate = [];
+
+                    for (let row of pass_Data) {
+                        chart_Labels.push(row.Name);
+                        pass_Rate.push(row.Percentage_Pass);
+                    }
+
+                    chart = new Chart(reportOutput, {
+                        type: 'line',
+                        data: {
+                            labels: chart_Labels,
+                            datasets: [
+                                {
+                                    label: 'Pass Rate',
+                                    data: pass_Rate
+                                }
+                            ]
+                        },
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    legend: {
+                                    position: 'top',
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Percentage Pass Rate by Test'
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    max: 100
+                                }
+                            }
+                        }                    
+                    });
+
+                    reportOutput.style.width = '1000px';
+                    reportOutput.style.height = '500px';
+
                     break;
                 case 'report9':
                     // code to generate report 9
