@@ -76,9 +76,12 @@
 
             switch (reportSelected) {
                 case 'report1': {
-                    const sql = 'SELECT ROUND(AVG(ts.Grade), 2) AS Grade, d.Disability_Type FROM Student s JOIN Test_Student ts ON ts.Student_ID = s.Student_ID JOIN Test t ON t.Test_ID = ts.Test_ID JOIN Student_Disability_Support sds ON sds.Student_ID = s.Student_ID JOIN Disability d ON d.Disability_ID = sds.Disability_ID GROUP BY d.Disability_Type;';
+                    // select average grade for each disability type
+                    const sql = 'SELECT ROUND(AVG(ts.Score), 2) AS Grade, d.Disability_Type FROM Student s JOIN Test_Student ts ON ts.Student_ID = s.Student_ID JOIN Test t ON t.Test_ID = ts.Test_ID JOIN Student_Disability_Support sds ON sds.Student_ID = s.Student_ID JOIN Disability d ON d.Disability_ID = sds.Disability_ID GROUP BY d.Disability_Type;';
     
                     const data = await getReportData(sql);
+
+                    console.log(data);
 
                     let labels = [];
                     let grades = [];
@@ -109,8 +112,9 @@
                         }
                     });
 
-                    reportOutput.style.width = '600px';
-                    reportOutput.style.height = '400px';
+                    reportOutput.style.width = '1800px';
+                    reportOutput.style.height = '700px';
+
                     break;
                 }
                     case 'report2': {
@@ -156,7 +160,7 @@
                     break;
                 }
                 case 'report3': {
-                    const sql = 'SELECT t.Test_ID, t.Name, MIN(ts.Grade) AS minGrade, MAX(ts.Grade) AS maxGrade, AVG(ts.Grade) AS avgGrade FROM Test t LEFT JOIN Test_Student ts ON t.Test_ID = ts.Test_ID GROUP BY t.Test_ID;';
+                    const sql = 'SELECT t.Test_ID, t.Name, MIN(ts.Score) AS minGrade, MAX(ts.Score) AS maxGrade, AVG(ts.Score) AS avgGrade FROM Test t LEFT JOIN Test_Student ts ON t.Test_ID = ts.Test_ID GROUP BY t.Test_ID;';
                         
                     const data = await getReportData(sql);
 
@@ -207,14 +211,23 @@
                             scales: {
                                 y: {
                                     beginAtZero: true,
-                                    max: 100
+                                    max: 100,
+                                    gace: '5%'
+                                },
+                                x: {
+                                    offset: true,
+                                    ticks: {
+                                        autoSkip: false,
+                                        maxRotation: 45,
+                                        minRotation: 45
+                                    }
                                 }
                             }
                         }                    
                     });
 
-                    reportOutput.style.width = '1000px';
-                    reportOutput.style.height = '500px';
+                    reportOutput.style.width = '1800px';
+                    reportOutput.style.height = '1000px';
                     
                     break;
                 }
