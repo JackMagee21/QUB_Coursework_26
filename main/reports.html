@@ -224,12 +224,16 @@
                     const assistance = await getAllStudentsWithAssistanceNoDups();
                     const noAssistance = await getAllStudentsWithoutAssistanceNoDups();
 
+                    console.log(assistance);
+                    console.log(noAssistance);
                     assistanceData = assistance.data;
                     noAssistanceData = noAssistance.data;
 
                     const studentIdsWithAssistance = assistanceData.map(record => record.Student_ID);
                     const studentIdsWithoutAssistance = noAssistanceData.map(record => record.Student_ID);
 
+                    console.log(studentIdsWithAssistance);
+                    console.log(studentIdsWithoutAssistance);
                     const averageMarkWithAssistance = await getAverageMarksFromStudentIds(studentIdsWithAssistance);
                     const averageMarkWithoutAssistance = await getAverageMarksFromStudentIds(studentIdsWithoutAssistance);
 
