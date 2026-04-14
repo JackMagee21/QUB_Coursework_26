@@ -296,7 +296,7 @@
 
 
 
-                    const sql = 'SELECT DISTINCT s.Student_ID, s.Forename, s.Surname FROM Student s JOIN Test_Student ts ON ts.Student_ID = s.Student_ID WHERE ts.Pass_Fail = 0;';
+                    const sql = 'SELECT DISTINCT s.Student_ID, s.Forename, s.Surname FROM Student s JOIN Test_Student ts ON s.Student_ID = ts.Student_ID JOIN Test t ON ts.Test_ID = t.Test_ID WHERE ts.Score < t.Pass_Marks ;';
 
                     const data = await getReportData(sql);
 
@@ -339,9 +339,9 @@
                     //-- Report Title: Test pass rates
                     //-- Business Question: What is the most difficult test?
                     //-- Why this report is useful: Allows a view on test past rates
-                    //-- Tables used: Student, Test, Test-Student
+                    //-- Tables used: Test, Test-Student
                     // Ask the database for the three fields we want to show.
-                    const pass_Sql = 'SELECT t.Test_ID, t.Name, COUNT(ts.Pass_Fail) AS Total_Pass_Fail, 100 * AVG( (CASE WHEN ts.Pass_Fail = 1 THEN 1.0 ELSE 0.0 END) ) AS Percentage_Pass FROM Test t LEFT JOIN Test_Student ts ON t.Test_ID = ts.Test_ID GROUP BY t.Test_ID;';
+                    const pass_Sql = 'SELECT t.Test_ID, t.Name, COUNT(ts.Score) AS Total_Pass_Fail, 100 * AVG( (CASE WHEN ts.Score > t.Pass_Marks THEN 1.0 ELSE 0.0 END) ) AS Percentage_Pass FROM Test t LEFT JOIN Test_Student ts ON t.Test_ID = ts.Test_ID GROUP BY t.Test_ID;';
 
                     const pass_Data = await getReportData(pass_Sql);
 
