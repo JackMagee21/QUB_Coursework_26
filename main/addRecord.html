@@ -77,6 +77,16 @@
           </div>
 
           <div class="form-group">
+            <label for="studentGender" class="form-label">Gender:</label>
+            <select class="form-input form-select" id="studentGender" name="studentGender" required oninput="saveLocalValues()">
+              <option value="">-- Select Gender --</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
             <label for="emergencyContactName" class="form-label">Emergency Contact Name:</label>
             <input 
             type="text" 
@@ -136,17 +146,18 @@
         switch (type) {
           case "disability":
             for (let checkbox of options) {
+              // create each checkbox to fit the format for the custom checkbox css
               const checkboxGroup = document.createElement("div");
               checkboxGroup.classList.add("checkbox-group");
     
               const label = document.createElement("label");
               label.classList.add("control", "control--checkbox");
-              label.setAttribute("for", checkbox.Disability_ID);
+              label.setAttribute("for", checkbox.Disability_Name);
               label.textContent = checkbox.Disability_Name;
     
               const input = document.createElement("input");
               input.type = "checkbox";
-              input.id = checkbox.Disability_ID;
+              input.id = checkbox.Disability_Name;
               input.name = checkbox.Disability_Name;
               input.value = checkbox.Disability_ID;
               input.classList.add("disability-checkbox");
@@ -168,12 +179,12 @@
     
               const label = document.createElement("label");
               label.classList.add("control", "control--checkbox");
-              label.setAttribute("for", checkbox.Assistance_ID);
+              label.setAttribute("for", checkbox.Assistance_Name);
               label.textContent = checkbox.Assistance_Name;
     
               const input = document.createElement("input");
               input.type = "checkbox";
-              input.id = checkbox.Assistance_ID;
+              input.id = checkbox.Assistance_Name;
               input.name = checkbox.Assistance_Name;
               input.value = checkbox.Assistance_ID;
               input.classList.add("support-checkbox");
@@ -202,14 +213,14 @@
         let studentLastName = document.getElementById("studentLastName").value;
         let studentDOB = document.getElementById("studentDOB").value;
         let studentEmail = document.getElementById("studentEmail").value;
+        let studentGender = document.getElementById("studentGender").value;
         let studentEmergencyContactName = document.getElementById("emergencyContactName").value;
         let studentEmergencyContactPNum = document.getElementById("emergencyContactPNum").value;
         let studentDisabilities = Array.from(document.querySelectorAll('input[type="checkbox"][class="disability-checkbox"]:checked')).map(checkbox => checkbox.value); // check which disability checkboxes are ticked and add those values to an array
         let studentSupportNeeds = Array.from(document.querySelectorAll('input[type="checkbox"][class="support-checkbox"]:checked')).map(checkbox => checkbox.value); // same here but for support needs
 
 
-        console.log(studentDisabilities);
-        console.log(studentSupportNeeds);
+        console.log(studentGender);
 
         // store data in an object to pass to validation function
         const student = {
@@ -220,6 +231,7 @@
           emergencyContact: `${studentEmergencyContactName} - ${studentEmergencyContactPNum}`,
           disabilities: studentDisabilities,
           supportNeeds: studentSupportNeeds,
+          gender: studentGender
         };
 
         console.log(student);
@@ -245,6 +257,7 @@
       });
 
       document.addEventListener('DOMContentLoaded', async () => {
+        // get the data to create the disability checkboxes
         const getDisabilityCheckboxesSQL = 'SELECT d.Disability_ID, d.Disability_Name FROM Disability d';
         const disabilityCheckboxesResult = await runQuery(getDisabilityCheckboxesSQL);
 
@@ -256,6 +269,8 @@
         const disabilityCheckboxContainer = document.getElementById("disabilityCheckboxesContainer");
         createCheckboxes(disabilityCheckboxContainer, disabilityCheckboxesResult.data, 'disability');
 
+
+        // get the data to create the support need checkboxes
         const getAssistanceCheckboxesSQL = 'SELECT a.Assistance_ID, a.Assistance_Name FROM Assistance a';
         const assistanceCheckboxesResult = await runQuery(getAssistanceCheckboxesSQL);
 
@@ -266,7 +281,6 @@
 
         const assistanceCheckboxContainer = document.getElementById("assistanceCheckboxesContainer");
         createCheckboxes(assistanceCheckboxContainer, assistanceCheckboxesResult.data, 'assistance');
-
       });
     </script>
 

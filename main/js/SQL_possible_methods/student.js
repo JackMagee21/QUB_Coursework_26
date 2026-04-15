@@ -4,20 +4,20 @@ Adding students, editting sudents and deleteing student methods
 */
 const addStudentToTable = async (student) => {
     const studentSql = `
-        INSERT INTO Student (Forename, Surname, Email, Emergency_Contact, DOB)
+        INSERT INTO Student (Forename, Surname, Email, Emergency_Contact, DOB, Gender)
         VALUES (
             '${escapeSql(student.firstName)}', 
             '${escapeSql(student.lastName)}', 
             '${escapeSql(student.email)}', 
             '${escapeSql(student.emergencyContact)}', 
-            '${escapeSql(student.dob)}'
+            '${escapeSql(student.dob)}',
+            '${escapeSql(student.gender)}'
         )
     `.trim();
 
     const StudentInsertResult = await runQuery(studentSql);
 
     if (!StudentInsertResult || StudentInsertResult.error) {
-        console.log("Error adding student: ", StudentInsertResult ? StudentInsertResult.error : "Unknown error");
         return { success: false, error: StudentInsertResult ? StudentInsertResult.error : "Unknown error" };
     }
 
