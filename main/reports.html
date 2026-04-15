@@ -29,8 +29,8 @@
             <label class="select-label" for="reportSelector">Select a report to view:</label>
             <select name="report" id="reportSelector" default="Choose an option">
                 <option value="">Choose an option</option>
-                <option value="report1">Average Grade by disability</option>
-                <option value="report2">Number of Students by Disability</option>
+                <option value="report1">Average Grade by Disability</option>
+                <option value="report2">Number of Students by Disability Type</option>
                 <option value="report3">Grade Distribution for each Test</option>
                 <option value="report4">Average Marks with and without Assistance</option>
                 <option value="report5">Find an individual student report</option>
@@ -76,7 +76,7 @@
 
             switch (reportSelected) {
                 case 'report1': {
-                    const sql = 'SELECT ROUND(AVG(ts.Score), 2) AS Grade, d.Disability_Type FROM Student s JOIN Test_Student ts ON ts.Student_ID = s.Student_ID JOIN Test t ON t.Test_ID = ts.Test_ID JOIN Student_Disability_Support sds ON sds.Student_ID = s.Student_ID JOIN Disability d ON d.Disability_ID = sds.Disability_ID GROUP BY d.Disability_Type;';
+                    const sql = 'SELECT AVG((ts.Score / t.Total_Marks) * 100) AS Grade, d.Disability_Type FROM Student s JOIN Test_Student ts ON ts.Student_ID = s.Student_ID JOIN Test t ON t.Test_ID = ts.Test_ID JOIN Student_Disability_Support sds ON sds.Student_ID = s.Student_ID JOIN Disability d ON d.Disability_ID = sds.Disability_ID GROUP BY d.Disability_Type;';
     
                     const data = await getReportData(sql);
 
@@ -154,12 +154,12 @@
                         }                    
                     });
 
-                    reportOutput.style.width = '500px';
-                    reportOutput.style.height = '500px';
+                    reportOutput.style.width = '900px';
+                    reportOutput.style.height = '900px';
                     break;
                 }
                 case 'report3': {
-                    const sql = 'SELECT t.Test_ID, t.Name, MIN(ts.Score) AS minGrade, MAX(ts.Score) AS maxGrade, AVG(ts.Score) AS avgGrade FROM Test t LEFT JOIN Test_Student ts ON t.Test_ID = ts.Test_ID GROUP BY t.Test_ID;';
+                    const sql = 'SELECT t.Test_ID, t.Name, MIN(ts.Score) AS minGrade, MAX(ts.Score) AS maxGrade, AVG(ts.Score) AS avgGrade, t.Total_Marks FROM Test t LEFT JOIN Test_Student ts ON t.Test_ID = ts.Test_ID GROUP BY t.Test_ID;';
                         
                     const data = await getReportData(sql);
 
@@ -172,9 +172,9 @@
 
                     for (let row of data) {
                         chartLabels.push(row.Name);
-                        minGrades.push(row.minGrade);
-                        maxGrades.push(row.maxGrade);
-                        avgGrades.push(row.avgGrade);
+                        minGrades.push((row.minGrade / row.Total_Marks) * 100);
+                        maxGrades.push((row.maxGrade / row.Total_Marks) * 100);
+                        avgGrades.push((row.avgGrade / row.Total_Marks) * 100);
                     }
                         
                     chart = new Chart(reportOutput, {
@@ -535,9 +535,10 @@
                     tableContainer.appendChild(table12);
                     break;
                 }
-                case 'report13':
+                case 'report13': {
                     // code to generate report 13
                     break;
+                }
                 case 'report14':
                     // code to generate report 14
                     break;

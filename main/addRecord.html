@@ -77,6 +77,16 @@
           </div>
 
           <div class="form-group">
+            <label for="studentGender" class="form-label">Gender:</label>
+            <select class="form-input form-select" id="studentGender" name="studentGender" required oninput="saveLocalValues()">
+              <option value="">-- Select Gender --</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
             <label for="emergencyContactName" class="form-label">Emergency Contact Name:</label>
             <input 
             type="text" 
@@ -105,280 +115,12 @@
           </div>
 
           <p class="form-label">Select any disabilities that apply:</p>
-          <div class="form-group checkbox-container">
-            <div class="checkbox-group">
-              <label for="paraplegia" class="control control--checkbox"
-                >Paraplegia
-                <input
-                  type="checkbox"
-                  id="paraplegia"
-                  name="paraplegia"
-                  value="1"
-                  class="disability-checkbox"
-                />
-                <div class="control__indicator"></div>
-              </label>
-            </div>
-            <div class="checkbox-group">
-              <label for="arthritis" class="control control--checkbox"
-                >Arthritis
-                <input
-                  type="checkbox"
-                  id="arthritis"
-                  name="arthritis"
-                  value="2"
-                  class="disability-checkbox"
-                />
-                <div class="control__indicator"></div>
-              </label>
-            </div>
-            <div class="checkbox-group">
-              <label for="blindness" class="control control--checkbox"
-                >Blindness
-                <input
-                  type="checkbox"
-                  id="blindness"
-                  name="blindness"
-                  value="3"
-                  class="disability-checkbox"
-                />
-                <div class="control__indicator"></div>
-              </label>
-            </div>
-            <div class="checkbox-group">
-              <label for="partialSight" class="control control--checkbox"
-                >Partial Sight
-                <input
-                  type="checkbox"
-                  id="partialSight"
-                  name="partialSight"
-                  value="4"
-                  class="disability-checkbox"
-                />
-                <div class="control__indicator"></div>
-              </label>
-            </div>
-            <div class="checkbox-group">
-              <label for="deafness" class="control control--checkbox"
-                >Deafness
-                <input
-                  type="checkbox"
-                  id="deafness"
-                  name="deafness"
-                  value="5"
-                  class="disability-checkbox"
-                />
-                <div class="control__indicator"></div>
-              </label>
-            </div>
-            <div class="checkbox-group">
-              <label for="hardOfHearing" class="control control--checkbox"
-                >Hard of Hearing
-                <input
-                  type="checkbox"
-                  id="hardOfHearing"
-                  name="hardOfHearing"
-                  value="6"
-                  class="disability-checkbox"
-                />
-                <div class="control__indicator"></div>
-              </label>
-            </div>
-            <div class="checkbox-group">
-              <label for="dyslexia" class="control control--checkbox"
-                >Dyslexia
-                <input
-                  type="checkbox"
-                  id="dyslexia"
-                  name="dyslexia"
-                  value="7"
-                  class="disability-checkbox"
-                />
-                <div class="control__indicator"></div>
-              </label>
-            </div>
-            <div class="checkbox-group">
-              <label for="adhd" class="control control--checkbox"
-                >ADHD
-                <input 
-                type="checkbox" 
-                id="adhd" 
-                name="adhd" 
-                value="8"
-                class="disability-checkbox"
-                />
-                <div class="control__indicator"></div>
-              </label>
-            </div>
-            <div class="checkbox-group">
-              <label for="anxiety" class="control control--checkbox"
-                >Anxiety Disorder
-                <input
-                  type="checkbox"
-                  id="anxiety"
-                  name="anxiety"
-                  value="9"
-                  class="disability-checkbox"
-                />
-                <div class="control__indicator"></div>
-              </label>
-            </div>
-            <div class="checkbox-group">
-              <label for="depression" class="control control--checkbox"
-                >Depression
-                <input
-                  type="checkbox"
-                  id="depression"
-                  name="depression"
-                  value="10"
-                  class="disability-checkbox"
-                />
-                <div class="control__indicator"></div>
-              </label>
-            </div>
+          <div class="form-group checkbox-container" id="disabilityCheckboxesContainer">
+            <!-- Disability checkboxes will be dynamically inserted here -->
           </div>
-
           <p class="form-label">Select any support needs that apply:</p>
-          <div class="form-group checkbox-container">
-            <div class="checkbox-group">
-              <label for="wheelchairAccess" class="control control--checkbox"
-                >Wheelchair Access
-                <input
-                  type="checkbox"
-                  id="wheelchairAccess"
-                  name="wheelchairAccess"
-                  value="1"
-                  class="support-checkbox"
-                />
-                <div class="control__indicator"></div>
-              </label>
-            </div>
-
-            <div class="checkbox-group">
-              <label for="mobilityAid" class="control control--checkbox"
-                >Mobility Aid
-                <input
-                  type="checkbox"
-                  id="mobilityAid"
-                  name="mobilityAid"
-                  value="2"
-                  class="support-checkbox"
-                />
-                <div class="control__indicator"></div>
-              </label>
-            </div>
-
-            <div class="checkbox-group">
-              <label for="screenReader" class="control control--checkbox"
-                >Screen Reader
-                <input
-                  type="checkbox"
-                  id="screenReader"
-                  name="screenReader"
-                  value="3"
-                  class="support-checkbox"
-                />
-                <div class="control__indicator"></div>
-              </label>
-            </div>
-
-            <div class="checkbox-group">
-              <label for="largePrint" class="control control--checkbox"
-                >Large Print Materials
-                <input
-                  type="checkbox"
-                  id="largePrint"
-                  name="largePrint"
-                  value="4"
-                  class="support-checkbox"
-                />
-                <div class="control__indicator"></div>
-              </label>
-            </div>
-
-            <div class="checkbox-group">
-              <label for="signLanguage" class="control control--checkbox"
-                >Sign Language Interpreter
-                <input
-                  type="checkbox"
-                  id="signLanguage"
-                  name="signLanguage"
-                  value="5"
-                  class="support-checkbox"
-                />
-                <div class="control__indicator"></div>
-              </label>
-            </div>
-
-            <div class="checkbox-group">
-              <label for="hearingLoop" class="control control--checkbox"
-                >Hearing Loop System
-                <input
-                  type="checkbox"
-                  id="hearingLoop"
-                  name="hearingLoop"
-                  value="6"
-                  class="support-checkbox"
-                />
-                <div class="control__indicator"></div>
-              </label>
-            </div>
-
-            <div class="checkbox-group">
-              <label for="extraTime" class="control control--checkbox"
-                >Extra Exam Time
-                <input
-                  type="checkbox"
-                  id="extraTime"
-                  name="extraTime"
-                  value="7"
-                  class="support-checkbox"
-                />
-                <div class="control__indicator"></div>
-              </label>
-            </div>
-
-            <div class="checkbox-group">
-              <label for="noteTaking" class="control control--checkbox"
-                >Note Taking Assistance
-                <input
-                  type="checkbox"
-                  id="noteTaking"
-                  name="noteTaking"
-                  value="8"
-                  class="support-checkbox"
-                />
-                <div class="control__indicator"></div>
-              </label>
-            </div>
-
-            <div class="checkbox-group">
-              <label for="counselling" class="control control--checkbox"
-                >Counselling Services
-                <input
-                  type="checkbox"
-                  id="counselling"
-                  name="counselling"
-                  value="9"
-                  class="support-checkbox"
-                />
-                <div class="control__indicator"></div>
-              </label>
-            </div>
-
-            <div class="checkbox-group">
-              <label for="studyRoom" class="control control--checkbox"
-                >Quiet Study Room
-                <input
-                  type="checkbox"
-                  id="studyRoom"
-                  name="studyRoom"
-                  value="10"
-                  class="support-checkbox"
-                />
-                <div class="control__indicator"></div>
-              </label>
-            </div>
+          <div class="form-group checkbox-container" id="assistanceCheckboxesContainer">
+            <!-- Support need checkboxes will be dynamically inserted here -->
           </div>
 
           <input type="submit" class="form-btn" />
@@ -399,6 +141,67 @@
         output.className = `message ${type}`;
       };
 
+      const createCheckboxes = (container, options, type) => {
+
+        switch (type) {
+          case "disability":
+            for (let checkbox of options) {
+              // create each checkbox to fit the format for the custom checkbox css
+              const checkboxGroup = document.createElement("div");
+              checkboxGroup.classList.add("checkbox-group");
+    
+              const label = document.createElement("label");
+              label.classList.add("control", "control--checkbox");
+              label.setAttribute("for", checkbox.Disability_Name);
+              label.textContent = checkbox.Disability_Name;
+    
+              const input = document.createElement("input");
+              input.type = "checkbox";
+              input.id = checkbox.Disability_Name;
+              input.name = checkbox.Disability_Name;
+              input.value = checkbox.Disability_ID;
+              input.classList.add("disability-checkbox");
+    
+              const indicator = document.createElement("div");
+              indicator.classList.add("control__indicator");
+    
+              label.appendChild(input);
+              label.appendChild(indicator);
+              checkboxGroup.appendChild(label);
+    
+              container.appendChild(checkboxGroup);
+            }
+            break;
+          case "assistance":
+            for (let checkbox of options) {
+              const checkboxGroup = document.createElement("div");
+              checkboxGroup.classList.add("checkbox-group");
+    
+              const label = document.createElement("label");
+              label.classList.add("control", "control--checkbox");
+              label.setAttribute("for", checkbox.Assistance_Name);
+              label.textContent = checkbox.Assistance_Name;
+    
+              const input = document.createElement("input");
+              input.type = "checkbox";
+              input.id = checkbox.Assistance_Name;
+              input.name = checkbox.Assistance_Name;
+              input.value = checkbox.Assistance_ID;
+              input.classList.add("support-checkbox");
+    
+              const indicator = document.createElement("div");
+              indicator.classList.add("control__indicator");
+    
+              label.appendChild(input);
+              label.appendChild(indicator);
+              checkboxGroup.appendChild(label);
+    
+              container.appendChild(checkboxGroup);
+            }
+            break;
+        }
+      }
+
       // select form
       let form = document.querySelector("form");
       //add event listener for form submit button press
@@ -410,14 +213,14 @@
         let studentLastName = document.getElementById("studentLastName").value;
         let studentDOB = document.getElementById("studentDOB").value;
         let studentEmail = document.getElementById("studentEmail").value;
+        let studentGender = document.getElementById("studentGender").value;
         let studentEmergencyContactName = document.getElementById("emergencyContactName").value;
         let studentEmergencyContactPNum = document.getElementById("emergencyContactPNum").value;
         let studentDisabilities = Array.from(document.querySelectorAll('input[type="checkbox"][class="disability-checkbox"]:checked')).map(checkbox => checkbox.value); // check which disability checkboxes are ticked and add those values to an array
         let studentSupportNeeds = Array.from(document.querySelectorAll('input[type="checkbox"][class="support-checkbox"]:checked')).map(checkbox => checkbox.value); // same here but for support needs
 
 
-        console.log(studentDisabilities);
-        console.log(studentSupportNeeds);
+        console.log(studentGender);
 
         // store data in an object to pass to validation function
         const student = {
@@ -428,6 +231,7 @@
           emergencyContact: `${studentEmergencyContactName} - ${studentEmergencyContactPNum}`,
           disabilities: studentDisabilities,
           supportNeeds: studentSupportNeeds,
+          gender: studentGender
         };
 
         console.log(student);
@@ -450,6 +254,33 @@
           }
           clearLocalValues(); // Look at saveLocalVars.js for code
         }
+      });
+
+      document.addEventListener('DOMContentLoaded', async () => {
+        // get the data to create the disability checkboxes
+        const getDisabilityCheckboxesSQL = 'SELECT d.Disability_ID, d.Disability_Name FROM Disability d';
+        const disabilityCheckboxesResult = await runQuery(getDisabilityCheckboxesSQL);
+
+        if (!disabilityCheckboxesResult || disabilityCheckboxesResult.error) {
+          showMessage("Unable to load disability options.  Please refresh the page.", "error");
+          return;
+        }
+
+        const disabilityCheckboxContainer = document.getElementById("disabilityCheckboxesContainer");
+        createCheckboxes(disabilityCheckboxContainer, disabilityCheckboxesResult.data, 'disability');
+
+
+        // get the data to create the support need checkboxes
+        const getAssistanceCheckboxesSQL = 'SELECT a.Assistance_ID, a.Assistance_Name FROM Assistance a';
+        const assistanceCheckboxesResult = await runQuery(getAssistanceCheckboxesSQL);
+
+        if (!assistanceCheckboxesResult || assistanceCheckboxesResult.error) {
+          showMessage("Unable to load support need options.  Please refresh the page.", "error");
+          return;
+        }
+
+        const assistanceCheckboxContainer = document.getElementById("assistanceCheckboxesContainer");
+        createCheckboxes(assistanceCheckboxContainer, assistanceCheckboxesResult.data, 'assistance');
       });
     </script>
 

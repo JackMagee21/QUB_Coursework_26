@@ -36,18 +36,7 @@
             <label for="testSelect" class="form-label select-label">Select Test:</label>
             <select id="testSelect" name="test" class="form-input form-select">
               <option value="">-- Select a test --</option>
-              <option value="1">Maths - 1A</option>
-              <option value="2">Maths - 2A</option>
-              <option value="3">Maths - 1B</option>
-              <option value="4">Computer Science - 1A</option>
-              <option value="5">Computer Science - 2A</option>
-              <option value="6">Biology - 1A</option>
-              <option value="7">Chemistry - 1A</option>
-              <option value="8">Physics - 1A</option>
-              <option value="9">History - 1A</option>
-              <option value="10">Geography - 1A</option>
-              <option value="11">Psychology - 1A</option>
-              <option value="12">Business - 1A</option>
+              <!-- Options will be populated by JS -->
             </select>
           </div>
 
@@ -66,10 +55,8 @@
 
           <!-- ── Test Result ── -->
           <div class="form-group">
-            <label for="testResult" class="form-label select-label">Test Result:</label>
-                <select id="testResult" name="testResult" class="form-input form-select">
-              <option value="">-- Select a result --</option>
-            </select>
+            <label for="testResult" class="form-label">Test Result:</label>
+                <input type="number" id="testResult" name="testResult" class="form-input">
           </div>
 
           <input type="submit" class="form-btn" value="Submit" />
@@ -86,8 +73,32 @@
     <script src="js/SQL_possible_methods/student.js"></script>
     <script src="js/SQL_possible_methods/test.js"></script>
     <script>
-      document.addEventListener("DOMContentLoaded", async () => {
+      const createSelectOptions = (options) => {
+        const selectElement = document.querySelector("#testSelect");
 
+        for (let option of options) {
+          const optionElement = document.createElement("option");
+          optionElement.value = option.Test_ID;
+          optionElement.textContent = option.Name;
+          selectElement.appendChild(optionElement);
+        }
+      }
+      
+      document.addEventListener("DOMContentLoaded", async () => {
+        
+        const getTestsSQL = `SELECT Test_ID, Name FROM Test;`;
+        const testsResult = await runQuery(getTestsSQL);
+        
+        if (!testsResult || testsResult.error) {
+          const testSelect = document.querySelector("#testSelect");
+          testSelect.innerHTML = `<option value="">-- Error loading tests --</option>`;
+          console.error("Error fetching tests:", testsResult ? testsResult.error : "Unknown error");
+          return;
+        }
+        
+        createSelectOptions(testsResult.data);
+        
+        
         // ── Element references ──
         let selectedTestId       = null;
         const testSelect         = document.querySelector("#testSelect");
@@ -95,9 +106,51 @@
         const testDetailsElement = document.querySelector("#testDetails");
         const messageDiv         = document.querySelector("#testMessage");
         const form               = document.querySelector("form");
-
+        
         // ── Helpers ──
+        
+  
+        const determineGrade = async (score, selectedTestDetails) => {
 
+          console.log('selected test details:', selectedTestDetails);
+
+          const selectedTestLevel = selectedTestDetails.Name.split(" ")[0]; 
+
+          const percentage = (score / selectedTestDetails.Total_Marks) * 100;
+
+          switch (selectedTestLevel){
+            case 'KS3':
+            case 'GCSE':
+              if (percentage >= 90) return 'Level 9';
+              if (percentage >= 80) return 'Level 8';
+              if (percentage >= 70) return 'Level 7';
+              if (percentage >= 60) return 'Level 6';
+              if (percentage >= 50) return 'Level 5';
+              if (percentage >= 40) return 'Level 4';
+              if (percentage >= 30) return 'Level 3';
+              if (percentage >= 20) return 'Level 2';
+              return 'Level 1';
+              break;
+            case 'AS':
+            case 'A2':
+              if (percentage >= 90) return 'A*';
+              if (percentage >= 80) return 'A';
+              if (percentage >= 70) return 'B';
+              if (percentage >= 60) return 'C';
+              if (percentage >= 50) return 'D';
+              if (percentage >= 40) return 'E';
+              return 'U';
+              break;
+            case 'BTEC':
+              if (percentage >= 85) return 'Distinction*';
+              if (percentage >= 70) return 'Distinction';
+              if (percentage >= 60) return 'Merit';
+              if (percentage >= 50) return 'Pass';
+              return 'Fail';
+              break;
+          }
+        };
+        
         const showMessage = (message, type) => {
           messageDiv.textContent = message;
           messageDiv.className   = `message ${type}`;
@@ -115,29 +168,6 @@
         const determinePassOrFail = (score, passMark = 60) => {
           return score >= passMark ? 1 : 0;
         };
-
-        // ── Populate test result dropdown on page load ──
-        const testResultSelect = document.querySelector("#testResult");
-
-        for (let i = 0; i <= 100; i = i + 10) {
-          const option = document.createElement("option");
-          option.value       = i;
-          switch (i) {
-            case 0:   option.textContent = "0% - No attempted (U)"; break;
-            case 10:  option.textContent = "10% - U"; break;
-            case 20:  option.textContent = "20% - G"; break;
-            case 30:  option.textContent = "30% - F"; break;
-            case 40:  option.textContent = "40% - E"; break;
-            case 50:  option.textContent = "50% - D"; break;
-            case 60:  option.textContent = "60% - C"; break;
-            case 70:  option.textContent = "70% - B"; break;
-            case 80:  option.textContent = "80% - A"; break;
-            case 90:  option.textContent = "90% - A*"; break;
-            case 100: option.textContent = "100% - A* (Perfect Score!)"; break;
-             default: option.textContent = `${i}%`; break;
-          }
-          testResultSelect.appendChild(option);
-        }
 
         // ── Populate student dropdown on page load ──
 
@@ -198,16 +228,27 @@
           let selectedTestId = document.querySelector("#testSelect").value;
           const studentId      = document.querySelector("#studentSelect").value;
           const testResult     = document.querySelector("#testResult").value;
-          console.log(studentId);
+
+          const selectedTestDetailsResult = await getSelectedTestDetails();
+          if (!selectedTestDetailsResult || selectedTestDetailsResult.error) {
+            showMessage("Error fetching test details for validation: " + (selectedTestDetailsResult ? selectedTestDetailsResult.error : "Unknown error"), "error");
+            return;
+          }
+          const selectedTestDetails = selectedTestDetailsResult.data[0];
+
+          const grade = await determineGrade(testResult, selectedTestDetails);
+
           const testResults = {
             studentId : studentId,
             testId    : selectedTestId,
-            result    : testResult,
-
+            score     : testResult,
+            grade     : grade
           };
 
+          console.log(testResults);
+
           // Validate inputs
-          const validationMessage = validateTestResult(testResults);
+          const validationMessage = validateTestResult(testResults, selectedTestDetails);
           if (validationMessage) {
             showMessage(validationMessage, "error");
             return;
@@ -220,11 +261,12 @@
             return;
           }
           console.log(testResults);
+
           const insertResult = await AddTestResult(
-            testResults.studentId,
-            testResults.testId,
-            testResults.result,
-            determinePassOrFail(testResults.result, detailsResult.data[0].Pass_Marks)
+            escapeSql(testResults.studentId),
+            escapeSql(testResults.testId),
+            escapeSql(testResults.score),
+            escapeSql(testResults.grade)
           );
 
           console.log(insertResult);

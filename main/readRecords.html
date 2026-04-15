@@ -89,7 +89,7 @@
                 newRow.insertCell(3).textContent = student.DOB;
                 newRow.insertCell(4).textContent = student.Email;
                 newRow.insertCell(5).textContent = student.Emergency_Contact;
-                newRow.insertCell(6).textContent = student.Attendance_Percentage + "%";
+                newRow.insertCell(6).textContent = student.Attendance_Percentage > 0 ? student.Attendance_Percentage + "%" : "N/A";
                 
             }
         };
@@ -136,7 +136,7 @@
                 newRow.insertCell(3).textContent = student.DOB;
                 newRow.insertCell(4).textContent = student.Email;
                 newRow.insertCell(5).textContent = student.Emergency_Contact;
-                newRow.insertCell(6).textContent = student.Attendance_Percentage + "%";
+                newRow.insertCell(6).textContent = student.Attendance_Percentage > 0 ? student.Attendance_Percentage + "%" : "N/A";
                 
             }
         };

@@ -94,7 +94,7 @@ const validateStudent = (student) => {
     return "";
 }
 
-const validateTestResult = (testResult) => {
+const validateTestResult = (testResult, selectedTestDetails) => {
     if (!testResult || typeof testResult !== 'object') {
         return "Test result data is invalid.";
     }
@@ -103,12 +103,16 @@ const validateTestResult = (testResult) => {
         return "Student ID must be a number.";
     }
 
-    if (testResult.result === null) {
+    if (testResult.score === null) {
         return "Test result must be a number.";
     }
 
-    if (testResult.result < 0) {
+    if (testResult.score < 0) {
         return "Test result cannot be negative.";
+    }
+
+    if (testResult.score > selectedTestDetails.Total_Marks) {
+        return "Test result cannot exceed the total marks for the test.";
     }
 
     // return empty string as error message if all checks are passed
