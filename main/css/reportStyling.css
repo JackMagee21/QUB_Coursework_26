@@ -15,9 +15,33 @@
     font-weight: 600;
 }
 
+.select-dropdown {
+    width: 300px;
+    height: 40px;
+    border-radius: 20px;
+    display: block;          /* makes margin auto work */
+    margin: auto;       /* centres it horizontally */
+    display: block;
+    padding: 10px;
+}
+
+.select-wrapper {
+    display: flex;
+    justify-content: center;   /* centres them horizontally */
+    gap: 20px;                 /* space between the two boxes */
+    flex-wrap: wrap;           /* stacks them on very small screens */
+    margin: 10px auto;
+}
+
+.text-wrapper {
+    display: flex;
+    flex-direction: column;  /* stacks label on top of selects */
+    align-items: center;     /* centres everything */
+    margin: 10px auto;
+}
+
 #tableContainer {
     width: 90%;
-    width: 1000px;
     margin: 0 auto;
 }
 

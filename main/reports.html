@@ -33,7 +33,7 @@
                 <option value="report2">Number of Students by Disability</option>
                 <option value="report3">Grade Distribution for each Test</option>
                 <option value="report4">Average Marks with and without Assistance</option>
-                <option value="report5">Pass Rate by Disability</option>
+                <option value="report5">Find an individual student report</option>
                 <option value="report6">Report 6</option>
                 <option value="report7">Students that have Failed atleast 1 Test</option>
                 <option value="report8">Test Pass Rates</option>
@@ -76,7 +76,6 @@
 
             switch (reportSelected) {
                 case 'report1': {
-                    // select average grade for each disability type
                     const sql = 'SELECT ROUND(AVG(ts.Score), 2) AS Grade, d.Disability_Type FROM Student s JOIN Test_Student ts ON ts.Student_ID = s.Student_ID JOIN Test t ON t.Test_ID = ts.Test_ID JOIN Student_Disability_Support sds ON sds.Student_ID = s.Student_ID JOIN Disability d ON d.Disability_ID = sds.Disability_ID GROUP BY d.Disability_Type;';
     
                     const data = await getReportData(sql);
@@ -237,21 +236,14 @@
                     const assistance = await getAllStudentsWithAssistanceNoDups();
                     const noAssistance = await getAllStudentsWithoutAssistanceNoDups();
 
-                    console.log(assistance);
-                    console.log(noAssistance);
                     assistanceData = assistance.data;
                     noAssistanceData = noAssistance.data;
 
                     const studentIdsWithAssistance = assistanceData.map(record => record.Student_ID);
                     const studentIdsWithoutAssistance = noAssistanceData.map(record => record.Student_ID);
 
-                    console.log(studentIdsWithAssistance);
-                    console.log(studentIdsWithoutAssistance);
                     const averageMarkWithAssistance = await getAverageMarksFromStudentIds(studentIdsWithAssistance);
                     const averageMarkWithoutAssistance = await getAverageMarksFromStudentIds(studentIdsWithoutAssistance);
-
-                    console.log(averageMarkWithAssistance);
-                    console.log(averageMarkWithoutAssistance);
                     // Without assistance
 
                     //Chart
@@ -282,9 +274,69 @@
                 }
                     // code to generate report 4
                 case 'report5':
+                    await createOptions(); // generates the select boxes and there labels
+
+                    // ================
+                    //  Combo-box name 
+                    // ================
+                    //selectAssistance
+                    //selectStudent
+                    selectStudent.addEventListener('change', async (event) => {
+                        selectedStudentId = event.target.value;
+
+                        const result = await getAllTestIdsBasedOnStudent(selectedStudentId);
+                        const selectedStudentData = result.data;
+
+                        if (!selectedStudentData || selectedStudentData.length === 0) {
+                            console.log('No data for this student');
+                            return;
+                        }
+
+                        let testLabels = [];
+                        let scores = [];
+
+                        if(chart) {chart.destroy();}
+                        console.log(selectedStudentData);
+                        for (let row of selectedStudentData) {
+                            const testName = await getTestFromId(row.Test_ID);
+                            console.log(testName);
+                                
+                            testLabels.push(testName.data[0].Name); // fixed
+                            scores.push(row.Score); // fixed - was empty
+                        }
+
+                        chart = new Chart(reportOutput, {
+                            type: 'bar',
+                            data: {
+                                labels: testLabels,
+                                datasets: [{
+                                    label: 'Score',
+                                    data: scores,
+                                    backgroundColor: '#2C66E'
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                        max: 100
+                                    }
+                                }
+                            }
+                        });
+
+                        reportOutput.style.width = '600px'; 
+                        reportOutput.style.height = '400px';
+                    });
+
+
+
                     // code to generate report 5
                     break;
                 case 'report6':
+
+                    
                     // code to generate report 6
                     break;
                 case 'report7':
@@ -296,7 +348,7 @@
 
 
 
-                    const sql = 'SELECT DISTINCT s.Student_ID, s.Forename, s.Surname FROM Student s JOIN Test_Student ts ON ts.Student_ID = s.Student_ID WHERE ts.Pass_Fail = 0;';
+                    const sql = 'SELECT DISTINCT s.Student_ID, s.Forename, s.Surname FROM Student s JOIN Test_Student ts ON s.Student_ID = ts.Student_ID JOIN Test t ON ts.Test_ID = t.Test_ID WHERE ts.Score < t.Pass_Marks ;';
 
                     const data = await getReportData(sql);
 
@@ -339,9 +391,9 @@
                     //-- Report Title: Test pass rates
                     //-- Business Question: What is the most difficult test?
                     //-- Why this report is useful: Allows a view on test past rates
-                    //-- Tables used: Student, Test, Test-Student
+                    //-- Tables used: Test, Test-Student
                     // Ask the database for the three fields we want to show.
-                    const pass_Sql = 'SELECT t.Test_ID, t.Name, COUNT(ts.Pass_Fail) AS Total_Pass_Fail, 100 * AVG( (CASE WHEN ts.Pass_Fail = 1 THEN 1.0 ELSE 0.0 END) ) AS Percentage_Pass FROM Test t LEFT JOIN Test_Student ts ON t.Test_ID = ts.Test_ID GROUP BY t.Test_ID;';
+                    const pass_Sql = 'SELECT t.Test_ID, t.Name, COUNT(ts.Score) AS Total_Pass_Fail, 100 * AVG( (CASE WHEN ts.Score > t.Pass_Marks THEN 1.0 ELSE 0.0 END) ) AS Percentage_Pass FROM Test t LEFT JOIN Test_Student ts ON t.Test_ID = ts.Test_ID GROUP BY t.Test_ID;';
 
                     const pass_Data = await getReportData(pass_Sql);
 
@@ -444,9 +496,7 @@
             const studentTestResults = await Promise.all(
                 studentIds.map(studentId => getStudentMarksForTest(studentId))
             );
-
             const testResultsByStudent = studentTestResults.map(result => result.data);
-
             const averageMarksPerStudent = studentIds.map((studentId, index) => {
                 const studentArray = testResultsByStudent[index];
 
@@ -458,7 +508,7 @@
                 }
 
                 const total = studentArray.reduce(
-                    (sum, r) => sum + parseFloat(r.Grade),
+                    (sum, r) => sum + parseFloat(r.Score),
                     0
                 );
 
@@ -477,7 +527,102 @@
             const averageMark = totalAverageMarks / studentIds.length;
 
             return averageMark;
+        };
+
+        let selectAssistance;
+        let selectStudent;
+
+        const createOptions = async () => {
+
+            /* Create a div wrapper */
+            const wrapper = document.createElement('div');
+            wrapper.className = 'select-wrapper';
+
+            const textwrapper = document.createElement('div');
+            textwrapper.className = 'text-wrapper';
+
+            const label1 = document.createElement('label');
+            label1.textContent = 'Select student or filter a student based on assistance or non-assistance:';
+            label1.className = 'select-label';
+            label1.htmlFor = 'selectAssistanceOrNot';
+
+            /* Combo-box 1 for chosing assistance */
+            selectAssistance = document.createElement('select');
+            selectAssistance.id = 'selectAssistanceOrNot';
+            selectAssistance.className = 'select-dropdown';
+
+            const defaultChoice1 = document.createElement('option');
+            defaultChoice1.value = '';
+            defaultChoice1.textContent = 'Select assistance or non-assistance';
+            selectAssistance.appendChild(defaultChoice1);
+
+            const optionAssistance = document.createElement('option');
+            optionAssistance.value = 'Assistance';
+            optionAssistance.textContent = 'Assistance';
+            selectAssistance.appendChild(optionAssistance);
+
+            const optionNonAssistance = document.createElement('option');
+            optionNonAssistance.value = 'Non-assistance';
+            optionNonAssistance.textContent = 'NonAssistance';
+            selectAssistance.appendChild(optionNonAssistance);
+
+
+            /* Combo-box 2 for student*/
+
+            selectStudent = document.createElement('select');
+            selectStudent.id = 'selectStudent';
+            selectStudent.className = 'select-dropdown';
+
+            const defaultChoice2 = document.createElement('option');
+            defaultChoice2.value = '';
+            defaultChoice2.textContent = 'Select a student';
+            selectStudent.appendChild(defaultChoice2);
+
+            const noFilter = await getAllStudents();
+            await populateStudentSelect(noFilter.data);
+
+            selectAssistance.addEventListener('change', async (event) => {
+                const selected = event.target.value;
+
+                let result;
+
+                if (selected === 'Assistance') {
+                    result = await getAllStudentsWithAssistanceNoDups();
+                } else if (selected === 'Non-assistance') {
+                    result = await getAllStudentsWithoutAssistanceNoDups();
+                } else {
+                    result = await getAllStudents();
+                }
+
+                await populateStudentSelect(result.data);
+            });
+            
+
+            wrapper.appendChild(selectAssistance);
+            wrapper.appendChild(selectStudent);
+            textwrapper.appendChild(label1);
+            textwrapper.appendChild(wrapper);
+            addElement(textwrapper);
+        };
+
+        const populateStudentSelect = async (students) => {
+            selectStudent.innerHTML = '';
+            const startOption = document.createElement('option');
+            startOption.value = '';
+            startOption.textContent = 'Select a student bellow:';
+            selectStudent.appendChild(startOption);
+
+            for (let row of students) {
+                const option = document.createElement('option');
+                option.value = row.Student_ID;
+                option.textContent = `ID:${row.Student_ID} ${row.Forename} ${row.Surname}`;
+                selectStudent.appendChild(option);
+            }
         }
+
+        const addElement = (element) => {
+            tableContainer.appendChild(element);
+        };
 
         
     </script>
