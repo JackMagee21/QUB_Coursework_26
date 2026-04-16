@@ -3,9 +3,9 @@ const getAllTestsBasedOnSubject = (subjectId) => {
 }
 
 
-const AddTestResult = async (Student_ID, Test_ID, Grade, Pass_Fail) => {
-    const sql = `INSERT INTO Test_Student (Student_ID, Test_ID, Grade, Pass_Fail) 
-    VALUES (${Student_ID},${Test_ID},${Grade},${Pass_Fail})`;
+const AddTestResult = async (Student_ID, Test_ID, Score, Grade) => {
+    const sql = `INSERT INTO Test_Student (Student_ID, Test_ID, Score, Grade) 
+    VALUES (${Student_ID},${Test_ID},${Score},'${Grade}' ) `;
     return await runQuery(sql);
 }
 

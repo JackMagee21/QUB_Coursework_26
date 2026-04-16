@@ -1,0 +1,76 @@
+-- =============================================
+-- VIEW: vw_Student_Disability_Performance
+-- Combines Student, Test_Student, Student_Disability_Support, Disability
+-- to show each student's average score alongside their disability details.
+-- Used by: Report 1 (Top 10 Performing Students with Disabilities)
+-- =============================================
+
+CREATE OR REPLACE VIEW vw_Student_Disability_Performance AS
+SELECT
+    s.Student_ID,
+    s.Forename,
+    s.Surname,
+    d.Disability_Name,
+    d.Category,
+    ROUND(AVG(ts.Score), 2) AS Average_Score
+FROM Student s
+INNER JOIN Test_Student ts ON s.Student_ID = ts.Student_ID
+INNER JOIN Student_Disability_Support sds ON s.Student_ID = sds.Student_ID
+INNER JOIN Disability d ON sds.Disability_ID = d.Disability_ID
+GROUP BY s.Student_ID, s.Forename, s.Surname, d.Disability_Name, d.Category;
+
+-- =============================================
+
+-- Report Title: Top 10 Performing Students with Disabilities
+-- Business Question: Which students with disabilities have the highest average scores?
+-- Why this report is useful: Identifies high achieving disabled students who could mentor peers
+-- Tables used: vw_Student_Disability_Performance (view)
+
+SELECT
+    Forename,
+    Surname,
+    Disability_Name,
+    Category,
+    Average_Score
+FROM vw_Student_Disability_Performance
+ORDER BY Average_Score DESC
+LIMIT 10;
+
+-- =============================================
+
+-- Report Title: Performance by Credential Type for Students with Disabilities
+-- Business Question: Which qualification level do disabled students struggle with most?
+-- Why this report is useful: Helps allocate support resources to the right qualification levels
+-- Tables used: Subject, Test, Test_Student, Student_Disability_Support
+
+SELECT 
+    sub.Credential_Type,
+    COUNT(DISTINCT ts.Student_ID) AS Total_Students,
+    ROUND(AVG(ts.Score), 2) AS Average_Score,
+    ROUND(100 * SUM(CASE WHEN ts.Score >= t.Pass_Marks THEN 1 ELSE 0 END) / COUNT(*), 2) AS Pass_Rate
+FROM Subject sub
+INNER JOIN Test t ON sub.Subject_ID = t.Subject_ID
+INNER JOIN Test_Student ts ON t.Test_ID = ts.Test_ID
+INNER JOIN Student_Disability_Support sds ON ts.Student_ID = sds.Student_ID
+GROUP BY sub.Credential_Type
+ORDER BY Average_Score DESC;
+
+-- =============================================
+
+-- Report Title: Teacher Workload for SEN Classes
+-- Business Question: How many classes supporting students with disabilities does each teacher have?
+-- Why this report is useful: Helps identify if SEN support workload is fairly distributed
+-- Tables used: Teacher, Teacher_Class, Class, Student_Class, Student_Disability_Support
+
+SELECT 
+    t.Title,
+    t.Forename,
+    t.Surname,
+    COUNT(DISTINCT tc.Class_ID) AS Total_Classes,
+    COUNT(DISTINCT sds.Student_ID) AS Total_SEN_Students
+FROM Teacher t
+LEFT JOIN Teacher_Class tc ON t.Teacher_ID = tc.Teacher_ID
+LEFT JOIN Student_Class sc ON tc.Class_ID = sc.Class_ID
+LEFT JOIN Student_Disability_Support sds ON sc.Student_ID = sds.Student_ID
+GROUP BY t.Teacher_ID, t.Title, t.Forename, t.Surname
+ORDER BY Total_SEN_Students DESC;

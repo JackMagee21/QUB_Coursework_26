@@ -141,13 +141,18 @@ h2 {
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
-    justify-content: space-between;
-    gap: 2%;
+    align-items: start;
+}
+
+.control--checkbox {
+    display: flex;
+    align-items: center;
+    gap: 1px;
 }
 
 .checkbox-group {
-    width: 18%;
     align-items: left;
+    flex: 1 1 calc(100% / 7);
 }
 
 .checkbox-group .control {
