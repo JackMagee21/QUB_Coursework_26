@@ -336,7 +336,21 @@
                     break;
                 case 'report6':
 
-                    
+                    createClassOptions();
+
+                    // ================
+                    //  Combo-box name
+                    // ================
+                    //
+                    //  selectClass
+                    //
+
+                    selectClass.addEventListener('change', async (event) => {
+                        selectedClassId = event.target.value;
+
+                        
+                    });
+
                     // code to generate report 6
                     break;
                 case 'report7':
@@ -603,6 +617,44 @@
             textwrapper.appendChild(label1);
             textwrapper.appendChild(wrapper);
             addElement(textwrapper);
+        };
+
+        let selectClass;
+
+        const createClassOptions = async () => {
+
+            const wrapper = document.createElement('div');
+            wrapper.className = 'select-wrapper';
+
+            selectClass = document.createElement('select');
+            selectClass.id = 'selectClass';
+            selectClass.className = 'select-dropdown';
+
+            const allClasses = await getEveryClassNoDups();
+            console.log(allClasses);
+            populateClassSelect(allClasses.data);
+
+            wrapper.appendChild(selectClass);
+            addElement(wrapper);
+        };
+
+        const populateClassSelect = async (classes) => {
+            selectClass.innerHTML = '';
+            const startOption = document.createElement('option');
+            startOption.value = '';
+            startOption.textContent = 'Select a class to view:';
+
+            selectClass.appendChild(startOption);
+
+            for(let row of classes) {
+                const option = document.createElement('option');
+                option.value = row.Class_ID;
+                const name = await getNameOfAClass(row.Class_ID);
+                const className = name.data;
+                console.log(className);
+                option.textContent = `Class: ${row.Class_ID}, Title: ${className[0].Class_Name}`;
+                selectClass.appendChild(option);
+            }
         };
 
         const populateStudentSelect = async (students) => {
