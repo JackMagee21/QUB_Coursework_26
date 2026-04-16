@@ -38,9 +38,9 @@
                 <option value="report7">Students that have Failed atleast 1 Test</option>
                 <option value="report8">Test Pass Rates</option>
                 <option value="report9">Report 9</option>
-                <option value="report10">Report 10</option>
-                <option value="report11">Report 11</option>
-                <option value="report12">Report 12</option>
+                <option value="report10">Top 10 Students with Disabilities</option>
+                <option value="report11">Performance by Credential Type</option>
+                <option value="report12">Teacher Workload for SEN Classes</option>
                 <option value="report13">Report 13</option>
                 <option value="report14">Report 14</option>
             </select>
@@ -473,6 +473,46 @@
                     }
                     table10.appendChild(tbody10);
                     tableContainer.appendChild(table10);
+
+                    const labels10 = data10.map(row => `${row.Forename} ${row.Surname}`);
+                    const scores10 = data10.map(row => row.Average_Score);
+
+                    chart = new Chart(reportOutput, {
+                        type: 'bar',
+                        data: {
+                            labels: labels10,
+                            datasets: [{
+                                label: 'Average Score',
+                                data: scores10,
+                                backgroundColor: '#2C666E'
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: 'Top 10 Performing Students with Disabilities'
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    max: 100
+                                },
+                                x: {
+                                    ticks: {
+                                        autoSkip: false,
+                                        maxRotation: 45,
+                                        minRotation: 45
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    reportOutput.style.width = '1000px';
+                    reportOutput.style.height = '500px';
                     break;
                 }
                 case 'report11': {
@@ -482,6 +522,27 @@
 
                     const data11 = await getReportData(sql11);
 
+                    // Filter dropdown
+                    const filter11Label = document.createElement('label');
+                    filter11Label.textContent = 'Filter by Credential Type: ';
+                    filter11Label.className = 'select-label';
+                    filter11Label.htmlFor = 'credentialFilter';
+
+                    const filter11 = document.createElement('select');
+                    filter11.id = 'credentialFilter';
+                    filter11.className = 'select-dropdown';
+
+                    for (let option of ['All', 'A-level', 'GCSE', 'BTEC', 'Key Stage']) {
+                        const opt = document.createElement('option');
+                        opt.value = option;
+                        opt.textContent = option;
+                        filter11.appendChild(opt);
+                    }
+
+                    tableContainer.appendChild(filter11Label);
+                    tableContainer.appendChild(filter11);
+
+                    // Table
                     const table11 = document.createElement('table');
                     const thead11 = document.createElement('thead');
                     const tbody11 = document.createElement('tbody');
@@ -495,14 +556,27 @@
                     }
                     thead11.appendChild(headerRow11);
                     table11.appendChild(thead11);
-
-                    for (let row of data11) {
-                        const tr = document.createElement('tr');
-                        tr.innerHTML = `<td>${row.Credential_Type}</td><td>${row.Total_Students}</td><td>${row.Average_Score}</td><td>${row.Pass_Rate}%</td>`;
-                        tbody11.appendChild(tr);
-                    }
                     table11.appendChild(tbody11);
                     tableContainer.appendChild(table11);
+
+                    const buildTable11 = (filterValue) => {
+                        tbody11.innerHTML = '';
+                        const filtered = filterValue === 'All'
+                            ? data11
+                            : data11.filter(row => row.Credential_Type === filterValue);
+                        for (let row of filtered) {
+                            const tr = document.createElement('tr');
+                            tr.innerHTML = `<td>${row.Credential_Type}</td><td>${row.Total_Students}</td><td>${row.Average_Score}</td><td>${row.Pass_Rate}%</td>`;
+                            tbody11.appendChild(tr);
+                        }
+                    };
+
+                    buildTable11('All');
+
+                    filter11.addEventListener('change', (event) => {
+                        buildTable11(event.target.value);
+                    });
+
                     break;
                 }
                 case 'report12': {

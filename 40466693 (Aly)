@@ -1,9 +1,13 @@
--- Report Title: Top 10 Performing Students with Disabilities
--- Business Question: Which students with disabilities have the highest average scores?
--- Why this report is useful: Identifies high achieving disabled students who could mentor peers
--- Tables used: Student, Test_Student, Student_Disability_Support, Disability
+-- =============================================
+-- VIEW: vw_Student_Disability_Performance
+-- Combines Student, Test_Student, Student_Disability_Support, Disability
+-- to show each student's average score alongside their disability details.
+-- Used by: Report 1 (Top 10 Performing Students with Disabilities)
+-- =============================================
 
-SELECT 
+CREATE OR REPLACE VIEW vw_Student_Disability_Performance AS
+SELECT
+    s.Student_ID,
     s.Forename,
     s.Surname,
     d.Disability_Name,
@@ -13,7 +17,22 @@ FROM Student s
 INNER JOIN Test_Student ts ON s.Student_ID = ts.Student_ID
 INNER JOIN Student_Disability_Support sds ON s.Student_ID = sds.Student_ID
 INNER JOIN Disability d ON sds.Disability_ID = d.Disability_ID
-GROUP BY s.Student_ID, s.Forename, s.Surname, d.Disability_Name, d.Category
+GROUP BY s.Student_ID, s.Forename, s.Surname, d.Disability_Name, d.Category;
+
+-- =============================================
+
+-- Report Title: Top 10 Performing Students with Disabilities
+-- Business Question: Which students with disabilities have the highest average scores?
+-- Why this report is useful: Identifies high achieving disabled students who could mentor peers
+-- Tables used: vw_Student_Disability_Performance (view)
+
+SELECT
+    Forename,
+    Surname,
+    Disability_Name,
+    Category,
+    Average_Score
+FROM vw_Student_Disability_Performance
 ORDER BY Average_Score DESC
 LIMIT 10;
 
