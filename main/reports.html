@@ -37,7 +37,7 @@
                 <option value="report6">Report 6</option>
                 <option value="report7">Students that have Failed atleast 1 Test</option>
                 <option value="report8">Test Pass Rates</option>
-                <option value="report9">Report 9</option>
+                <option value="report9">Disabilities by Gender Split</option>
                 <option value="report10">Top 10 Students with Disabilities</option>
                 <option value="report11">Performance by Credential Type</option>
                 <option value="report12">Teacher Workload for SEN Classes</option>
@@ -443,7 +443,50 @@
 
                     break;
                 case 'report9':
-                // code to generate report 9
+                    //-- Report Title: Disability Gender Split
+                    //-- Business Question: What disabilities are more common in what gender
+                    //-- Why this report is useful: Allows the ability to view trends of disability development in students
+                    //-- Tables used: Student, Disability, Student_Disability_Support
+                    
+                    const gender_Sql = 'SELECT d.Disability_Name, s.Gender, COUNT(*) AS Total FROM Student s JOIN Student_Disability_Support sds ON s.Student_ID = sds.Student_ID JOIN Disability d ON sds.Disability_ID = d.Disability_ID GROUP BY d.Disability_Name, s.Gender ORDER BY d.Disability_Name, s.Gender;';
+
+                    const gender_Data = await getReportData(gender_Sql);
+
+                    console.log(gender_Data);
+
+                    let chartLabels = [];
+                    let Total = [];
+
+                    for (let row of gender_Data) {
+                        chartLabels.push(row.Disability_Name +" (" + row.Gender +")");
+                        Total.push(row.Total);
+                    }
+
+                    chart = new Chart(reportOutput, {
+                            type: 'pie',
+                            data: {
+                                labels: chartLabels,
+                                datasets: [{
+                                    data: Total
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    legend: {
+                                        position: 'left',
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: 'Number of Students by Gender and Disability'
+                                    }
+                                }
+                        }
+                    });
+
+
+                    reportOutput.style.width = '500px';
+                    reportOutput.style.height = '500px';
                 break;
                 case 'report10': {
                     //-- Report Title: Top 10 Performing Students with Disabilities
