@@ -21,3 +21,15 @@ const getAllStudentsWithoutAssistanceNoDups = async () => {
     const result = await runQuery(sql);
     return result;
 }
+
+const getEveryClassNoDups = async () => {
+    const sql = 'SELECT DISTINCT Class_ID FROM Student_Class';
+    const result = await runQuery(sql);
+    return result;
+}
+
+const getNameOfAClass = async (Class_ID) => {
+    const sql = `SELECT Class_Name FROM Class WHERE Class_ID = ${Class_ID}`;
+    const result = await runQuery(sql);
+    return result;
+}

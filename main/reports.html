@@ -37,10 +37,10 @@
                 <option value="report6">Report 6</option>
                 <option value="report7">Students that have Failed atleast 1 Test</option>
                 <option value="report8">Test Pass Rates</option>
-                <option value="report9">Report 9</option>
-                <option value="report10">Report 10</option>
-                <option value="report11">Report 11</option>
-                <option value="report12">Report 12</option>
+                <option value="report9">Disabilities by Gender Split</option>
+                <option value="report10">Top 10 Students with Disabilities</option>
+                <option value="report11">Performance by Credential Type</option>
+                <option value="report12">Teacher Workload for SEN Classes</option>
                 <option value="report13">Report 13</option>
                 <option value="report14">Report 14</option>
             </select>
@@ -336,7 +336,21 @@
                     break;
                 case 'report6':
 
-                    
+                    createClassOptions();
+
+                    // ================
+                    //  Combo-box name
+                    // ================
+                    //
+                    //  selectClass
+                    //
+
+                    selectClass.addEventListener('change', async (event) => {
+                        selectedClassId = event.target.value;
+
+                        
+                    });
+
                     // code to generate report 6
                     break;
                 case 'report7':
@@ -443,20 +457,219 @@
 
                     break;
                 case 'report9':
-                    // code to generate report 9
+                    //-- Report Title: Disability Gender Split
+                    //-- Business Question: What disabilities are more common in what gender
+                    //-- Why this report is useful: Allows the ability to view trends of disability development in students
+                    //-- Tables used: Student, Disability, Student_Disability_Support
+                    
+                    const gender_Sql = 'SELECT d.Disability_Name, s.Gender, COUNT(*) AS Total FROM Student s JOIN Student_Disability_Support sds ON s.Student_ID = sds.Student_ID JOIN Disability d ON sds.Disability_ID = d.Disability_ID GROUP BY d.Disability_Name, s.Gender ORDER BY d.Disability_Name, s.Gender;';
+
+                    const gender_Data = await getReportData(gender_Sql);
+
+                    console.log(gender_Data);
+
+                    let chartLabels = [];
+                    let Total = [];
+
+                    for (let row of gender_Data) {
+                        chartLabels.push(row.Disability_Name +" (" + row.Gender +")");
+                        Total.push(row.Total);
+                    }
+
+                    chart = new Chart(reportOutput, {
+                            type: 'pie',
+                            data: {
+                                labels: chartLabels,
+                                datasets: [{
+                                    data: Total
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    legend: {
+                                        position: 'left',
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: 'Number of Students by Gender and Disability'
+                                    }
+                                }
+                        }
+                    });
+
+
+                    reportOutput.style.width = '500px';
+                    reportOutput.style.height = '500px';
+                break;
+                case 'report10': {
+                    //-- Report Title: Top 10 Performing Students with Disabilities
+                    //-- Business Question: Which students with disabilities have the highest average scores?
+                    const sql10 = 'SELECT s.Forename, s.Surname, d.Disability_Name, d.Category, ROUND(AVG(ts.Score), 2) AS Average_Score FROM Student s INNER JOIN Test_Student ts ON s.Student_ID = ts.Student_ID INNER JOIN Student_Disability_Support sds ON s.Student_ID = sds.Student_ID INNER JOIN Disability d ON sds.Disability_ID = d.Disability_ID GROUP BY s.Student_ID, s.Forename, s.Surname, d.Disability_Name, d.Category ORDER BY Average_Score DESC LIMIT 10;';
+
+                    const data10 = await getReportData(sql10);
+
+                    const table10 = document.createElement('table');
+                    const thead10 = document.createElement('thead');
+                    const tbody10 = document.createElement('tbody');
+
+                    const headerRow10 = document.createElement('tr');
+                    const headers10 = ['First Name', 'Surname', 'Disability', 'Category', 'Average Score'];
+                    for (let header of headers10) {
+                        const th = document.createElement('th');
+                        th.textContent = header;
+                        headerRow10.appendChild(th);
+                    }
+                    thead10.appendChild(headerRow10);
+                    table10.appendChild(thead10);
+
+                    for (let row of data10) {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `<td>${row.Forename}</td><td>${row.Surname}</td><td>${row.Disability_Name}</td><td>${row.Category}</td><td>${row.Average_Score}</td>`;
+                        tbody10.appendChild(tr);
+                    }
+                    table10.appendChild(tbody10);
+                    tableContainer.appendChild(table10);
+
+                    const labels10 = data10.map(row => `${row.Forename} ${row.Surname}`);
+                    const scores10 = data10.map(row => row.Average_Score);
+
+                    chart = new Chart(reportOutput, {
+                        type: 'bar',
+                        data: {
+                            labels: labels10,
+                            datasets: [{
+                                label: 'Average Score',
+                                data: scores10,
+                                backgroundColor: '#2C666E'
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: 'Top 10 Performing Students with Disabilities'
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    max: 100
+                                },
+                                x: {
+                                    ticks: {
+                                        autoSkip: false,
+                                        maxRotation: 45,
+                                        minRotation: 45
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    reportOutput.style.width = '1000px';
+                    reportOutput.style.height = '500px';
                     break;
-                case 'report10':
-                    // code to generate report 10
+                }
+                case 'report11': {
+                    //-- Report Title: Performance by Credential Type for Students with Disabilities
+                    //-- Business Question: Which qualification level do disabled students struggle with most?
+                    const sql11 = 'SELECT sub.Credential_Type, COUNT(DISTINCT ts.Student_ID) AS Total_Students, ROUND(AVG(ts.Score), 2) AS Average_Score, ROUND(100 * SUM(CASE WHEN ts.Score >= t.Pass_Marks THEN 1 ELSE 0 END) / COUNT(*), 2) AS Pass_Rate FROM Subject sub INNER JOIN Test t ON sub.Subject_ID = t.Subject_ID INNER JOIN Test_Student ts ON t.Test_ID = ts.Test_ID INNER JOIN Student_Disability_Support sds ON ts.Student_ID = sds.Student_ID GROUP BY sub.Credential_Type ORDER BY Average_Score DESC;';
+
+                    const data11 = await getReportData(sql11);
+
+                    // Filter dropdown
+                    const filter11Label = document.createElement('label');
+                    filter11Label.textContent = 'Filter by Credential Type: ';
+                    filter11Label.className = 'select-label';
+                    filter11Label.htmlFor = 'credentialFilter';
+
+                    const filter11 = document.createElement('select');
+                    filter11.id = 'credentialFilter';
+                    filter11.className = 'select-dropdown';
+
+                    for (let option of ['All', 'A-level', 'GCSE', 'BTEC', 'Key Stage']) {
+                        const opt = document.createElement('option');
+                        opt.value = option;
+                        opt.textContent = option;
+                        filter11.appendChild(opt);
+                    }
+
+                    tableContainer.appendChild(filter11Label);
+                    tableContainer.appendChild(filter11);
+
+                    // Table
+                    const table11 = document.createElement('table');
+                    const thead11 = document.createElement('thead');
+                    const tbody11 = document.createElement('tbody');
+
+                    const headerRow11 = document.createElement('tr');
+                    const headers11 = ['Credential Type', 'Total Students', 'Average Score', 'Pass Rate'];
+                    for (let header of headers11) {
+                        const th = document.createElement('th');
+                        th.textContent = header;
+                        headerRow11.appendChild(th);
+                    }
+                    thead11.appendChild(headerRow11);
+                    table11.appendChild(thead11);
+                    table11.appendChild(tbody11);
+                    tableContainer.appendChild(table11);
+
+                    const buildTable11 = (filterValue) => {
+                        tbody11.innerHTML = '';
+                        const filtered = filterValue === 'All'
+                            ? data11
+                            : data11.filter(row => row.Credential_Type === filterValue);
+                        for (let row of filtered) {
+                            const tr = document.createElement('tr');
+                            tr.innerHTML = `<td>${row.Credential_Type}</td><td>${row.Total_Students}</td><td>${row.Average_Score}</td><td>${row.Pass_Rate}%</td>`;
+                            tbody11.appendChild(tr);
+                        }
+                    };
+
+                    buildTable11('All');
+
+                    filter11.addEventListener('change', (event) => {
+                        buildTable11(event.target.value);
+                    });
+
                     break;
-                case 'report11':
-                    // code to generate report 11
+                }
+                case 'report12': {
+                    //-- Report Title: Teacher Workload for SEN Classes
+                    //-- Business Question: How many classes supporting students with disabilities does each teacher have?
+                    const sql12 = 'SELECT t.Title, t.Forename, t.Surname, COUNT(DISTINCT tc.Class_ID) AS Total_Classes, COUNT(DISTINCT sds.Student_ID) AS Total_SEN_Students FROM Teacher t LEFT JOIN Teacher_Class tc ON t.Teacher_ID = tc.Teacher_ID LEFT JOIN Student_Class sc ON tc.Class_ID = sc.Class_ID LEFT JOIN Student_Disability_Support sds ON sc.Student_ID = sds.Student_ID GROUP BY t.Teacher_ID, t.Title, t.Forename, t.Surname ORDER BY Total_SEN_Students DESC;';
+
+                    const data12 = await getReportData(sql12);
+
+                    const table12 = document.createElement('table');
+                    const thead12 = document.createElement('thead');
+                    const tbody12 = document.createElement('tbody');
+
+                    const headerRow12 = document.createElement('tr');
+                    const headers12 = ['Title', 'First Name', 'Surname', 'Total Classes', 'Total SEN Students'];
+                    for (let header of headers12) {
+                        const th = document.createElement('th');
+                        th.textContent = header;
+                        headerRow12.appendChild(th);
+                    }
+                    thead12.appendChild(headerRow12);
+                    table12.appendChild(thead12);
+
+                    for (let row of data12) {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `<td>${row.Title}</td><td>${row.Forename}</td><td>${row.Surname}</td><td>${row.Total_Classes}</td><td>${row.Total_SEN_Students}</td>`;
+                        tbody12.appendChild(tr);
+                    }
+                    table12.appendChild(tbody12);
+                    tableContainer.appendChild(table12);
                     break;
-                case 'report12':
-                    // code to generate report 12
+                }
+                case 'report13': {
+                    // code to generate report 13
                     break;
-                case 'report13':{
-                    break;
-                }                 
+                }
                 case 'report14':
                     // code to generate report 14
                     break;
@@ -603,6 +816,44 @@
             textwrapper.appendChild(label1);
             textwrapper.appendChild(wrapper);
             addElement(textwrapper);
+        };
+
+        let selectClass;
+
+        const createClassOptions = async () => {
+
+            const wrapper = document.createElement('div');
+            wrapper.className = 'select-wrapper';
+
+            selectClass = document.createElement('select');
+            selectClass.id = 'selectClass';
+            selectClass.className = 'select-dropdown';
+
+            const allClasses = await getEveryClassNoDups();
+            console.log(allClasses);
+            populateClassSelect(allClasses.data);
+
+            wrapper.appendChild(selectClass);
+            addElement(wrapper);
+        };
+
+        const populateClassSelect = async (classes) => {
+            selectClass.innerHTML = '';
+            const startOption = document.createElement('option');
+            startOption.value = '';
+            startOption.textContent = 'Select a class to view:';
+
+            selectClass.appendChild(startOption);
+
+            for(let row of classes) {
+                const option = document.createElement('option');
+                option.value = row.Class_ID;
+                const name = await getNameOfAClass(row.Class_ID);
+                const className = name.data;
+                console.log(className);
+                option.textContent = `Class: ${row.Class_ID}, Title: ${className[0].Class_Name}`;
+                selectClass.appendChild(option);
+            }
         };
 
         const populateStudentSelect = async (students) => {
