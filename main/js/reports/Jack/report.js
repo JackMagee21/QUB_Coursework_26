@@ -33,3 +33,15 @@ const getNameOfAClass = async (Class_ID) => {
     const result = await runQuery(sql);
     return result;
 }
+
+const getTestsBasedOnAClass = async (Class_ID) => {
+    const sql = `SELECT Test_ID FROM Class_Test WHERE Class_ID = ${Class_ID}`;
+    const result = await runQuery(sql);
+    return result;
+}
+
+const getStudentsFromClass = async (Class_ID) => {
+    const sql = `SELECT Student_ID FROM Student_Class WHERE Class_ID = ${Class_ID}`;
+    const result = await runQuery(sql);
+    return result;
+}

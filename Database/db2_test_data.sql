@@ -4152,3 +4152,166 @@ INSERT INTO Test_Student (Student_ID, Test_ID, Score, Grade) VALUES
 (150, 78, 44.00, 'B'),
 (150, 79, 44.00, 'B'),
 (150, 80, 37.00, 'C');
+
+INSERT INTO Class_Test (Class_ID, Test_ID) VALUES
+
+-- =============================================
+-- KS3 CLASSES (Years 7, 8, 9)
+-- Subject 1 (English) → Tests 1, 2, 3
+-- =============================================
+-- Class 1: 7A English
+(1, 1), (1, 2), (1, 3),
+-- Class 8: 8A English
+(8, 1), (8, 2), (8, 3),
+-- Class 15: 9A English
+(15, 1), (15, 2), (15, 3),
+
+-- Subject 2 (Mathematics) → Tests 4, 5, 6
+-- Class 2: 7A Mathematics
+(2, 4), (2, 5), (2, 6),
+-- Class 9: 8A Mathematics
+(9, 4), (9, 5), (9, 6),
+-- Class 16: 9A Mathematics
+(16, 4), (16, 5), (16, 6),
+
+-- Subject 3 (Science) → Tests 7, 8, 9
+-- Class 3: 7A Science
+(3, 7), (3, 8), (3, 9),
+-- Class 10: 8A Science
+(10, 7), (10, 8), (10, 9),
+-- Class 17: 9A Science
+(17, 7), (17, 8), (17, 9),
+
+-- Subject 4 (History) → Tests 10, 11, 12
+-- Class 4: 7A History
+(4, 10), (4, 11), (4, 12),
+-- Class 11: 8A History
+(11, 10), (11, 11), (11, 12),
+-- Class 18: 9A History
+(18, 10), (18, 11), (18, 12),
+
+-- Subject 5 (Geography) → Tests 13, 14, 15
+-- Class 5: 7A Geography
+(5, 13), (5, 14), (5, 15),
+-- Class 12: 8A Geography
+(12, 13), (12, 14), (12, 15),
+-- Class 19: 9A Geography
+(19, 13), (19, 14), (19, 15),
+
+-- Subject 6 (Religious Education) → Tests 16, 17, 18
+-- Class 6: 7A Religious Education
+(6, 16), (6, 17), (6, 18),
+-- Class 13: 8A Religious Education
+(13, 16), (13, 17), (13, 18),
+-- Class 20: 9A Religious Education
+(20, 16), (20, 17), (20, 18),
+
+-- Subject 7 (Physical Education) → Tests 19, 20, 21
+-- Class 7: 7A Physical Education
+(7, 19), (7, 20), (7, 21),
+-- Class 14: 8A Physical Education
+(14, 19), (14, 20), (14, 21),
+-- Class 21: 9A Physical Education
+(21, 19), (21, 20), (21, 21),
+
+-- =============================================
+-- GCSE CLASSES (Years 10 & 11)
+-- Subject 16 (GCSE English Language) → Tests 22, 23, 24, 25
+-- =============================================
+-- Class 22: 10A GCSE English Language
+(22, 22), (22, 23), (22, 24), (22, 25),
+-- Class 30: 11A GCSE English Language
+(30, 22), (30, 23), (30, 24), (30, 25),
+
+-- Subject 17 (GCSE English Literature) → Tests 26, 27, 28
+-- Class 23: 10A GCSE English Literature
+(23, 26), (23, 27), (23, 28),
+-- Class 31: 11A GCSE English Literature
+(31, 26), (31, 27), (31, 28),
+
+-- Subject 18 (GCSE Mathematics) → Tests 29, 30, 31
+-- Class 24: 10A GCSE Mathematics
+(24, 29), (24, 30), (24, 31),
+-- Class 32: 11A GCSE Mathematics
+(32, 29), (32, 30), (32, 31),
+
+-- Subject 23 (GCSE Double Award Science) → Tests 32, 33, 34, 35
+-- Class 25: 10A GCSE Double Award Science
+(25, 32), (25, 33), (25, 34), (25, 35),
+-- Class 33: 11A GCSE Double Award Science
+(33, 32), (33, 33), (33, 34), (33, 35),
+
+-- Subject 24 (GCSE History) → Tests 36, 37, 38
+-- Class 26: 10A GCSE History
+(26, 36), (26, 37), (26, 38),
+-- Class 35: 11A GCSE History
+(35, 36), (35, 37), (35, 38),
+
+-- Subject 25 (GCSE Geography) → Tests 39, 40, 41
+-- Class 27: 10A GCSE Geography
+(27, 39), (27, 40), (27, 41),
+
+-- Subject 26 (GCSE Religious Studies) → Tests 42, 43, 44
+-- Class 34: 11A GCSE Religious Studies
+(34, 42), (34, 43), (34, 44),
+
+-- Subject 30 (GCSE Art & Design) → Tests 45, 46
+-- Class 29: 10A GCSE Art & Design
+(29, 45), (29, 46),
+
+-- Subject 32 (GCSE Drama) → Tests 47, 48, 49
+-- Class 37: 11A GCSE Drama
+(37, 47), (37, 48), (37, 49),
+
+-- Subject 35 (GCSE Business Studies) → Tests 50, 51, 52
+-- Class 28: 10A GCSE Business Studies
+(28, 50), (28, 51), (28, 52),
+
+-- Subject 36 (GCSE Digital Technology) → Tests 53, 54, 55
+-- Class 36: 11A GCSE Digital Technology
+(36, 53), (36, 54), (36, 55),
+
+-- =============================================
+-- A-LEVEL & BTEC CLASSES (Years 12 & 13)
+-- Subject 40 (A-level English Literature) → Tests 56, 57, 58
+-- =============================================
+-- Class 38: L6 A-level English Literature
+(38, 56), (38, 57), (38, 58),
+-- Class 45: U6 A-level English Literature
+(45, 56), (45, 57), (45, 58),
+
+-- Subject 41 (A-level Mathematics) → Tests 59, 60, 61, 62
+-- Class 39: L6 A-level Mathematics
+(39, 59), (39, 60), (39, 61), (39, 62),
+-- Class 46: U6 A-level Mathematics
+(46, 59), (46, 60), (46, 61), (46, 62),
+
+-- Subject 43 (A-level Biology) → Tests 63, 64, 65, 66
+-- Class 40: L6 A-level Biology
+(40, 63), (40, 64), (40, 65), (40, 66),
+-- Class 47: U6 A-level Biology
+(47, 63), (47, 64), (47, 65), (47, 66),
+
+-- Subject 44 (A-level Chemistry) → Tests 67, 68, 69, 70
+-- Class 41: L6 A-level Chemistry
+(41, 67), (41, 68), (41, 69), (41, 70),
+-- Class 48: U6 A-level Chemistry
+(48, 67), (48, 68), (48, 69), (48, 70),
+
+-- Subject 46 (A-level History) → Tests 71, 72, 73
+-- Class 42: L6 A-level History
+(42, 71), (42, 72), (42, 73),
+-- Class 49: U6 A-level History
+(49, 71), (49, 72), (49, 73),
+
+-- Subject 57 (A-level Psychology) → Tests 74, 75, 76
+-- Class 43: L6 A-level Psychology
+(43, 74), (43, 75), (43, 76),
+-- Class 50: U6 A-level Psychology
+(50, 74), (50, 75), (50, 76),
+
+-- Subject 63 (BTEC Sport) → Tests 77, 78, 79, 80
+-- Class 44: L6 BTEC Sport
+(44, 77), (44, 78), (44, 79), (44, 80),
+-- Class 51: U6 BTEC Sport
+(51, 77), (51, 78), (51, 79), (51, 80);

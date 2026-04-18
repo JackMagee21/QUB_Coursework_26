@@ -336,6 +336,8 @@
                     break;
                 case 'report6':
 
+                    tableContainer.innerHTML = '<div id="class-select-wrapper"></div> <div id="charts-container" class="charts-container"></div>';
+
                     createClassOptions();
 
                     // ================
@@ -346,9 +348,107 @@
                     //
 
                     selectClass.addEventListener('change', async (event) => {
-                        selectedClassId = event.target.value;
+                        const classId = event.target.value;
 
-                        
+                        const testIds = await getTestsBasedOnAClass(classId) ?? [];
+                        const studentIds = await getStudentsFromClass(classId) ?? [];
+
+                        const testnames = [];
+                        const testGrades = [];
+
+                        console.log(testIds);
+                        for(const test of testIds.data){
+                            const testName = await getTestFromId(test.Test_ID);
+                            const testGrade = await getTestGrade(test.Test_ID);
+                            testnames.push(testName);
+                            testGrades.push(testGrade);
+                        }
+
+                        const testStats = [];
+                        for(const student of studentIds.data) {
+                            for(const test of testIds.data){
+                                const gradeResult = await getGradeOfATestForAStudent(classId, student.Student_ID, test.Test_ID);
+
+                                if(gradeResult.data[0]){
+                                    testStats.push(gradeResult.data);
+                                }
+                            }
+                        }
+
+                        const gradeList = testStats.flat().map(result => ({
+                            test_Name: result.Test_Name,
+                            grade: result.Grade
+                        }));
+
+                        const groupByTest = gradeList.reduce((acc, result) => {
+                            if(!acc[result.test_Name]){
+                                acc[result.test_Name] = [];
+                            }
+
+                            acc[result.test_Name].push(result.grade);
+                            return acc;
+                        }, {});
+
+                        const pieChartData = Object.entries(groupByTest).map(([test_Name, grades]) => {
+                            const gradeCounts = grades.reduce((acc, grade) => {
+                                acc[grade] = (acc[grade] || 0) + 1;
+                                return acc;
+                            }, {});
+
+                            return {
+                                test_Name,
+                                labels: Object.keys(gradeCounts),
+                                data: Object.values(gradeCounts)
+                            };
+                        })
+
+                        console.log(pieChartData);
+
+
+
+                        const container = document.getElementById('charts-container');
+
+                        container.innerHTML = '';
+
+                        pieChartData.forEach((test, index) =>{
+                            console.log(test.data);
+                            const wrapper = document.createElement('div');
+                            wrapper.classList.add('chart-wrapper');
+
+                            const canvas = document.createElement('canvas');
+                            canvas.id = `chart-${index}`;
+
+                            wrapper.appendChild(canvas);
+                            container.appendChild(wrapper);
+
+
+
+                            new Chart(canvas, {
+                                type: 'pie',
+                                data: {
+                                    labels: test.labels,
+                                    datasets: [{
+                                        data: test.data,
+                                        backgroundColor: [
+                                            'rgba(255, 99, 132, 0.5)',
+                                            'rgba(54, 162, 235, 0.5)',
+                                            'rgba(255, 206, 86, 0.5)',
+                                            'rgba(75, 192, 192, 0.5)',
+                                            'rgba(153, 102, 255, 0.5)',
+                                        ]
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    plugins: {
+                                        title: {
+                                            display: true,
+                                            text: test.test_Name 
+                                        }
+                                    }
+                                }
+                            });
+                        });
                     });
 
                     // code to generate report 6
@@ -834,7 +934,12 @@
             populateClassSelect(allClasses.data);
 
             wrapper.appendChild(selectClass);
-            addElement(wrapper);
+            const selectWrapper = document.getElementById('class-select-wrapper');
+            if(selectWrapper) {
+                selectWrapper.appendChild(wrapper);
+            } else {
+                addElement(wrapper);
+            }
         };
 
         const populateClassSelect = async (classes) => {
@@ -850,7 +955,6 @@
                 option.value = row.Class_ID;
                 const name = await getNameOfAClass(row.Class_ID);
                 const className = name.data;
-                console.log(className);
                 option.textContent = `Class: ${row.Class_ID}, Title: ${className[0].Class_Name}`;
                 selectClass.appendChild(option);
             }

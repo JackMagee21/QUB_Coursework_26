@@ -114,6 +114,15 @@ CREATE TABLE Student_Disability_Support (
     FOREIGN KEY (Assistance_ID) REFERENCES Assistance(Assistance_ID)
 );
 
+CREATE TABLE Class_Test (
+    Class_ID INT,
+    Test_ID INT,
+
+    PRIMARY KEY (Class_ID, Test_ID),
+    FOREIGN KEY (Class_ID) REFERENCES Class(Class_ID),
+    FOREIGN KEY (Test_ID) REFERENCES Test(Test_ID)
+);
+
 
 
 
