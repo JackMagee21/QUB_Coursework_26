@@ -117,7 +117,7 @@
                     break;
                 }
                     case 'report2': {
-                        const sql = 'SELECT COUNT(s.Student_ID) AS numStudents, d.Disability_Type FROM Student s JOIN Student_Disability_Support sds ON sds.Student_ID = s.Student_ID JOIN Disability d ON sds.Disability_ID = d.Disability_ID GROUP BY d.Disability_Type;';
+                        const sql = "SELECT COUNT(s.Student_ID) AS numStudents, COALESCE(d.Disability_Type, 'None') AS Disability FROM Student s LEFT JOIN Student_Disability_Support sds ON sds.Student_ID = s.Student_ID LEFT JOIN Disability d ON sds.Disability_ID = d.Disability_ID GROUP BY Disability;";
                         
                         const data = await getReportData(sql);
 
@@ -127,7 +127,7 @@
                         let numStudents = [];
 
                         for (let row of data) {
-                            chartLabels.push(row.Disability_Type);
+                            chartLabels.push(row.Disability);
                             numStudents.push(row.numStudents);
                         }
                         
@@ -137,7 +137,16 @@
                                 labels: chartLabels,
                                 datasets: [{
                                     label: 'Number of Students',
-                                    data: numStudents
+                                    data: numStudents,
+                                    backgroundColor: [
+                                        '#1A6FBF',
+                                        '#F57500',
+                                        '#D42020',
+                                        '#2AB5AD',
+                                        '#2E9E42',
+                                        '#F0C400',
+                                        '#9B3D9B',
+                                        '#FF6B7A']
                                 }]
                             },
                             options: {
