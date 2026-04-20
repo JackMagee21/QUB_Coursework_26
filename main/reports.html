@@ -41,12 +41,12 @@
                 <option value="report10">Top 10 Students with Disabilities</option>
                 <option value="report11">Performance by Credential Type</option>
                 <option value="report12">Teacher Workload for SEN Classes</option>
-                <option value="report13">Report 13</option>
-                <option value="report14">Report 14</option>
             </select>
 
             <div id="tableContainer"></div>
             <canvas id="chartContainer"></canvas>
+
+            <div class="message"></div>
         </div>
     </div>
 
@@ -56,6 +56,11 @@
     <script src="js/reports/Jack/report.js"></script>
     <script src="js/SQL_possible_methods/test.js"></script>
     <script>
+        const showMessage = (message, type) => {
+          messageDiv.textContent = message;
+          messageDiv.className   = `message ${type}`;
+        };
+
         const selectTag = document.querySelector('#reportSelector');
         const reportOutput = document.querySelector('#chartContainer');
         const tableContainer = document.querySelector('#tableContainer');
@@ -79,8 +84,6 @@
                     const sql = 'SELECT AVG((ts.Score / t.Total_Marks) * 100) AS Grade, d.Disability_Type FROM Student s JOIN Test_Student ts ON ts.Student_ID = s.Student_ID JOIN Test t ON t.Test_ID = ts.Test_ID JOIN Student_Disability_Support sds ON sds.Student_ID = s.Student_ID JOIN Disability d ON d.Disability_ID = sds.Disability_ID GROUP BY d.Disability_Type;';
     
                     const data = await getReportData(sql);
-
-                    console.log(data);
 
                     let labels = [];
                     let grades = [];
@@ -120,8 +123,6 @@
                         const sql = "SELECT COUNT(s.Student_ID) AS numStudents, COALESCE(d.Disability_Type, 'None') AS Disability FROM Student s LEFT JOIN Student_Disability_Support sds ON sds.Student_ID = s.Student_ID LEFT JOIN Disability d ON sds.Disability_ID = d.Disability_ID GROUP BY Disability;";
                         
                         const data = await getReportData(sql);
-
-                        console.log(data);
 
                         let chartLabels = [];
                         let numStudents = [];
@@ -171,8 +172,6 @@
                     const sql = 'SELECT t.Test_ID, t.Name, MIN(ts.Score) AS minGrade, MAX(ts.Score) AS maxGrade, AVG(ts.Score) AS avgGrade, t.Total_Marks FROM Test t LEFT JOIN Test_Student ts ON t.Test_ID = ts.Test_ID GROUP BY t.Test_ID;';
                         
                     const data = await getReportData(sql);
-
-                    console.log(data);
 
                     let chartLabels = [];
                     let minGrades = [];
@@ -804,13 +803,6 @@
                     tableContainer.appendChild(table12);
                     break;
                 }
-                case 'report13': {
-                    // code to generate report 13
-                    break;
-                }
-                case 'report14':
-                    // code to generate report 14
-                    break;
                 default: 
                     tableContainer.textContent = 'Please select a report to view.';
             }
@@ -820,7 +812,7 @@
             const result = await runQuery(sql);
 
             if (!result || !result.success) {
-                console.error('Error fetching report data:', result ? result.error : 'No result returned');
+                showMessage('Error fetching report data: ' + (result ? result.error : 'No result returned'), 'error');
                 return null;
             }
 
@@ -835,9 +827,6 @@
                 labels.push(Object.values(row)[1]);
                 data.push(Object.values(row)[0]);
             }
-
-            console.log(labels);
-            console.log(data);
 
             return { labels: labels, data: data };
         }
@@ -968,7 +957,6 @@
             selectClass.className = 'select-dropdown';
 
             const allClasses = await getEveryClassNoDups();
-            console.log(allClasses);
             populateClassSelect(allClasses.data);
 
             wrapper.appendChild(selectClass);

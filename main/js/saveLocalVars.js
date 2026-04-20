@@ -72,7 +72,6 @@ function clearLocalValues(){
     document.getElementById("studentEmail").value = "";
     document.getElementById("emergencyContactName").value = "";
     document.getElementById("emergencyContactPNum").value = "";
-    console.log("Values cleared");
 }
 
 document.addEventListener("DOMContentLoaded", function () {

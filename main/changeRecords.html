@@ -485,12 +485,9 @@ const createCheckboxes = (container, options, type) => {
       event.preventDefault();
       const currentStudentId = document.querySelector("#studentID").value;
 
-      console.log(currentStudentId);
-
       const student = await getStudentById(currentStudentId);
       const data = student.data[0];
 
-      console.log(data);
       document.querySelector("#studentFirstName").value = data.Forename;
       document.querySelector("#studentLastName").value = data.Surname;
       document.querySelector("#studentEmail").value = data.Email
@@ -499,7 +496,7 @@ const createCheckboxes = (container, options, type) => {
 
       let disabilities = await getAllDisabilityNamesFromStudentId(currentStudentId);
       disabilities = disabilities.data ?? [];
-      console.log(disabilities);
+
       for(const disability of disabilities) {
         const tickBox = document.querySelector(`input[type=checkbox][value*="${disability}"]`);
         if(tickBox) tickBox.checked = true;
