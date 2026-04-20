@@ -1,0 +1,328 @@
+
+Data Dictionary:
+
+Student table = lines 2-57
+Disability table = lines 58-95
+Teacher table = lines 96-133
+Assistance table = lines 134-158
+Subject table = lines 159-195
+Class table = lines 196-
+
+=*=*= TABLE: Student =*=*=
+
+FIELD: Student_ID
+~> Data type: INT
+~> Description: An auto generated key for a new student
+~> Constraints: AUTO_INCREMENT
+~> Key type: Primary Key (PK)
+~> Example value: 192
+
+FIELD: Forename
+~> Data type: VARCHAR(100)
+~> Description: Students first name
+~> Constraints: N/A
+~> Key type: N/A
+~> Example value: Jack
+
+FIELD: Surname
+~> Data type: VARCHAR(100)
+~> Description: Students last name
+~> Constraints: N/A
+~> Key type: N/A
+~> Example value: Jordan
+
+FIELD: Email
+~> Data type: VARCHAR(150)
+~> Description: A students email
+~> Constraints: N/A
+~> Key type: N/A
+~> Example value: Jack.Jordan@yahoo.com
+
+FIELD: DOB
+~> Data type: DATE
+~> Description: A students date of birth
+~> Constraints: N/A
+~> Key type: N/A
+~> Example value: 21/04/09 09/08/2010
+
+FIELD: Attendance_Precentage
+~> Data type: DECIMAL(5,2)
+~> Description: Current students attendance precentage to two decimal places
+~> Constraints: N/A
+~> Key type: N/A
+~> Example value: 89%, 75.21%
+
+FIELD: Gender
+~> Data type: ENUM
+~> Description: Students gender
+~> Constraints: Can only be 'Male', 'Female' or 'Other'
+~> Key type: N/A
+~> Example value: 'Male', 'Female'
+
+=*=*= TABLE: Disability =*=*=
+
+FIELD: Disability_ID
+~> Data type: INT
+~> Description: An auto generated key for a disability
+~> Constraints: AUTO_INCREMENT
+~> Key type: Primary Key (PK)
+~> Example value: 12
+
+FIELD: Disability_Type
+~> Data type: VARCHAR(100)
+~> Description: type of disability thhe current disability is in more depth
+~> Constraints: N/A
+~> Key type: N/A
+~> Example value: Specific learning difficulty
+
+
+FIELD: Disability_Name
+~> Data type: VARCHAR(100)
+~> Description: Name of the disability
+~> Constraints: N/A
+~> Key type: N/A
+~> Example value: aspergers
+
+FIELD: Category
+~> Data type: ENUM
+~> Description: A broader classification of the type of disability
+~> Constraints: Limited to the selection of: 'Learning', 'Physical', 'Mental Health', 'Neurodevelopmental', 'Sensory', 'Other'
+~> Key type: N/A
+~> Example value: 'Learning', 'Physical'
+
+FIELD: Disability_Desc
+~> Data type: TEXT
+~> Description: Indepth description of a disability
+~> Constraints: N/A
+~> Key type: N/A
+~> Example value: This learning difficulty affects reading and the fluency of spelling words, ....
+
+=*=*= TABLE: Teacher =*=*=
+
+FIELD: Teacher_ID
+~> Data type: INT
+~> Description: An auto generated key for a Teacher
+~> Constraints: AUTO_INCREMENT
+~> Key type: Primary Key (PK)
+~> Example value: 15
+
+FIELD: Forename
+~> Data type: VARCHAR(100)
+~> Description: Teachers first name
+~> Constraints: N/A
+~> Key type: N/A
+~> Example value: Keith
+
+FIELD: Surname
+~> Data type: VARCHAR(100)
+~> Description: Teachers last name
+~> Constraints: N/A
+~> Key type: N/A
+~> Example value: Graham
+
+FIELD: Email
+~> Data type: VARCHAR(150)
+~> Description: A teachers email
+~> Constraints: N/A
+~> Key type: N/A
+~> Example value: teacher.teacher@yahoo.com
+
+FIELD: Start_Working_Date
+~> Data type: DATE
+~> Description: The exact date that a teacher joined the school
+~> Constraints: N/A
+~> Key type: N/A
+~> Example value: 1/1/1990
+
+=*=*= TABLE: Assistance =*=*=
+
+FIELD: Assistance_ID
+~> Data type: INT
+~> Description: An auto generated key for an assistant
+~> Constraints: AUTO_INCREMENT
+~> Key type: Primary Key (PK)
+~> Example value: 78
+
+FIELD: Assistance_Type
+~> Data type: VARCHAR(100)
+~> Description: A broader classification / category of the assistance provided
+~> Constraints: N/A
+~> Key type: N/A
+~> Example value: Assistive technology
+
+FIELD: Assistance_Name
+~> Data type: VARCHAR(100)
+~> Description: The name of the assistance provided
+~> Constraints: N/A
+~> Key type: N/A
+~> Example value: Screen reader software
+
+=*=*= TABLE: Subject =*=*=
+
+FIELD: Subject_ID
+~> Data type: INT
+~> Description: An auto generated key for a subject
+~> Constraints: AUTO_INCREMENT
+~> Key type: Primary Key (PK)
+~> Example value: 1
+
+FIELD: Subject_Name
+~> Data type: VARCHAR(100)
+~> Description: Name of the subject being tought
+~> Constraints: N/A
+~> Key type: N/A
+~> Example value: A2 Further organic chemistry
+
+FIELD: Credential_Type
+~> Data type: ENUM
+~> Description: The credential this subject awards
+~> Constraints: Is Limited to: 'Key Stage', 'GCSE', 'A-level', 'BTEC', 'Other'
+~> Key type: N/A
+~> Example value: 'A-level'
+
+FIELD: Entry_Requirements
+~> Data type: VARCHAR(200)
+~> Description: The requirements for this subject to be able to study it
+~> Constraints: N/A
+~> Key type: N/A
+~> Example value: 'B or higher in GCSE Spanish' (For A-level spanish for example)
+
+FIELD: Subject_Desc
+~> Data type: TEXT
+~> Description: Indepth description of the subject
+~> Constraints: N/A
+~> Key type: N/A
+~> Example value: Chemistry will cover many fields of chemistry including: organic, nitro-chemistry, halogens, alkenes, ...
+
+=*=*= TABLE: Class =*=*=
+
+FIELD: Subject_ID
+~> Data type: INT
+~> Description: An auto generated key for a class
+~> Constraints: AUTO_INCREMENT
+~> Key type: Primary Key (PK)
+~> Example value: 14
+
+FIELD: Subject_ID
+~> Data type: INT
+~> Description: A foreign key that identifies the subject by ID
+~> Constraints: FOREIGN KEY referances 'Subject' table
+~> Key type: Foreign Key (FK)
+~> Example value: 1
+
+FIELD: Subject_Name
+~> Data type: VARCHAR(200)
+~> Description: Name of the class
+~> Constraints: NOT NULL
+~> Key type: N/A
+~> Example value: Class 9F
+
+=*=*= TABLE: Teacher_Class =*=*=
+
+FIELD: Teacher_Class_ID
+~> Data type: INT
+~> Description: An auto generated key for the teacher_class table
+~> Constraints: AUTO_INCREMENT
+~> Key type: Primary Key (PK)
+~> Example value: 147
+
+FIELD: Teacher_ID
+~> Data type: INT
+~> Description: A composite key to identify a teacher
+~> Constraints: FOREIGN KEY referances 'Teacher' table, and a PRIMARY KEY
+~> Key type: Foreign Key (FK), Primary Key (PK)
+~> Example value: 3
+
+FIELD: Class_ID
+~> Data type: INT
+~> Description: A composite key to identify a class
+~> Constraints: FOREIGN KEY referances 'Class' table, and a PRIMARY KEY
+~> Key type: Foreign Key (FK), Primary Key (PK)
+~> Example value: 8
+
+FIELD: Role
+~> Data type: ENUM
+~> Description: The role that a teacher has in a class
+~> Constraints: Is Limited to: 'Teacher', 'Co-Teacher', 'Teaching Assistant'
+~> Key type: N/A
+~> Example value: 'Teacher'
+
+=*=*= TABLE: Student_Class =*=*=
+
+FIELD: Class_ID
+~> Data type: INT
+~> Description: A composite key to identify a class
+~> Constraints: FOREIGN KEY referances 'Class' table, and a PRIMARY KEY
+~> Key type: Foreign Key (FK), Primary Key (PK)
+~> Example value: 5
+
+FIELD: Student_ID
+~> Data type: INT
+~> Description: A composite key to identify a student
+~> Constraints: FOREIGN KEY referances 'Student' table, and a PRIMARY KEY
+~> Key type: Foreign Key (FK), Primary Key (PK)
+~> Example value: 90
+
+=*=*= TABLE: Test =*=*=
+
+FIELD: Test_ID
+~> Data type: INT
+~> Description: An auto generated key for a test
+~> Constraints: AUTO_INCREMENT
+~> Key type: Primary Key (PK)
+~> Example value: 16
+
+FIELD: Subject_ID
+~> Data type: INT
+~> Description: An foreign key to identify the subject that the test is on
+~> Constraints: FOREIGN KEY referances 'Subject' table
+~> Key type: Foreign Key (PK)
+~> Example value: 19
+
+FIELD: Name
+~> Data type: VARCHAR(250)
+~> Description: Name of a test
+~> Constraints: N/A
+~> Key type: N/A
+~> Example value: 'KS3 Introduction to hooke's law'
+
+FIELD: Precentage_of_subject
+~> Data type: DECIMAL(5,2)
+~> Description: The precentage that the test is worth for the overall subject
+~> Constraints: N/A
+~> Key type: N/A
+~> Example value: 50%
+
+FIELD: Precentage_of_subject
+~> Data type: DECIMAL(5,2)
+~> Description: The precentage that the test is worth for the overall subject
+~> Constraints: N/A
+~> Key type: N/A
+~> Example value: 50%
+
+FIELD: Total_Mark
+~> Data type: INT
+~> Description: Number of maximum marks allocated to a test
+~> Constraints: N/A
+~> Key type: N/A
+~> Example value: 50, 80, 100, ...
+
+FIELD: Pass_Mark
+~> Data type: INT
+~> Description: Number of minimum marks on a test to be able to pass the test
+~> Constraints: N/A
+~> Key type: N/A
+~> Example value: 30, 48, 60, ...
+
+FIELD: Completion_Date
+~> Data type: DATE
+~> Description: The date of when the test was completed
+~> Constraints: N/A
+~> Key type: N/A
+~> Example value: 05/05/2026
+
+
+
+
+
+
