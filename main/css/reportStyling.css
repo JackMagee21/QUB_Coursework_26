@@ -40,6 +40,20 @@
     margin: 10px auto;
 }
 
+.chart-wrapper {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    max-width: 400px;
+    height: 400px;       /* must have a height */
+}
+
+.chart-box {
+    flex: 1;             /* each chart-box shares space equally */
+    min-width: 0;        /* allows shrinking */
+    position: relative;  /* helps Chart.js size correctly */
+}
+
 #tableContainer {
     width: 90%;
     margin: 0 auto;

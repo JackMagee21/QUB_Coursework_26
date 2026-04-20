@@ -375,32 +375,43 @@
                             }
                         }
 
-                        const gradeList = testStats.flat().map(result => ({
-                            test_Name: result.Test_Name,
-                            grade: result.Grade
-                        }));
+                        const studentTestData = testStats.flat();
 
-                        const groupByTest = gradeList.reduce((acc, result) => {
-                            if(!acc[result.test_Name]){
-                                acc[result.test_Name] = [];
+                        const testGroups = {};
+
+                        studentTestData.forEach(r => {
+                            if(!testGroups[r.Test_Name]) {
+                                testGroups[r.Test_Name] = []
                             }
+                            testGroups[r.Test_Name].push(r);
+                        });
 
-                            acc[result.test_Name].push(result.grade);
-                            return acc;
-                        }, {});
 
-                        const pieChartData = Object.entries(groupByTest).map(([test_Name, grades]) => {
-                            const gradeCounts = grades.reduce((acc, grade) => {
-                                acc[grade] = (acc[grade] || 0) + 1;
-                                return acc;
-                            }, {});
+                        const pieChartData = Object.keys(testGroups).map(testName => {
+
+                            const studentsInTest = testGroups[testName];
+
+                            const gradeGroups = {};
+
+                            studentsInTest.forEach(s => {
+                                if(!gradeGroups[s.Grade]) {
+                                    gradeGroups[s.Grade] = [];
+                                }
+                                const isDisabled = s.Is_Disabled === 'true' ? '(SEN)' : '';
+                                gradeGroups[s.Grade].push(`${s.Forename} ${s.Surname} ${isDisabled}`);
+                            });
+
+                            const labels = Object.keys(gradeGroups);                 // ['A', 'B', 'C']
+                            const data = labels.map(g => gradeGroups[g].length);     // [3, 5, 2]
+                            const students = labels.map(g => gradeGroups[g]);        // [['Thomas H', ...], ...]
 
                             return {
-                                test_Name,
-                                labels: Object.keys(gradeCounts),
-                                data: Object.values(gradeCounts)
+                                test_Name: testName,
+                                labels: labels,
+                                data: data,
+                                students: students
                             };
-                        })
+                        });
 
                         console.log(pieChartData);
 
@@ -409,17 +420,18 @@
                         const container = document.getElementById('charts-container');
 
                         container.innerHTML = '';
-
+                        const wrapper = document.createElement('div');
+                        wrapper.classList.add('chart-wrapper');
                         pieChartData.forEach((test, index) =>{
                             console.log(test.data);
-                            const wrapper = document.createElement('div');
-                            wrapper.classList.add('chart-wrapper');
+                            const chartDiv = document.createElement('div');
+                            chartDiv.classList.add('chart-box');
 
                             const canvas = document.createElement('canvas');
+                            canvas.classList.add('canvas-class')
                             canvas.id = `chart-${index}`;
 
                             wrapper.appendChild(canvas);
-                            container.appendChild(wrapper);
 
 
 
@@ -440,15 +452,31 @@
                                 },
                                 options: {
                                     responsive: true,
+                                    maintainAspectRatio: false,
                                     plugins: {
+                                        tooltip: {
+                                            callbacks: {
+                                                title: function(context) {
+                                                    if (!context || !context.length) return '';
+                                                   const count = context[0].parsed;
+                                                   return `${context[0].label} (${count} student${count === 1 ? '' : 's'})`;
+                                                },
+                                                label: function(context) {
+                                                    if (!context) return '';
+                                                    return test.students[context.dataIndex];
+                                                }
+                                            }
+                                        },
                                         title: {
                                             display: true,
                                             text: test.test_Name 
                                         }
                                     }
                                 }
+                                
                             });
                         });
+                        container.appendChild(wrapper);
                     });
 
                     // code to generate report 6

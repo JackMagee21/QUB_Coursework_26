@@ -35,7 +35,7 @@ const getTestGrade = async (Test_ID) => {
 }
 
 const getGradeOfATestForAStudent = async (Class_ID, Student_ID, Test_ID) => {
-    const sql = `SELECT c.Class_Name, t.Name AS Test_Name, ts.Score, ts.Grade FROM Test_Student ts JOIN Student s ON ts.Student_ID = s.Student_ID JOIN Test t ON ts.Test_ID = t.Test_ID JOIN Class_Test ct ON t.Test_ID = ct.Test_ID JOIN Class c ON ct.Class_ID = c.Class_ID JOIN Student_Class sc ON c.Class_ID = sc.Class_ID AND sc.Student_ID = s.Student_ID WHERE ts.Student_ID = ${Student_ID} AND c.Class_ID = ${Class_ID} AND t.Test_ID = ${Test_ID};`;
+    const sql = `SELECT s.Forename, s.Surname, c.Class_Name, t.Name AS Test_Name, ts.Score, ts.Grade, CASE WHEN sds.Student_ID IS NOT NULL THEN 'true' ELSE 'false' END AS Is_Disabled FROM Test_Student ts JOIN Student s ON ts.Student_ID = s.Student_ID JOIN Test t ON ts.Test_ID = t.Test_ID JOIN Class_Test ct ON t.Test_ID = ct.Test_ID JOIN Class c ON ct.Class_ID = c.Class_ID JOIN Student_Class sc ON c.Class_ID = sc.Class_ID AND sc.Student_ID = s.Student_ID LEFT JOIN Student_Disability_Support sds ON s.Student_ID = sds.Student_ID WHERE ts.Student_ID = ${Student_ID} AND c.Class_ID = ${Class_ID} AND t.Test_ID = ${Test_ID} GROUP BY s.Student_ID, s.Forename, s.Surname, c.Class_Name, t.Name, ts.Score, ts.Grade;`;
     const result = await runQuery(sql);
     return result;
 }
