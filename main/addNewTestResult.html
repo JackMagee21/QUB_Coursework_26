@@ -92,7 +92,7 @@
         if (!testsResult || testsResult.error) {
           const testSelect = document.querySelector("#testSelect");
           testSelect.innerHTML = `<option value="">-- Error loading tests --</option>`;
-          console.error("Error fetching tests:", testsResult ? testsResult.error : "Unknown error");
+          showMessage("Error fetching tests:", testsResult ? testsResult.error : "Unknown error", 'error');
           return;
         }
         
@@ -111,9 +111,6 @@
         
   
         const determineGrade = async (score, selectedTestDetails) => {
-
-          console.log('selected test details:', selectedTestDetails);
-
           const selectedTestLevel = selectedTestDetails.Name.split(" ")[0]; 
 
           const percentage = (score / selectedTestDetails.Total_Marks) * 100;
@@ -180,7 +177,6 @@
           }
 
           studentSelect.innerHTML = `<option value="">-- Select a student --</option>`;
-          console.log("Loaded students:", result.data);
           result.data.forEach(student => {
             const option = document.createElement("option");
             option.value       = student.Student_ID;
@@ -245,8 +241,6 @@
             grade     : grade
           };
 
-          console.log(testResults);
-
           // Validate inputs
           const validationMessage = validateTestResult(testResults, selectedTestDetails);
           if (validationMessage) {
@@ -260,7 +254,6 @@
             showMessage("Error fetching test details: " + (detailsResult?.error ?? "Unknown error"), "error");
             return;
           }
-          console.log(testResults);
 
           const insertResult = await AddTestResult(
             escapeSql(testResults.studentId),
@@ -268,8 +261,6 @@
             escapeSql(testResults.score),
             escapeSql(testResults.grade)
           );
-
-          console.log(insertResult);
 
           if (!insertResult || insertResult.error) {
             showMessage("Database error" + (insertResult ? ": " + insertResult.error : ""), "error");

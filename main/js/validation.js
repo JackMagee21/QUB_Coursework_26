@@ -90,6 +90,15 @@ const validateStudent = (student) => {
     if (disabilities.length < 0) {
         return "At least one disability is required.";
     }
+
+    if (supportNeeds.length > 0 && disabilities.length === 0) {
+        return "A student with support needs must have at least one disability.";
+    }
+
+    if (disabilities.length > 0 && supportNeeds.length === 0) {
+        return "A student with a disability must have at least one support need.";
+    }
+
     // return empty string as error message if all checks are passed
     return "";
 }

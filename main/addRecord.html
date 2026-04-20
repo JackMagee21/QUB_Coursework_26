@@ -219,9 +219,6 @@
         let studentDisabilities = Array.from(document.querySelectorAll('input[type="checkbox"][class="disability-checkbox"]:checked')).map(checkbox => checkbox.value); // check which disability checkboxes are ticked and add those values to an array
         let studentSupportNeeds = Array.from(document.querySelectorAll('input[type="checkbox"][class="support-checkbox"]:checked')).map(checkbox => checkbox.value); // same here but for support needs
 
-
-        console.log(studentGender);
-
         // store data in an object to pass to validation function
         const student = {
           firstName: studentFirstName,
@@ -234,26 +231,24 @@
           gender: studentGender
         };
 
-        console.log(student);
-
         const validationMessage = validateStudent(student);
-
-
 
         if (validationMessage) {
           showMessage(validationMessage, "error");
+          return;
         } else {
           const result = await addStudentToTable(student);
 
           //check if query was successful
           if (result && result.success) {
             showMessage("Student added successfully!", "success");
-            console.log(result);
           } else {
             showMessage("Unable to add student.  Please try again.", "error");
           }
           clearLocalValues(); // Look at saveLocalVars.js for code
         }
+
+        form.reset(); // reset form after submission
       });
 
       document.addEventListener('DOMContentLoaded', async () => {
