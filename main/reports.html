@@ -406,8 +406,9 @@
                                 if(!gradeGroups[s.Grade]) {
                                     gradeGroups[s.Grade] = [];
                                 }
+                                const id = s.Student_ID;
                                 const isDisabled = s.Is_Disabled === 'true' ? '(SEN)' : '';
-                                gradeGroups[s.Grade].push(`${s.Forename} ${s.Surname} ${isDisabled}`);
+                                gradeGroups[s.Grade].push(`ID:${id} ${s.Forename} ${s.Surname} ${isDisabled}`);
                             });
 
                             const labels = Object.keys(gradeGroups);                 // ['A', 'B', 'C']
