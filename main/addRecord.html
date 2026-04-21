@@ -123,6 +123,11 @@
             <!-- Support need checkboxes will be dynamically inserted here -->
           </div>
 
+          <p class="form-label"> Select the classes to enrole the student in: </p>
+          <div class="form-group checkbox-container" id="classCheckboxContainer">
+            <!-- class checkboxes will be dynamically inserted here -->
+          </div>
+
           <input type="submit" class="form-btn" />
         </form>
 
@@ -199,6 +204,33 @@
               container.appendChild(checkboxGroup);
             }
             break;
+          case "classes": 
+            for (let checkbox of options) {
+              const checkboxGroup = document.createElement("div");
+              checkboxGroup.classList.add("checkbox-group");
+    
+              const label = document.createElement("label");
+              label.classList.add("control", "control--checkbox");
+              label.setAttribute("for", checkbox.Class_Name);
+              label.textContent = checkbox.Class_Name;
+    
+              const input = document.createElement("input");
+              input.type = "checkbox";
+              input.id = checkbox.Class_Name;
+              input.name = checkbox.Class_Name;
+              input.value = checkbox.Class_ID;
+              input.classList.add("class-checkbox");
+    
+              const indicator = document.createElement("div");
+              indicator.classList.add("control__indicator");
+    
+              label.appendChild(input);
+              label.appendChild(indicator);
+              checkboxGroup.appendChild(label);
+    
+              container.appendChild(checkboxGroup);
+            }
+            break;
         }
       }
 
@@ -251,6 +283,21 @@
         form.reset(); // reset form after submission
       });
 
+      function getYearGroup(dob) {
+        const today = new Date();
+        const dobDate = new Date(dob);
+
+        const academicYearStart = today.getMonth() >= 8 ? today.getFullYear : today.getFullYear() - 1;
+
+        const ageOnSept1 = academicYearStart - dobDate.getFullYear();
+
+        const yearGroup = ageOnSept1 - 4;
+
+        if(yearGroup < 7 || yearGroup > 13) return -1;
+
+        return yearGroup;
+      }
+
       document.addEventListener('DOMContentLoaded', async () => {
         // get the data to create the disability checkboxes
         const getDisabilityCheckboxesSQL = 'SELECT d.Disability_ID, d.Disability_Name FROM Disability d';
@@ -276,7 +323,74 @@
 
         const assistanceCheckboxContainer = document.getElementById("assistanceCheckboxesContainer");
         createCheckboxes(assistanceCheckboxContainer, assistanceCheckboxesResult.data, 'assistance');
+
+        const getClassesSQL = 'SELECT c.Class_ID, c.Class_Name FROM Class c';
+        const classCheckBox = await runQuery(getClassesSQL);
+
+        console.log(classCheckBox.data);
+        if(!classCheckBox || classCheckBox.error) {
+          showMessage("Unable to load classes,  please refresh the page", "error");
+        }
+
+        const classCheckboxContainer = document.getElementById("classCheckboxContainer");
+        createCheckboxes(classCheckboxContainer, classCheckBox.data, 'classes');
+
+
+
+
+        document.getElementById('studentDOB').addEventListener('input', (e) =>{
+          const inputDOB = e.target.value;
+
+          const yearGroupBasedOnDOB = getYearGroup(inputDOB);
+
+          let tag = null;
+
+          switch(yearGroupBasedOnDOB) {
+            case 7: {
+              tag = '7A';
+              break;
+            }
+            case 8: {
+              tag = '8A';
+              break;
+            }
+            case 9: {
+              tag = '9A'
+              break;
+            }
+            case 10: {
+              tag = '10A';
+              break;
+            }
+            case 11: {
+              tag = '11A';
+              break;
+            }
+            case 12: {
+              tag = 'L6';
+              break;
+            }
+            case 13: {
+              tag = 'U6';
+              break;
+            }
+          }
+          
+          const allCheckboxes = document.querySelectorAll('input[type="checkbox"].class-checkbox');
+
+          allCheckboxes.forEach(classBox => {
+            const name = classBox.name;
+            console.log(name);
+            if(name.includes(tag)) {
+              classBox.disabled = false;
+            } else {
+              classBox.disabled = true;
+            }
+          })
+        });
+
       });
+
     </script>
 
     <script src="js/saveLocalVars.js"></script>
