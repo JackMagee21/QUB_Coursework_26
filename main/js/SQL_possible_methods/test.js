@@ -23,7 +23,7 @@ const getStudentMarksForTest = async (Student_ID) => {
 }
 
 const getTestFromId = async (Test_ID) => {
-    const sql = `SELECT Name FROM Test WHERE Test_ID = ${Test_ID}`;
+    const sql = `SELECT Name, Total_Marks FROM Test WHERE Test_ID = ${Test_ID}`;
     const result = await runQuery(sql);
     return result;
 }

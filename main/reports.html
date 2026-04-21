@@ -294,33 +294,53 @@
 
                         const result = await getAllTestIdsBasedOnStudent(selectedStudentId);
                         const selectedStudentData = result.data;
+                        console.log(selectedStudentData);
 
                         if (!selectedStudentData || selectedStudentData.length === 0) {
-                            console.log('No data for this student');
                             return;
                         }
 
                         let testLabels = [];
                         let scores = [];
+                        let totalMarks = [];
 
                         if(chart) {chart.destroy();}
-                        console.log(selectedStudentData);
+
                         for (let row of selectedStudentData) {
-                            const testName = await getTestFromId(row.Test_ID);
-                            console.log(testName);
-                                
-                            testLabels.push(testName.data[0].Name); // fixed
+                            const test = await getTestFromId(row.Test_ID);
+                            
+                            testLabels.push(test.data[0].Name); // fixed
                             scores.push(row.Score); // fixed - was empty
+                            totalMarks.push(test.data[0].Total_Marks);
                         }
+
+                        console.log(scores);
+                        console.log(totalMarks);
+
+                        const scoresAsPrecentages = [];
+
+                        for(let i = 0; i <= totalMarks.length -1; i++) {
+                            scoresAsPrecentages[i] = scores[i] / totalMarks[i];
+                        }
+
+                        const percentagesRounded = scoresAsPrecentages.map(n => n.toFixed(2));
+
+                        const hightlightColours = percentagesRounded.map(score => {
+                            
+                            if((score * 100) == 100) return '#FFD93D';
+                            if((score * 100) >= 80) return '#00C853';
+                            if((score * 100) >= 70) return '#3A86FF';
+                            if((score * 100) >= 60) return '#FF9671';
+                            if((score * 100) < 60) return '#FF6B6B'
+                        });
 
                         chart = new Chart(reportOutput, {
                             type: 'bar',
                             data: {
                                 labels: testLabels,
                                 datasets: [{
-                                    label: 'Score',
-                                    data: scores,
-                                    backgroundColor: '#2C66E'
+                                    data: percentagesRounded,
+                                    backgroundColor: hightlightColours
                                 }]
                             },
                             options: {
@@ -328,14 +348,38 @@
                                 scales: {
                                     y: {
                                         beginAtZero: true,
-                                        max: 100
+                                        max: 1
+                                    }
+                                },
+                                plugins: {
+                                    legend: {
+                                        position: 'top',
+                                        labels: {
+                                            generateLabels: function() {
+                                                return [
+                                                    { text: '100%',      fillStyle: '#FFD93D', strokeStyle: '#FFD93D' },
+                                                    { text: '80-99%',    fillStyle: '#00C853', strokeStyle: '#00C853' },
+                                                    { text: '70-79%',    fillStyle: '#3A86FF', strokeStyle: '#3A86FF' },
+                                                    { text: '60-69%',    fillStyle: '#FF9671', strokeStyle: '#FF9671' },
+                                                    { text: 'Below 60%', fillStyle: '#FF6B6B', strokeStyle: '#FF6B6B' }
+                                                ];
+                                            }
+                                        }
+                                    },
+                                    tooltip: {
+                                        callbacks: {
+                                            label: function(context) {
+                                                const value = context.parsed.y;
+                                                return `${value*100}%`;
+                                            }
+                                        }
                                     }
                                 }
                             }
                         });
 
-                        reportOutput.style.width = '600px'; 
-                        reportOutput.style.height = '400px';
+                        reportOutput.style.width = '1000px'; 
+                        reportOutput.style.height = '700px';
                     });
 
 
