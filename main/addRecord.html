@@ -387,8 +387,10 @@
             console.log(name);
             if(name.includes(tag)) {
               classBox.disabled = false;
+              classBox.parentElement.style.color = "black";
             } else {
               classBox.disabled = true;
+              classBox.parentElement.style.color = "red";
             }
           })
         });
