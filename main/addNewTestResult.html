@@ -27,9 +27,17 @@
       </div>
 
       <div class="main">
-        <h2>Add New Test Result</h2>
+        <h2>Add a new test result to a student</h2>
 
         <form>
+
+           <!-- ── Student Selection ── -->
+          <div class="form-group">
+            <label for="studentSelect" class="form-label select-label">Select Student:</label>
+            <select id="studentSelect" name="studentID" class="form-input form-select">
+              <option value="">-- Loading students... --</option>
+            </select>
+          </div>
 
           <!-- ── Test Selection ── -->
           <div class="form-group">
@@ -43,15 +51,8 @@
           <!-- ── Selected Test Info (populated by JS) ── -->
           <div id="testDetails" class="test-details"></div>
 
-          <h2>Enter Test Result</h2>
+         
 
-          <!-- ── Student Selection ── -->
-          <div class="form-group">
-            <label for="studentSelect" class="form-label select-label">Select Student:</label>
-            <select id="studentSelect" name="studentID" class="form-input form-select">
-              <option value="">-- Loading students... --</option>
-            </select>
-          </div>
 
           <!-- ── Test Result ── -->
           <div class="form-group">
@@ -73,6 +74,10 @@
     <script src="js/SQL_possible_methods/student.js"></script>
     <script src="js/SQL_possible_methods/test.js"></script>
     <script>
+
+      document.getElementById('testSelect').disabled = true;
+      document.getElementById('testResult').disabled = true;
+
       const createSelectOptions = (options) => {
         const selectElement = document.querySelector("#testSelect");
 
@@ -85,18 +90,6 @@
       }
       
       document.addEventListener("DOMContentLoaded", async () => {
-        
-        const getTestsSQL = `SELECT Test_ID, Name FROM Test;`;
-        const testsResult = await runQuery(getTestsSQL);
-        
-        if (!testsResult || testsResult.error) {
-          const testSelect = document.querySelector("#testSelect");
-          testSelect.innerHTML = `<option value="">-- Error loading tests --</option>`;
-          showMessage("Error fetching tests:", testsResult ? testsResult.error : "Unknown error", 'error');
-          return;
-        }
-        
-        createSelectOptions(testsResult.data);
         
         
         // ── Element references ──
@@ -276,6 +269,34 @@
           await loadStudents();
         });
 
+        studentSelect.addEventListener("change", async (event) => {
+          document.getElementById('testSelect').disabled = false;
+          document.getElementById('testResult').disabled = false;
+
+          const studentId = studentSelect.value;
+
+          const getTestSql = `SELECT DISTINCT t.Test_ID, t.Name FROM Test t JOIN Class_Test ct on t.Test_ID = ct.Test_ID JOIN Student_Class sc ON ct.Class_ID = sc.Class_ID LEFT JOIN Test_Student ts ON t.Test_ID = ts.Test_ID AND ts.Student_ID = ${studentId} WHERE sc.Student_ID = ${studentId} AND ts.Test_ID IS NULL;`;
+          console.log(getTestSql);
+          const testsResult = await runQuery(getTestSql);
+          const testSelect = document.querySelector("#testSelect");
+        
+          if (!testsResult || testsResult.error) {
+            testSelect.innerHTML = `<option value="">-- Error loading tests --</option>`;
+            showMessage("Error fetching tests:", testsResult ? testsResult.error : "Unknown error", 'error');
+            return;
+          }
+
+          console.log(testsResult);
+
+          if(testsResult.affected_rows === 0){
+            testSelect.innerHTML = `<option value="">-- No pending tests --</option>`;
+            document.getElementById('testSelect').disabled = true;
+            document.getElementById('testResult').disabled = true;
+            return
+          }
+        
+          createSelectOptions(testsResult.data);
+        });
       });
     </script>
   </body>

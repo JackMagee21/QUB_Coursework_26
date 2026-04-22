@@ -250,6 +250,9 @@
         let studentEmergencyContactPNum = document.getElementById("emergencyContactPNum").value;
         let studentDisabilities = Array.from(document.querySelectorAll('input[type="checkbox"][class="disability-checkbox"]:checked')).map(checkbox => checkbox.value); // check which disability checkboxes are ticked and add those values to an array
         let studentSupportNeeds = Array.from(document.querySelectorAll('input[type="checkbox"][class="support-checkbox"]:checked')).map(checkbox => checkbox.value); // same here but for support needs
+        let studentClasses = Array.from(document.querySelectorAll('input[type="checkbox"][class="class-checkbox"]:checked')).map(checkbox => checkbox.value);
+
+        console.log(studentClasses);
 
         // store data in an object to pass to validation function
         const student = {
@@ -260,7 +263,8 @@
           emergencyContact: `${studentEmergencyContactName} - ${studentEmergencyContactPNum}`,
           disabilities: studentDisabilities,
           supportNeeds: studentSupportNeeds,
-          gender: studentGender
+          gender: studentGender,
+          classes: studentClasses
         };
 
         const validationMessage = validateStudent(student);

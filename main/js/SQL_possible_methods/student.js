@@ -44,6 +44,12 @@ const addStudentToTable = async (student) => {
             INSERT INTO Student_Disability_Support (Student_ID, Disability_ID, Assistance_ID)
             VALUES (${studentId}, ${i < numberOfDisabilities ? student.disabilities[i] : numberOfDisabilities}, ${i < numberOfSupports ? student.supportNeeds[i] : numberOfSupports});`.trim());  
     }
+    console.log(student.classes);
+
+    const numberOfClasses = student.classes.length;
+    for(let i = 0; i < numberOfClasses; i++) {
+        sqlStatements.push(`INSERT INTO Student_Class (Class_ID, Student_ID) VALUES (${student.classes[i]}, ${studentId})`);
+    }
 
     return await runMultipleQueries(sqlStatements);
 }
@@ -54,7 +60,15 @@ const getLastInsertedStudentId = async () => {
 
 }
 
+
 const deleteStudentFromTable = async (studentId) => {
+
+    const deleteClasses = `
+        DELETE FROM Student_Class WHERE Student_ID=${studentId}
+    `;
+
+    await runQuery(deleteClasses);
+
 
     const deleteDisabilities = `
         DELETE FROM Student_Disability_Support WHERE Student_ID='${escapeSql(studentId)}' 
