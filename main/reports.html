@@ -53,7 +53,7 @@
     <script src="js/useSQL.js"></script>
     <script src="js/SQL_possible_methods/student.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="js/reports/Jack/report.js"></script>
+    <script src="js/report.js"></script>
     <script src="js/SQL_possible_methods/test.js"></script>
     <script>
         const showMessage = (message, type) => {
@@ -241,29 +241,21 @@
                 /* My reports (Jack)*/
                 case 'report4': {
                     // With assistance
-                    const assistance = await getAllStudentsWithAssistanceNoDups();
-                    const noAssistance = await getAllStudentsWithoutAssistanceNoDups();
+                    const marks = await getAverageMarksOfAssistanceAndNonAssistance();
+                    const markData = marks.data;
 
-                    assistanceData = assistance.data;
-                    noAssistanceData = noAssistance.data;
-
-                    const studentIdsWithAssistance = assistanceData.map(record => record.Student_ID);
-                    const studentIdsWithoutAssistance = noAssistanceData.map(record => record.Student_ID);
-
-                    const averageMarkWithAssistance = await getAverageMarksFromStudentIds(studentIdsWithAssistance);
-                    const averageMarkWithoutAssistance = await getAverageMarksFromStudentIds(studentIdsWithoutAssistance);
+                    const label = markData.map(r => r.Has_Assistance === 'True' ? 'With Assistance' : 'Without Assistance');
+                    const data = markData.map(r => parseFloat(r.Average_Mark_As_Precentage));
                     // Without assistance
 
                     //Chart
-                    const label = ['With assistance', 'Without assistance'];
-                    const marks = [averageMarkWithAssistance, averageMarkWithoutAssistance];
                     chart = new Chart(reportOutput, {
                         type: 'bar',
                         data:{
                             labels: label,
                             datasets:[{
                                 label:'Average mark',
-                                data: marks,
+                                data: data,
                                 backgroundColor:'#2C666E'
                             }]
                         },
@@ -292,54 +284,28 @@
                     selectStudent.addEventListener('change', async (event) => {
                         selectedStudentId = event.target.value;
 
-                        const result = await getAllTestIdsBasedOnStudent(selectedStudentId);
-                        const selectedStudentData = result.data;
-                        console.log(selectedStudentData);
+                        allTest = await getAllTestResultsForAStudent(selectedStudentId);
 
-                        if (!selectedStudentData || selectedStudentData.length === 0) {
-                            return;
-                        }
+                        const allTestData = allTest.data;
+                        
+                        const testNames = allTestData.map(n => n.Name);
+                        const marks = allTestData.map(m => parseFloat(m.Mark_Percent));
 
-                        let testLabels = [];
-                        let scores = [];
-                        let totalMarks = [];
-
-                        if(chart) {chart.destroy();}
-
-                        for (let row of selectedStudentData) {
-                            const test = await getTestFromId(row.Test_ID);
+                        const hightlightColours = marks.map(score => {
                             
-                            testLabels.push(test.data[0].Name); // fixed
-                            scores.push(row.Score); // fixed - was empty
-                            totalMarks.push(test.data[0].Total_Marks);
-                        }
-
-                        console.log(scores);
-                        console.log(totalMarks);
-
-                        const scoresAsPrecentages = [];
-
-                        for(let i = 0; i <= totalMarks.length -1; i++) {
-                            scoresAsPrecentages[i] = scores[i] / totalMarks[i];
-                        }
-
-                        const percentagesRounded = scoresAsPrecentages.map(n => n.toFixed(2));
-
-                        const hightlightColours = percentagesRounded.map(score => {
-                            
-                            if((score * 100) == 100) return '#FFD93D';
-                            if((score * 100) >= 80) return '#00C853';
-                            if((score * 100) >= 70) return '#3A86FF';
-                            if((score * 100) >= 60) return '#FF9671';
-                            if((score * 100) < 60) return '#FF6B6B'
+                            if((score) == 100) return '#FFD93D';
+                            if((score) >= 80) return '#00C853';
+                            if((score) >= 70) return '#3A86FF';
+                            if((score) >= 60) return '#FF9671';
+                            if((score) < 60) return '#FF6B6B'
                         });
 
                         chart = new Chart(reportOutput, {
                             type: 'bar',
                             data: {
-                                labels: testLabels,
+                                labels: testNames,
                                 datasets: [{
-                                    data: percentagesRounded,
+                                    data: marks,
                                     backgroundColor: hightlightColours
                                 }]
                             },
@@ -348,7 +314,7 @@
                                 scales: {
                                     y: {
                                         beginAtZero: true,
-                                        max: 1
+                                        max: 100
                                     }
                                 },
                                 plugins: {
@@ -370,7 +336,7 @@
                                         callbacks: {
                                             label: function(context) {
                                                 const value = context.parsed.y;
-                                                return `${value*100}%`;
+                                                return `${value}%`;
                                             }
                                         }
                                     }
@@ -402,77 +368,39 @@
                     selectClass.addEventListener('change', async (event) => {
                         const classId = event.target.value;
 
-                        const testIds = await getTestsBasedOnAClass(classId) ?? [];
-                        const studentIds = await getStudentsFromClass(classId) ?? [];
-
-                        const testnames = [];
-                        const testGrades = [];
-
-                        console.log(testIds);
-                        for(const test of testIds.data){
-                            const testName = await getTestFromId(test.Test_ID);
-                            const testGrade = await getTestGrade(test.Test_ID);
-                            testnames.push(testName);
-                            testGrades.push(testGrade);
-                        }
-
-                        const testStats = [];
-                        for(const student of studentIds.data) {
-                            for(const test of testIds.data){
-                                const gradeResult = await getGradeOfATestForAStudent(classId, student.Student_ID, test.Test_ID);
-
-                                if(gradeResult.data[0]){
-                                    testStats.push(gradeResult.data);
-                                }
-                            }
-                        }
-
-                        const studentTestData = testStats.flat();
+                        const classTest = await getStudentTestsDataBasedOnAClass(classId);
+                        console.log(classTest);
+                        const classTestData = classTest.data;
+                        console.log(classTestData);
 
                         const testGroups = {};
-
-                        studentTestData.forEach(r => {
-                            if(!testGroups[r.Test_Name]) {
-                                testGroups[r.Test_Name] = []
+                        classTestData.forEach(row => {
+                            if(!testGroups[row.Test_Name]) {
+                                testGroups[row.Test_Name] = [];
                             }
-                            testGroups[r.Test_Name].push(r);
-                        });
+                            testGroups[row.Test_Name].push(row);
+                        })
 
+                        const gradeOrder = ['A*', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'U'];
 
                         const pieChartData = Object.keys(testGroups).map(testName => {
+                            const selectedStudent = testGroups[testName];
 
-                            const studentsInTest = testGroups[testName];
-
-                            const gradeGroups = {};
-
-                            studentsInTest.forEach(s => {
-                                if(!gradeGroups[s.Grade]) {
-                                    gradeGroups[s.Grade] = [];
+                            const gradeCounts = {};
+                            selectedStudent.forEach(s => {
+                                if(!gradeCounts[s.Grade]) {
+                                    gradeCounts[s.Grade] = [];
                                 }
-                                const id = s.Student_ID;
-                                const isDisabled = s.Is_Disabled === 'true' ? '(SEN)' : '';
-                                gradeGroups[s.Grade].push(`ID:${id} ${s.Forename} ${s.Surname} ${isDisabled}`);
+                                const has_Assistance = s.Has_Assistance === 'True' ? ' (SEN)' : '';
+                                gradeCounts[s.Grade].push(`ID:${s.Student_ID} ${s.Forename} ${s.Surname}${has_Assistance}`);
                             });
 
-                            const gradeOrder = ['A*', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'U']
+                            const labels = Object.keys(gradeCounts).sort(
+                                (a,b) => gradeOrder.indexOf(a) - gradeOrder.indexOf(b)
+                            );
 
-                            const labels = Object.keys(gradeGroups).sort((a, b) => {
-                                return gradeOrder.indexOf(a) - gradeOrder.indexOf(b);
-                            });
-                                                                                     // ['A', 'B', 'C']
-                            const data = labels.map(g => gradeGroups[g].length);     // [3, 5, 2]
-                            const students = labels.map(g => gradeGroups[g]);        // [['Thomas H', ...], ...]
-
-                            return {
-                                test_Name: testName,
-                                labels: labels,
-                                data: data,
-                                students: students
-                            };
-                        });
-
-                        console.log(pieChartData);
-
+                            return {testName : testName, labels: labels, data: labels.map(g => gradeCounts[g].length), studentNames: labels.map(g => gradeCounts[g])};
+                        })
 
 
                         const container = document.getElementById('charts-container');
@@ -524,13 +452,13 @@
                                                 },
                                                 label: function(context) {
                                                     if (!context) return '';
-                                                    return test.students[context.dataIndex];
+                                                    return test.studentNames[context.dataIndex];
                                                 }
                                             }
                                         },
                                         title: {
                                             display: true,
-                                            text: test.test_Name 
+                                            text: test.testName 
                                         }
                                     }
                                 }
@@ -979,9 +907,9 @@
                 let result;
 
                 if (selected === 'Assistance') {
-                    result = await getAllStudentsWithAssistanceNoDups();
+                    result = await getStudentsWithAssistance();
                 } else if (selected === 'Non-assistance') {
-                    result = await getAllStudentsWithoutAssistanceNoDups();
+                    result = await getStudentsWithoutAssistance();
                 } else {
                     result = await getAllStudents();
                 }
