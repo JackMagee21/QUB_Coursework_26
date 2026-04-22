@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Disabilities in Education</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/fixedFormStyling.css" />
+  </head>
+  <body>
+    <div class="content">
+
+      <div class="banner">
+        <h1>Disabilities in Education</h1>
+        <p>The effects on learning and development for students with disabilities</p>
+      </div>
+
+      <div class="nav">
+        <p>
+          <a href="index.html">Home</a> |
+          <a href="addRecord.html">Add new Student Record</a> |
+          <a href="readRecords.html">Read Student Records</a> |
+          <a href="changeRecords.html">Edit/Delete Student Details</a> |
+          <a href="addNewTestResult.html">Add New Test Result</a> |
+          <a href="removeTestResult.html">Remove Test Result</a> |
+          <a href="reports.html">Reports</a>
+        </p>
+      </div>
+
+      <div class="main">
+        <h2>Select a test result to remove off a student</h2>
+
+        <form>
+
+           <!-- ── Student Selection ── -->
+          <div class="form-group">
+            <label for="studentSelect" class="form-label select-label">Select Student:</label>
+            <select id="studentSelect" name="studentID" class="form-input form-select">
+              <option value="">-- Loading students... --</option>
+            </select>
+          </div>
+
+          <!-- ── Test Selection ── -->
+          <div class="form-group">
+            <label for="testSelect" class="form-label select-label">Select Test:</label>
+            <select id="testSelect" name="test" class="form-input form-select">
+              <option value="">-- Select a test --</option>
+              <!-- Options will be populated by JS -->
+            </select>
+          </div>
+
+          <!-- ── Selected Test Info (populated by JS) ── -->
+          <div id="testDetails" class="test-details"></div>
+
+          <input type="submit" class="form-btn" value="Submit" />
+
+      </div>
+    </div>
+  </body>
+</html>
