@@ -5,52 +5,52 @@
 /* Non-linked tables */
 
 CREATE TABLE Student (
-    Student_ID INT AUTO_INCREMENT PRIMARY KEY,
-    Forename VARCHAR(100),
-    Surname VARCHAR(100),
-    Email VARCHAR(150),
-    Emergency_Contact VARCHAR(150),
-    DOB DATE,
+    Student_ID INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    Forename VARCHAR(100) NOT NULL,
+    Surname VARCHAR(100) NOT NULL,
+    Email VARCHAR(150) NOT NULL,
+    Emergency_Contact VARCHAR(150) NOT NULL,
+    DOB DATE NOT NULL,
     Attendance_Percentage DECIMAL(5,2),
-    Gender ENUM('Male', 'Female', 'Other')
+    Gender ENUM('Male', 'Female', 'Other') NOT NULL
 );
 
 CREATE TABLE Disability (
     Disability_ID INT AUTO_INCREMENT PRIMARY KEY,
-    Disability_Type VARCHAR(100),
-    Disability_Name VARCHAR(100),
-    Category ENUM('Learning', 'Physical', 'Mental Health', 'Neurodevelopmental', 'Sensory', 'Other'),
-    Disability_Desc TEXT
+    Disability_Type VARCHAR(100) NOT NULL,
+    Disability_Name VARCHAR(100) NOT NULL,
+    Category ENUM('Learning', 'Physical', 'Mental Health', 'Neurodevelopmental', 'Sensory', 'Other') NOT NULL,
+    Disability_Desc TEXT NOT NULL
 );
 
 CREATE TABLE Teacher (
-    Teacher_ID INT AUTO_INCREMENT PRIMARY KEY,
+    Teacher_ID INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     Title VARCHAR(20),
-    Forename VARCHAR(100),
-    Surname VARCHAR(100),
-    Email VARCHAR(150),
-    Start_Working_Date DATE
+    Forename VARCHAR(100) NOT NULL,
+    Surname VARCHAR(100) NOT NULL,
+    Email VARCHAR(150) NOT NULL,
+    Start_Working_Date DATE NOT NULL
 );
 
 CREATE TABLE Assistance (
-    Assistance_ID INT AUTO_INCREMENT PRIMARY KEY,
-    Assistance_Type VARCHAR(100),
-    Assistance_Name VARCHAR(100)
+    Assistance_ID INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    Assistance_Type VARCHAR(100) NOT NULL,
+    Assistance_Name VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE Subject (
-    Subject_ID INT AUTO_INCREMENT PRIMARY KEY,
-    Subject_Name VARCHAR(100),
-    Credential_Type ENUM('Key Stage', 'GCSE', 'A-level', 'BTEC', 'Other'),
+    Subject_ID INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    Subject_Name VARCHAR(100) NOT NULL,
+    Credential_Type ENUM('Key Stage', 'GCSE', 'A-level', 'BTEC', 'Other') NOT NULL,
     Entry_Requirements VARCHAR(200),
-    Subject_Desc TEXT
+    Subject_Desc TEXT NOT NULL
 );
 
 /* Linked tables */
 
 CREATE TABLE Class (
-    Class_ID INT AUTO_INCREMENT PRIMARY KEY,
-    Subject_ID INT,
+    Class_ID INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    Subject_ID INT NOT NULL,
 
     Class_Name VARCHAR(200) NOT NULL,
 
@@ -58,19 +58,19 @@ CREATE TABLE Class (
 );
 
 CREATE TABLE Teacher_Class (
-    Teacher_Class_ID INT AUTO_INCREMENT PRIMARY KEY,
-    Teacher_ID INT,
-    Class_ID INT, 
-
-    Role ENUM('Teacher', 'Co-Teacher', 'Teaching Assistant'),
+    Teacher_Class_ID INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    Teacher_ID INT NOT NULL,
+    Class_ID INT NOT NULL, 
+    
+    Role ENUM('Teacher', 'Co-Teacher', 'Teaching Assistant') NOT NULL,
 
     FOREIGN KEY (Teacher_ID) REFERENCES Teacher(Teacher_ID),
     FOREIGN KEY (Class_ID) REFERENCES Class(Class_ID)
 );
 
 CREATE TABLE Student_Class (
-    Class_ID INT,
-    Student_ID INT,
+    Class_ID INT NOT NULL,
+    Student_ID INT NOT NULL,
 
     PRIMARY KEY (Class_ID, Student_ID),
     
@@ -79,24 +79,24 @@ CREATE TABLE Student_Class (
 );
 
 CREATE TABLE Test (
-    Test_ID INT AUTO_INCREMENT PRIMARY KEY,
-    Subject_ID INT,
+    Test_ID INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    Subject_ID INT NOT NULL,
 
-    Name VARCHAR(250),
-    Percent_of_subject DECIMAL(5,2),
-    Total_Marks INT,
-    Pass_Marks INT,
-    Completion_Date Date,
+    Name VARCHAR(250) NOT NULL,
+    Percent_of_subject DECIMAL(5,2) NOT NULL,
+    Total_Marks INT NOT NULL,
+    Pass_Marks INT NOT NULL,
+    Completion_Date Date NOT NULL,
     
     FOREIGN KEY (Subject_ID) REFERENCES Subject(Subject_ID)
 );
 
 CREATE TABLE Test_Student (
-    Student_ID INT,
-    Test_ID INT,
+    Student_ID INT NOT NULL,
+    Test_ID INT NOT NULL,
 
-    Score DECIMAL(6,2),
-    Grade VARCHAR(20),
+    Score DECIMAL(6,2) NOT NULL,
+    Grade VARCHAR(20) NOT NULL,
 
     PRIMARY KEY (Student_ID, Test_ID),
     FOREIGN KEY (Student_ID) REFERENCES Student(Student_ID),
@@ -104,9 +104,9 @@ CREATE TABLE Test_Student (
 );
 
 CREATE TABLE Student_Disability_Support (
-    Student_ID INT,
-    Disability_ID INT,
-    Assistance_ID INT,
+    Student_ID INT NOT NULL,
+    Disability_ID INT NOT NULL,
+    Assistance_ID INT NOT NULL,
 
     PRIMARY KEY (Student_ID, Disability_ID, Assistance_ID),
     FOREIGN KEY (Student_ID) REFERENCES Student(Student_ID),
@@ -115,8 +115,8 @@ CREATE TABLE Student_Disability_Support (
 );
 
 CREATE TABLE Class_Test (
-    Class_ID INT,
-    Test_ID INT,
+    Class_ID INT NOT NULL,
+    Test_ID INT NOT NULL,
 
     PRIMARY KEY (Class_ID, Test_ID),
     FOREIGN KEY (Class_ID) REFERENCES Class(Class_ID),
