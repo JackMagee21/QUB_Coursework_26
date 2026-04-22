@@ -17,27 +17,19 @@
     ==========
 */
 
--- This gets all students that have assistance
-SELECT s.Student_ID, s.Forename, s.Surname, GROUP_CONCAT(DISTINCT a.Assistance_Name SEPARATOR ', ') 
-AS Assistance_Name 
+
+SELECT 
+CASE WHEN sds.Assistance_ID IS NOT NULL THEN 'True'
+ELSE 'False' END AS Has_Assistance,
+ROUND (AVG((ts.Score / t.Total_Marks)), 2) AS Average_Mark,
+ROUND(AVG((ts.Score / t.Total_Marks) * 100), 2) AS Average_Mark_As_Precentage
 FROM Student s 
-JOIN Student_Disability_Support sds ON s.Student_ID = sds.Student_ID 
-JOIN Assistance a ON sds.Assistance_ID = a.Assistance_ID 
-WHERE sds.Assistance_ID IS NOT NULL 
-GROUP BY s.Student_ID, s.Forename, s.Surname
+INNER JOIN Test_Student ts ON s.Student_ID = ts.Student_ID
+INNER JOIN Test t ON ts.Test_ID = t.Test_ID
+LEFT JOIN Student_Disability_Support sds ON s.Student_ID = sds.Student_ID
+GROUP BY Has_Assistance
 
 
--- This gets all students that don't have assistance
-SELECT s.Student_ID, s.Forename, s.Surname 
-FROM Student s 
-LEFT JOIN Student_Disability_Support sds 
-ON s.Student_ID = sds.Student_ID 
-WHERE sds.Student_ID IS NULL
-
--- Gets the test score based on the studentId
-SELECT Student_ID, Score 
-FROM Test_Student 
-WHERE Student_ID = ${escapeSql(Student_ID)}
 
 /*
 
@@ -58,33 +50,49 @@ WHERE Student_ID = ${escapeSql(Student_ID)}
     ==========
 */
 
--- Gets every student
-SELECT * FROM Student;
 
--- This gets all students that have assistance
-SELECT s.Student_ID, s.Forename, s.Surname, GROUP_CONCAT(DISTINCT a.Assistance_Name SEPARATOR ', ') 
-AS Assistance_Name 
+/* These two querys is for the filters */
+-- Students with disabilities
+SELECT DISTINCT s.Student_ID, s.Forename, s.Surname
 FROM Student s 
-JOIN Student_Disability_Support sds ON s.Student_ID = sds.Student_ID 
-JOIN Assistance a ON sds.Assistance_ID = a.Assistance_ID 
-WHERE sds.Assistance_ID IS NOT NULL 
-GROUP BY s.Student_ID, s.Forename, s.Surname
+LEFT JOIN Student_Disability_Support sds ON s.Student_ID = sds.Student_ID
+WHERE sds.Assistance_ID IS NOT NULL
+ORDER BY s.Student_ID
+
+-- Students without disabilities
+SELECT DISTINCT s.Student_ID, s.Forename, s.Surname
+FROM Student s
+LEFT JOIN Student_Disability_Support sds ON s.Student_ID = sds.Student_ID
+WHERE sds.Assistance_ID IS NULL
+ORDER BY s.Student_ID
+
+/* Students marks */
+/* Student_ID = 3 is an example of the query, that '3' would 
+    be replaced with the selected Student_ID */
+SELECT s.Student_ID, s.Forename, s.Surname, t.Name,
+ROUND(((ts.Score / t.Total_Marks) * 100), 2) AS Mark_Percent
+FROM Student s
+INNER JOIN Test_Student ts ON s.Student_ID = ts.Student_ID
+INNER JOIN Test t ON ts.Test_ID = t.Test_ID
+WHERE s.Student_ID = 3;
+
+/**/
+
+SELECT DISTINCT ct.Class_ID, s.Student_ID, s.Forename, s.Surname, ts.Grade FROM Student s 
+INNER JOIN Test_Student ts ON s.Student_ID = ts.Student_ID
+INNER JOIN Test t ON ts.Test_ID = t.Test_ID
+INNER JOIN Class_Test ct ON t.Test_ID = ct.Test_ID
+WHERE ct.Class_ID = 2  
+ORDER BY `s`.`Student_ID` ASC;
+
+SELECT t.Name FROM Test t
+INNER JOIN Class_Test ct ON t.Test_ID = ct.Test_ID
+WHERE ct.Class_ID = 2;
+
+SELECT DISTINCT s.Student_ID, CASE WHEN sds.Assistance_ID IS NOT NULL THEN 'True'
+ELSE 'False' END AS Has_Assistance FROM Student s
+LEFT JOIN Student_Disability_Support sds ON s.Student_ID = sds.Student_ID
+WHERE s.Student_ID = 2;
 
 
--- This gets all students that don't have assistance
-SELECT s.Student_ID, s.Forename, s.Surname 
-FROM Student s 
-LEFT JOIN Student_Disability_Support sds 
-ON s.Student_ID = sds.Student_ID 
-WHERE sds.Student_ID IS NULL
-
--- Gets every test that a student has done
-SELECT Test_ID, Score 
-FROM Test_Student 
-WHERE Student_ID = ${escapeSql(Student_ID)}
-
--- Gets the name of a test based on the testId
-SELECT Name 
-FROM Test 
-WHERE Test_ID = ${Test_ID}
 
