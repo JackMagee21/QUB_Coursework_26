@@ -302,6 +302,9 @@
                             if((score) >= 60) return '#FF9671';
                             if((score) < 60) return '#FF6B6B'
                         });
+                        if(chart) {
+                            chart.destroy();
+                        }
 
                         chart = new Chart(reportOutput, {
                             type: 'bar',
