@@ -25,7 +25,7 @@ const getStudentsFromClass = async (Class_ID) => {
 
 
 const getAverageMarksOfAssistanceAndNonAssistance = async () => {
-    const sql = `SELECT CASE WHEN sds.Assistance_ID IS NOT NULL THEN 'True' ELSE 'False' END AS Has_Assistance, ROUND (AVG((ts.Score / t.Total_Marks)), 2) AS Average_Mark, ROUND(AVG((ts.Score / t.Total_Marks) * 100), 2) AS Average_Mark_As_Precentage FROM Student s INNER JOIN Test_Student ts ON s.Student_ID = ts.Student_ID INNER JOIN Test t ON ts.Test_ID = t.Test_ID LEFT JOIN Student_Disability_Support sds ON s.Student_ID = sds.Student_ID GROUP BY Has_Assistance;`;
+    const sql = `SELECT * FROM vw_Performance_By_Assistance;`;
     const result = await runQuery(sql);
     return result;
 }

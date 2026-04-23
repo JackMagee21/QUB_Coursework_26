@@ -20,6 +20,7 @@ const validateStudent = (student) => {
 
     const supportNeeds = Array.isArray(student.supportNeeds) ? student.supportNeeds : [];
     const disabilities = Array.isArray(student.disabilities) ? student.disabilities : [];
+    const classes = Array.isArray(student.classes) ? student.classes : [];
     
     const attendance = Number(student.attendance);
 
@@ -101,6 +102,10 @@ const validateStudent = (student) => {
 
     if (disabilities.length > 0 && supportNeeds.length === 0) {
         return "A student with a disability must have at least one support need.";
+    }
+
+    if(classes.length < 0 || classes.length === 0) {
+        return "A student must be in at least one class";
     }
 
     // return empty string as error message if all checks are passed

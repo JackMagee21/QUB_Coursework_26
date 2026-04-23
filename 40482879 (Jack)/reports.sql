@@ -18,6 +18,7 @@
 */
 
 
+CREATE OR REPLACE VIEW vw_Performance_By_Assistance AS
 SELECT 
 CASE WHEN sds.Assistance_ID IS NOT NULL THEN 'True'
 ELSE 'False' END AS Has_Assistance,
@@ -27,7 +28,10 @@ FROM Student s
 INNER JOIN Test_Student ts ON s.Student_ID = ts.Student_ID
 INNER JOIN Test t ON ts.Test_ID = t.Test_ID
 LEFT JOIN Student_Disability_Support sds ON s.Student_ID = sds.Student_ID
-GROUP BY Has_Assistance
+GROUP BY Has_Assistance;
+
+/* Query to run it */
+SELECT * FROM vw_Performance_By_Assistance;
 
 
 

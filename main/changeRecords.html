@@ -555,11 +555,11 @@ const createCheckboxes = (container, options, type) => {
 
           console.log(student);
 
-          //const validationMessage = validateStudent(student);
-          //if(validationMessage) {
-          //  showMessage(validationMessage, "error");
-          //  return;
-          //}
+          const validationMessage = validateStudent(student);
+          if(validationMessage) {
+            showMessage(validationMessage, "error");
+            return;
+          }
 
           const result = await editStudentFromTable(document.querySelector("#studentID").value, student);
 
