@@ -92,6 +92,12 @@
                   <!-- checkboxes will be dynamically inserted here -->
                 </div>
 
+
+                <p class="form-label"> Select the classes to enrole the student in: </p>
+                <div class="form-group checkbox-container" id="classCheckboxContainer">
+                  <!-- class checkboxes will be dynamically inserted here -->
+                </div>
+
           <input type="submit" class="form-btn" />
         </form>
 
@@ -146,15 +152,29 @@
             document.querySelector("#studentGender").value = student.Gender;
             document.querySelector("#studentEmail").value = student.Email;
             document.querySelector("#emergencyContact").value = student.Emergency_Contact;
+
+            
+
+            console.log("run line");
+            console.log(student);
             
 
             const disabilities = student.Disabilities ? student.Disabilities.split(", ") : [];
             const assistances = student.Assistance ? student.Assistance.split(", ") : [];
+            const classes = student.Classes ? student.Classes.split(", ") : [];
             
             const ticks = [...disabilities, ...assistances]; // Combines the two arrays into one
 
+            console.log(ticks);
             for(const tick of ticks){
-              const checkbox = document.querySelector(`input[type=checkbox][value*="${tick}"]`);
+              const checkbox = document.querySelector(`input[type=checkbox][Name*="${tick}"]`);
+              if(checkbox) {
+                checkbox.checked = true;
+              }
+            }
+            console.log(classes);
+            for(const cls of classes) {
+              const checkbox = document.querySelector(`input[type=checkbox][Name="${cls}"]`);
               if(checkbox) {
                 checkbox.checked = true;
               }
@@ -181,8 +201,7 @@
             output.textContent = ""; // div surrounding table is reset
             
             // required sql
-            const sql = "SELECT s.Student_ID, s.Forename, s.Surname, s.Email, s.Emergency_Contact, GROUP_CONCAT(DISTINCT d.Disability_Name SEPARATOR ', ') AS Disabilities, GROUP_CONCAT(DISTINCT a.Assistance_Name SEPARATOR ', ') AS Assistance, DATE_FORMAT(s.DOB, '%Y-%m-%d') AS DOB, s.Gender FROM Student s LEFT JOIN Student_Disability_Support sds ON s.Student_ID = sds.Student_ID LEFT JOIN Assistance a ON sds.Assistance_ID = a.Assistance_ID LEFT JOIN Disability d ON sds.Disability_ID = d.Disability_ID GROUP BY s.Student_ID ORDER BY s.Student_ID";
-
+            const sql = "SELECT s.Student_ID, s.Forename, s.Surname, s.Email, s.Emergency_Contact, GROUP_CONCAT(DISTINCT d.Disability_Name SEPARATOR ', ') AS Disabilities, GROUP_CONCAT(DISTINCT a.Assistance_Name SEPARATOR ', ') AS Assistance, GROUP_CONCAT(DISTINCT c.Class_Name SEPARATOR ', ') AS Classes, DATE_FORMAT(s.DOB, '%Y-%m-%d') AS DOB, s.Gender FROM Student s LEFT JOIN Student_Disability_Support sds ON s.Student_ID = sds.Student_ID LEFT JOIN Assistance a ON sds.Assistance_ID = a.Assistance_ID LEFT JOIN Disability d ON sds.Disability_ID = d.Disability_ID LEFT JOIN Student_Class sc ON s.Student_ID = sc.Student_ID LEFT JOIN Class c ON sc.Class_ID = c.Class_ID GROUP BY s.Student_ID ORDER BY s.Student_ID";
             const result = await runQuery(sql);
 
             // check if the data was returned properly
@@ -373,7 +392,7 @@ const createCheckboxes = (container, options, type) => {
               input.type = "checkbox";
               input.id = checkbox.Disability_Name;
               input.name = checkbox.Disability_Name;
-              input.value = checkbox.Disability_Name;
+              input.value = checkbox.Disability_ID;
               input.classList.add("disability-checkbox");
     
               const indicator = document.createElement("div");
@@ -400,7 +419,7 @@ const createCheckboxes = (container, options, type) => {
               input.type = "checkbox";
               input.id = checkbox.Assistance_Name;
               input.name = checkbox.Assistance_Name;
-              input.value = checkbox.Assistance_Name;
+              input.value = checkbox.Assistance_ID;
               input.classList.add("support-checkbox");
     
               const indicator = document.createElement("div");
@@ -413,6 +432,33 @@ const createCheckboxes = (container, options, type) => {
               container.appendChild(checkboxGroup);
             }
             break;
+          case "classes": 
+            for (let checkbox of options) {
+              const checkboxGroup = document.createElement("div");
+              checkboxGroup.classList.add("checkbox-group");
+    
+              const label = document.createElement("label");
+              label.classList.add("control", "control--checkbox");
+              label.setAttribute("for", checkbox.Class_Name);
+              label.textContent = checkbox.Class_Name;
+    
+              const input = document.createElement("input");
+              input.type = "checkbox";
+              input.id = checkbox.Class_Name;
+              input.name = checkbox.Class_Name;
+              input.value = checkbox.Class_ID;
+              input.classList.add("class-checkbox");
+    
+              const indicator = document.createElement("div");
+              indicator.classList.add("control__indicator");
+    
+              label.appendChild(input);
+              label.appendChild(indicator);
+              checkboxGroup.appendChild(label);
+    
+              container.appendChild(checkboxGroup);
+            }
+          break;
         }
       }
     // wait for page to load before adding event listeners to elements and creating the table
@@ -442,7 +488,16 @@ const createCheckboxes = (container, options, type) => {
         const assistanceCheckboxContainer = document.getElementById("assistanceCheckboxesContainer");
         createCheckboxes(assistanceCheckboxContainer, assistanceCheckboxesResult.data, 'assistance');
 
+        const getClassesSQL = 'SELECT c.Class_ID, c.Class_Name FROM Class c';
+        const classCheckBox = await runQuery(getClassesSQL);
 
+        console.log(classCheckBox.data);
+        if(!classCheckBox || classCheckBox.error) {
+          showMessage("Unable to load classes,  please refresh the page", "error");
+        }
+
+        const classCheckboxContainer = document.getElementById("classCheckboxContainer");
+        createCheckboxes(classCheckboxContainer, classCheckBox.data, 'classes');
         resetForm();
         printTable();
 
@@ -454,23 +509,26 @@ const createCheckboxes = (container, options, type) => {
             return;
           }
 
-          const student = {
+        const student = {
             studentID: Number(document.querySelector("#studentID").value),
             firstName: document.querySelector("#studentFirstName").value,
             lastName: document.querySelector("#studentLastName").value,
             email: document.querySelector("#studentEmail").value,
             dob: document.querySelector("#studentDOB").value,
             emergencyContact: document.getElementById("emergencyContact").value,
-            disabilities: Array.from(document.querySelectorAll("input[name=disabilities]:checked")).map((checkbox) => checkbox.value),
-            assistance: Array.from(document.querySelectorAll("input[name=assistance]:checked")).map((checkbox) => checkbox.value)
+            disabilities: Array.from(document.querySelectorAll("input.disability-checkbox:checked")).map(cb => cb.value),
+            assistance:   Array.from(document.querySelectorAll("input.support-checkbox:checked")).map(cb => cb.value),
+            classes:      Array.from(document.querySelectorAll("input.class-checkbox:checked")).map(cb => cb.value)
           };
+          console.log("run line");
 
+          console.log(student);
 
-          const validationMessage = validateStudent(student);
-          if(validationMessage) {
-            showMessage(validationMessage, "error");
-            return;
-          }
+          //const validationMessage = validateStudent(student);
+          //if(validationMessage) {
+          //  showMessage(validationMessage, "error");
+          //  return;
+          //}
 
           const result = await editStudentFromTable(document.querySelector("#studentID").value, student);
 
@@ -494,6 +552,7 @@ const createCheckboxes = (container, options, type) => {
       document.querySelector("#studentEmail").value = data.Email
       document.querySelector("#studentDOB").value = data.DOB
       document.getElementById("emergencyContact").value = data.Emergency_Contact;
+      console.log("run line");
 
       let disabilities = await getAllDisabilityNamesFromStudentId(currentStudentId);
       disabilities = disabilities.data ?? [];

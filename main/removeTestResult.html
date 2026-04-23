@@ -54,6 +54,8 @@
 
           <input id="submitBtn" type="submit" class="form-btn" value="Submit" />
 
+          <div class="message" id="testMessage"></div>
+
             <script src="js/useSQL.js"></script>
             <script src="js/validation.js"></script>
             <script src="js/SQL_possible_methods/student.js"></script>
@@ -61,6 +63,13 @@
           <script>
             const studentSelect = document.querySelector("#studentSelect");
             const testSelect = document.querySelector('#testSelect');
+            const messageDiv = document.querySelector("#testMessage");
+            const form = document.querySelector("form");
+
+            const showMessage = (message, type) => {
+              messageDiv.textContent = message;
+              messageDiv.className   = `message ${type}`;
+            };
 
             const createSelectOptions = (options) => {
               const selectTestElements = document.querySelector('#testSelect');
@@ -72,6 +81,7 @@
                 selectTestElements.appendChild(element);
               }
             }
+
 
             document.addEventListener("DOMContentLoaded", async () => {
 
@@ -94,7 +104,7 @@
               }
 
               await loadStudents();
-              let testId;
+              let testId = -1;
 
               studentSelect.addEventListener("change", async (event) => {
                 const studentId = studentSelect.value;
@@ -111,10 +121,25 @@
               const submit = document.getElementById('submitBtn');
 
               submit.addEventListener('click', async () => {
+                
+                event.preventDefault();
+
                 const studentId = studentSelect.value;
                 const testId = testSelect.value;
                 const removeTestResultSql = `DELETE FROM Test_Student WHERE Test_ID = ${testId} AND Student_ID = ${studentId}`;
+                console.log(testId);
+                if(studentId == "") {
+                  showMessage("Error: please select a student to remove a test result from", 'error');
+                  return;
+                }
+                if(testId == "") {
+                  showMessage(`Error: please select a test to delete of student, ID: ${studentId}`, 'error');
+                  return;
+                }
                 const result = await runQuery(removeTestResultSql);
+                
+                showMessage(`Success: Test result removed from student, ID: ${studentId}`, 'success');
+                form.reset();
               })
             });
           </script>

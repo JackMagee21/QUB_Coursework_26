@@ -88,6 +88,8 @@ WHERE s.Student_ID = 3;
 ~> Purpose of this report: To look at the grades of each test in a class and identify which tests maybe easier, harder and also to see which students are 
                             struggling or not
 
+~> Business question: To see which tests have the lowest grades or highest grades, to see which test a student might of stuggled with more or less?
+
 
 
     ==========
@@ -96,13 +98,11 @@ WHERE s.Student_ID = 3;
 */
 
 SELECT s.Student_ID, s.Forename, s.Surname, t.Name AS Test_Name, t.Test_ID, ts.Grade, 
-CASE WHEN EXISTS (SELECT 1 FROM Student_Disability_Support sds WHERE sds.Student_ID = s.Student_ID AND sds.Assistance_ID IS NOT NULL)
-THEN 'True' ELSE 'False' END AS Has_Assistance 
-FROM Student s 
-INNER JOIN Test_Student ts ON s.Student_ID = ts.Student_ID 
+CASE WHEN EXISTS (SELECT 1 FROM Student_Disability_Support sds WHERE sds.Student_ID = s.Student_ID AND sds.Assistance_ID IS NOT NULL) 
+THEN 'True' ELSE 'False' END AS Has_Assistance FROM Student s INNER JOIN Test_Student ts ON s.Student_ID = ts.Student_ID 
 INNER JOIN Test t ON ts.Test_ID = t.Test_ID 
 INNER JOIN Class_Test c ON t.Test_ID = c.Test_ID 
-WHERE c.Class_ID = ${Class_ID} 
+WHERE c.Class_ID = 3
 ORDER BY t.Test_ID;
 
 

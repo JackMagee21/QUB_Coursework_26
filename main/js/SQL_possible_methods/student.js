@@ -95,22 +95,56 @@ const deleteStudentFromTable = async (studentId) => {
         return false;
 }
 
-const editStudentFromTable = (studentId, newStudentRecords) => {
-    
-    console.log(newStudentRecords);
-    const sql = `
-        UPDATE Student 
-        SET
-        Forename = '${escapeSql(newStudentRecords.firstName)}',
-        Surname = '${escapeSql(newStudentRecords.lastName)}',
-        DOB = '${escapeSql(newStudentRecords.dob)}',
-        Email = '${escapeSql(newStudentRecords.email)}',
-        Emergency_Contact = '${escapeSql(newStudentRecords.emergencyContact)}'
-        WHERE Student_ID='${escapeSql(studentId)}';
-    `;
+const editStudentFromTable = async (studentId, newStudentRecords) => {
+  console.log(newStudentRecords);
 
-    return runQuery(sql);
-}
+  // 1. Update the student's own fields
+  const updateStudentSql = `
+    UPDATE Student SET
+      Forename = '${escapeSql(newStudentRecords.firstName)}',
+      Surname = '${escapeSql(newStudentRecords.lastName)}',
+      DOB = '${escapeSql(newStudentRecords.dob)}',
+      Email = '${escapeSql(newStudentRecords.email)}',
+      Emergency_Contact = '${escapeSql(newStudentRecords.emergencyContact)}'
+    WHERE Student_ID = ${escapeSql(studentId)};
+  `;
+  await runQuery(updateStudentSql);
+
+  // 2. Reset disability/assistance links, then re-insert the selected ones
+  await runQuery(`DELETE FROM Student_Disability_Support WHERE Student_ID = ${escapeSql(studentId)};`);
+
+  const disabilities = newStudentRecords.disabilities;
+  const assistance   = newStudentRecords.assistance;
+
+  console.log(disabilities);
+  console.log(assistance);
+
+
+  // Each disability gets paired with each assistance (matches your current schema)
+  for (const disId of disabilities) {
+    for (const assistId of assistance) {
+      const insertSql = `
+        INSERT INTO Student_Disability_Support (Student_ID, Disability_ID, Assistance_ID)
+        VALUES (${escapeSql(studentId)}, ${escapeSql(disId)}, ${escapeSql(assistId)});
+      `;
+      await runQuery(insertSql);
+    }
+  }
+
+  // 3. Reset class enrolments, then re-insert
+  await runQuery(`DELETE FROM Student_Class WHERE Student_ID = ${escapeSql(studentId)};`);
+
+  const classes = newStudentRecords.classes || [];
+  for (const classId of classes) {
+    const insertClassSql = `
+      INSERT INTO Student_Class (Class_ID, Student_ID)
+      VALUES (${escapeSql(classId)}, ${escapeSql(studentId)});
+    `;
+    await runQuery(insertClassSql);
+  }
+
+  return { success: true };
+};
 
 /*
 

@@ -21,16 +21,6 @@ const validateStudent = (student) => {
     const supportNeeds = Array.isArray(student.supportNeeds) ? student.supportNeeds : [];
     const disabilities = Array.isArray(student.disabilities) ? student.disabilities : [];
 
-    if (emergencyContact) {
-        // split parts of emergency contact info
-        const contactParts = emergencyContact.split(" - ");
-        
-        emergencyContactName = contactParts[0].trim();
-        emergencyContactPNum = contactParts[1].trim();
-        
-    } else {
-        return "Emergency contact is required.";
-    }
 
     console.log(firstName);
     // check if first name is provided
@@ -64,24 +54,24 @@ const validateStudent = (student) => {
     }
 
     // check if emergency contact phone number is provided
-    if (!emergencyContactPNum) {
-        return "Emergency contact phone number is required.";
-    }
+    //if (!emergencyContactPNum) {
+    //    return "Emergency contact phone number is required.";
+    //}
 
     // check if emergency contact name is too long
-    if (emergencyContactName.length > 100) {
-        return "Emergency contact name cannot exceed 100 characters.";
-    }
+    //if (emergencyContactName.length > 100) {
+    //    return "Emergency contact name cannot exceed 100 characters.";
+    //}
 
     // check if emergency contact phone number correct length /**
-    if (emergencyContactPNum.length > 11) {
-        return "Emergency phone number must be 11 digits long.";
-    }
+    //if (emergencyContactPNum.length > 11) {
+    //    return "Emergency phone number must be 11 digits long.";
+    //}
 
     // check if emergency contact is a valid 11 digit number
-    if (!/^\d{11}$/.test(String(emergencyContactPNum))) {
-        return "Emergency phone number must be a valid 11 digit number.";
-    }
+    //if (!/^\d{11}$/.test(String(emergencyContactPNum))) {
+    //    return "Emergency phone number must be a valid 11 digit number.";
+    //}
 
     if (supportNeeds.length < 0) {
         return "At least one support need is required.";
