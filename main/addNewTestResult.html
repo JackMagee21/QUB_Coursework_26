@@ -22,6 +22,7 @@
           <a href="readRecords.html">Read Student Records</a> |
           <a href="changeRecords.html">Edit/Delete Student Details</a> |
           <a href="addNewTestResult.html">Add New Test Result</a> |
+          <a href="removeTestResult.html">Remove Test Result</a> |
           <a href="reports.html">Reports</a>
         </p>
       </div>
@@ -270,15 +271,18 @@
         });
 
         studentSelect.addEventListener("change", async (event) => {
+
+          const testSelect = document.querySelector("#testSelect");
+          testSelect.innerHTML = `<option value="">-- Loading tests --</option>`;
+
           document.getElementById('testSelect').disabled = false;
           document.getElementById('testResult').disabled = false;
-
+          
           const studentId = studentSelect.value;
 
           const getTestSql = `SELECT DISTINCT t.Test_ID, t.Name FROM Test t JOIN Class_Test ct on t.Test_ID = ct.Test_ID JOIN Student_Class sc ON ct.Class_ID = sc.Class_ID LEFT JOIN Test_Student ts ON t.Test_ID = ts.Test_ID AND ts.Student_ID = ${studentId} WHERE sc.Student_ID = ${studentId} AND ts.Test_ID IS NULL;`;
           console.log(getTestSql);
           const testsResult = await runQuery(getTestSql);
-          const testSelect = document.querySelector("#testSelect");
         
           if (!testsResult || testsResult.error) {
             testSelect.innerHTML = `<option value="">-- Error loading tests --</option>`;

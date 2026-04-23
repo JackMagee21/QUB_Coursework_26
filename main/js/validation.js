@@ -20,6 +20,12 @@ const validateStudent = (student) => {
 
     const supportNeeds = Array.isArray(student.supportNeeds) ? student.supportNeeds : [];
     const disabilities = Array.isArray(student.disabilities) ? student.disabilities : [];
+    
+    const attendance = Number(student.attendance);
+
+    if (isNaN(attendance) || attendance < 0 || attendance > 100) {
+    return "Attendance must be between 0 and 100.";
+    }
 
     if (emergencyContact) {
         // split parts of emergency contact info

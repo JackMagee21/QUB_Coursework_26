@@ -7,43 +7,168 @@
 body {
     font-family: Arial, Helvetica, sans-serif;
     background-color: #F0EDEE;
-    padding: 10px;
-    padding-left: 50px;
-    padding-right: 50px;
-    line-height: 1.5;
+    line-height: 1.6;
+}
+
+.wrapper {
+    max-width: 90%;
+    margin: 0 auto;
+    background-color: #f5f5f5;
 }
 
 .content {
-    max-width: none;
-    margin: 0 auto;
-    border: 1px solid #F0EDEE;
+    max-width: 90%;
+    margin: 20px auto;
     background-color: white;
+    border: 1px solid #ccc;
 }
 
 .banner {
-    text-align: center;
     background-color: #2C666E;
     color: white;
-    padding: 12px;
+    padding: 50px 40px;
+    border-bottom: 6px solid #90DDF0;
+}
+
+.banner h1 {
+    font-size: 2.4rem;
+    margin-bottom: 6px;
+}
+
+.banner p {
+    font-size: 1rem;
+    font-weight: normal;
+    color: #90DDF0;
 }
 
 .nav {
-    background-color: #90DDF0;
+    background-color: #07393C;
+    padding: 0;
     text-align: center;
-    padding: 10px;
-    border-top: 1px solid #F0EDEE;
-    border-bottom: 1px solid #F0EDEE;
 }
 
-.nav a{
-    color: #2C666E;
+.nav a {
+    color: #90DDF0;
+    text-decoration: none;
+    padding: 14px 18px;
+    display: inline-block;
+    font-size: 0.88rem;
+    border-right: 1px solid #2C666E;
+}
+
+.nav a:first-child {
+    border-left: 1px solid #2C666E;
 }
 
 .nav a:hover {
+    background-color: #2C666E;
+    color: white;
+}
+
+.nav a.active {
+    background-color: #90DDF0;
     color: #07393C;
+    font-weight: bold;
 }
 
 .main {
-    color: #0A090C;
-    padding: 20px;
+    background-color: white;
+    padding: 40px;
+}
+
+.main h2 {
+    font-size: 1.4rem;
+    color: #07393C;
+    margin-bottom: 14px;
+    border-bottom: 2px solid #90DDF0;
+    padding-bottom: 6px;
+}
+
+.main p {
+    color: #444;
+    margin-bottom: 14px;
+}
+
+.sections h3 {
+    color: #07393C;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.85rem;
+    margin-bottom: 16px;
+}
+
+.sections table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.sections table tr {
+    border-bottom: 1px solid #ddd;
+}
+
+.sections table tr:last-child {
+    border-bottom: none;
+}
+
+.sections table td {
+    padding: 16px 12px;
+    vertical-align: middle;
+}
+
+.sections table td:first-child {
+    width: 30%;
+    font-weight: bold;
+    color: #2C666E;
+    font-size: 0.95rem;
+}
+
+.sections table td:nth-child(2) {
+    color: #555;
+    font-size: 0.9rem;
+}
+
+.sections table td:last-child {
+    width: 100px;
+    text-align: right;
+}
+
+.sections table tr:hover td {
+    background-color: #eef9fa;
+}
+
+.btn {
+    display: inline-block;
+    background-color: #2C666E;
+    color: white;
+    padding: 8px 16px;
+    text-decoration: none;
+    font-size: 0.85rem;
+}
+
+.btn:hover {
+    background-color: #07393C;
+}
+
+.info-bar {
+    background-color: #2C666E;
+    color: white;
+    padding: 20px 40px;
+}
+
+.info-bar p {
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+}
+
+.info-bar span {
+    color: #90DDF0;
+    font-weight: bold;
+}
+
+.footer {
+    background-color: #07393C;
+    color: #90DDF0;
+    text-align: center;
+    padding: 14px;
+    font-size: 0.8rem;
 }

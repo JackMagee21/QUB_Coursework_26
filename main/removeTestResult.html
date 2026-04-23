@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Disabilities in Education</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/fixedFormStyling.css" />
+  </head>
+  <body>
+    <div class="content">
+
+      <div class="banner">
+        <h1>Disabilities in Education</h1>
+        <p>The effects on learning and development for students with disabilities</p>
+      </div>
+
+      <div class="nav">
+        <p>
+          <a href="index.html">Home</a> |
+          <a href="addRecord.html">Add new Student Record</a> |
+          <a href="readRecords.html">Read Student Records</a> |
+          <a href="changeRecords.html">Edit/Delete Student Details</a> |
+          <a href="addNewTestResult.html">Add New Test Result</a> |
+          <a href="removeTestResult.html">Remove Test Result</a> |
+          <a href="reports.html">Reports</a>
+        </p>
+      </div>
+
+      <div class="main">
+        <h2>Select a test result to remove off a student</h2>
+
+        <form>
+
+           <!-- ── Student Selection ── -->
+          <div class="form-group">
+            <label for="studentSelect" class="form-label select-label">Select Student:</label>
+            <select id="studentSelect" name="studentID" class="form-input form-select">
+              <option value="">-- Loading students... --</option>
+            </select>
+          </div>
+
+          <!-- ── Test Selection ── -->
+          <div class="form-group">
+            <label for="testSelect" class="form-label select-label">Select Test:</label>
+            <select id="testSelect" name="test" class="form-input form-select">
+              <option value="">-- Select a test --</option>
+              <!-- Options will be populated by JS -->
+            </select>
+          </div>
+
+          <!-- ── Selected Test Info (populated by JS) ── -->
+          <div id="testDetails" class="test-details"></div>
+
+          <input id="submitBtn" type="submit" class="form-btn" value="Submit" />
+
+            <script src="js/useSQL.js"></script>
+            <script src="js/validation.js"></script>
+            <script src="js/SQL_possible_methods/student.js"></script>
+            <script src="js/SQL_possible_methods/test.js"></script>
+          <script>
+            const studentSelect = document.querySelector("#studentSelect");
+            const testSelect = document.querySelector('#testSelect');
+
+            const createSelectOptions = (options) => {
+              const selectTestElements = document.querySelector('#testSelect');
+
+              for(let option of options) {
+                const element = document.createElement("option");
+                element.value = option.Test_ID;
+                element.textContent = option.Test_Name;
+                selectTestElements.appendChild(element);
+              }
+            }
+
+            document.addEventListener("DOMContentLoaded", async () => {
+
+              const loadStudents = async () => {
+                const result = await getAllStudents();
+
+                if (!result || result.error) {
+                  studentSelect.innerHTML = `<option value="">-- Error loading students --</option>`;
+                  return;
+                }
+
+                studentSelect.innerHTML = `<option value="">-- Select a student --</option>`;
+
+                result.data.forEach(student => {
+                   const option = document.createElement("option");
+                   option.value = student.Student_ID;
+                   option.textContent = `${student.Surname}, ${student.Forename} (ID: ${student.Student_ID})`;
+                   studentSelect.appendChild(option);
+                });
+              }
+
+              await loadStudents();
+              let testId;
+
+              studentSelect.addEventListener("change", async (event) => {
+                const studentId = studentSelect.value;
+                const getTestSql = `SELECT DISTINCT t.Test_ID,t.Name AS Test_Name,t.Completion_Date,t.Total_Marks,t.Pass_Marks,t.Percent_of_subject,s.Subject_Name,ts.Score,ts.Grade, CASE WHEN ts.Score >= t.Pass_Marks THEN 'Pass' ELSE 'Fail' END AS Result FROM Student_Class sc JOIN Class_Test ct ON ct.Class_ID = sc.Class_ID JOIN Test t ON t.Test_ID = ct.Test_ID JOIN Subject s ON s.Subject_ID = t.Subject_ID JOIN Test_Student ts ON ts.Test_ID = t.Test_ID AND ts.Student_ID = sc.Student_ID WHERE sc.Student_ID = ${studentId} ORDER BY t.Completion_Date DESC;`;
+                const testsResult = await runQuery(getTestSql);
+                console.log(testsResult);
+                createSelectOptions(testsResult.data);
+              });
+
+              testSelect.addEventListener("change", async (event) => {
+                testId = testSelect.value;
+              });
+
+              const submit = document.getElementById('submitBtn');
+
+              submit.addEventListener('click', async () => {
+                const studentId = studentSelect.value;
+                const testId = testSelect.value;
+                const removeTestResultSql = `DELETE FROM Test_Student WHERE Test_ID = ${testId} AND Student_ID = ${studentId}`;
+                const result = await runQuery(removeTestResultSql);
+              })
+            });
+          </script>
+      </div>
+    </div>
+  </body>
+</html>

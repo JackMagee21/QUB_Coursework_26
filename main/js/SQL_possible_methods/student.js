@@ -4,16 +4,17 @@ Adding students, editting sudents and deleteing student methods
 */
 const addStudentToTable = async (student) => {
     const studentSql = `
-        INSERT INTO Student (Forename, Surname, Email, Emergency_Contact, DOB, Gender)
-        VALUES (
-            '${escapeSql(student.firstName)}', 
-            '${escapeSql(student.lastName)}', 
-            '${escapeSql(student.email)}', 
-            '${escapeSql(student.emergencyContact)}', 
-            '${escapeSql(student.dob)}',
-            '${escapeSql(student.gender)}'
-        )
-    `.trim();
+    INSERT INTO Student (Forename, Surname, Email, Emergency_Contact, DOB, Gender, Attendance_Percentage)
+    VALUES (
+        '${escapeSql(student.firstName)}', 
+        '${escapeSql(student.lastName)}', 
+        '${escapeSql(student.email)}', 
+        '${escapeSql(student.emergencyContact)}', 
+        '${escapeSql(student.dob)}',
+        '${escapeSql(student.gender)}',
+        ${Number(student.attendance)}
+    )
+`.trim();
 
     const StudentInsertResult = await runQuery(studentSql);
 
@@ -105,7 +106,8 @@ const editStudentFromTable = (studentId, newStudentRecords) => {
         Surname = '${escapeSql(newStudentRecords.lastName)}',
         DOB = '${escapeSql(newStudentRecords.dob)}',
         Email = '${escapeSql(newStudentRecords.email)}',
-        Emergency_Contact = '${escapeSql(newStudentRecords.emergencyContact)}'
+        Emergency_Contact = '${escapeSql(newStudentRecords.emergencyContact)}',
+        Attendance_Percentage = '${escapeSql(newStudentRecords.attendance)}'
         WHERE Student_ID='${escapeSql(studentId)}';
     `;
 
