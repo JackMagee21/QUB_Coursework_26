@@ -37,7 +37,7 @@ GROUP BY Has_Assistance
      REPORT 5
     ==========
 
-~> Report name: Find an individual student repor
+~> Report name: Find an individual student report
 
 ~> Purpose of this report: To make is as easy as possible to get a selected students scores, this makes it easy for a teacher to figure out what an individual
                             student strengths / weaknesses are and could possibly get the student help to improve in areas where that they are weak in
@@ -76,23 +76,34 @@ INNER JOIN Test_Student ts ON s.Student_ID = ts.Student_ID
 INNER JOIN Test t ON ts.Test_ID = t.Test_ID
 WHERE s.Student_ID = 3;
 
-/**/
+/*
 
-SELECT DISTINCT ct.Class_ID, s.Student_ID, s.Forename, s.Surname, ts.Grade FROM Student s 
-INNER JOIN Test_Student ts ON s.Student_ID = ts.Student_ID
-INNER JOIN Test t ON ts.Test_ID = t.Test_ID
-INNER JOIN Class_Test ct ON t.Test_ID = ct.Test_ID
-WHERE ct.Class_ID = 2  
-ORDER BY `s`.`Student_ID` ASC;
 
-SELECT t.Name FROM Test t
-INNER JOIN Class_Test ct ON t.Test_ID = ct.Test_ID
-WHERE ct.Class_ID = 2;
+    ==========
+     REPORT 6
+    ==========
 
-SELECT DISTINCT s.Student_ID, CASE WHEN sds.Assistance_ID IS NOT NULL THEN 'True'
-ELSE 'False' END AS Has_Assistance FROM Student s
-LEFT JOIN Student_Disability_Support sds ON s.Student_ID = sds.Student_ID
-WHERE s.Student_ID = 2;
+~> Report name: Find a selected class-test grades
+
+~> Purpose of this report: To look at the grades of each test in a class and identify which tests maybe easier, harder and also to see which students are 
+                            struggling or not
+
+
+
+    ==========
+     SQL Used 
+    ==========
+*/
+
+SELECT s.Student_ID, s.Forename, s.Surname, t.Name AS Test_Name, t.Test_ID, ts.Grade, 
+CASE WHEN EXISTS (SELECT 1 FROM Student_Disability_Support sds WHERE sds.Student_ID = s.Student_ID AND sds.Assistance_ID IS NOT NULL)
+THEN 'True' ELSE 'False' END AS Has_Assistance 
+FROM Student s 
+INNER JOIN Test_Student ts ON s.Student_ID = ts.Student_ID 
+INNER JOIN Test t ON ts.Test_ID = t.Test_ID 
+INNER JOIN Class_Test c ON t.Test_ID = c.Test_ID 
+WHERE c.Class_ID = ${Class_ID} 
+ORDER BY t.Test_ID;
 
 
 
