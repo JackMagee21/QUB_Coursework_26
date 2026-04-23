@@ -20,9 +20,24 @@ const validateStudent = (student) => {
 
     const supportNeeds = Array.isArray(student.supportNeeds) ? student.supportNeeds : [];
     const disabilities = Array.isArray(student.disabilities) ? student.disabilities : [];
+    
+    const attendance = Number(student.attendance);
 
+    if (isNaN(attendance) || attendance < 0 || attendance > 100) {
+    return "Attendance must be between 0 and 100.";
+    }
 
-    console.log(firstName);
+    if (emergencyContact) {
+        // split parts of emergency contact info
+        const contactParts = emergencyContact.split(" - ");
+        
+        emergencyContactName = contactParts[0].trim();
+        emergencyContactPNum = contactParts[1].trim();
+        
+    } else {
+        return "Emergency contact is required.";
+    }
+    
     // check if first name is provided
     if (firstName == "") {
         return "First name is required.";
@@ -39,10 +54,9 @@ const validateStudent = (student) => {
     }
 
     // check length of last name
-    if (!lastName.length > 50) {
+    if (lastName.length > 50) {
         return "Last name cannot exceed 50 characters.";
     }
-    console.log(dob);
     // check if dob is a valid date
     if (isNaN(dob.getDate())) {
         return "Date of birth must be a valid date.";
