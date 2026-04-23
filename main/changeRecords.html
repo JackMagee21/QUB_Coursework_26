@@ -312,18 +312,21 @@
       return;
     }
   
-    const sql = `SELECT s.Student_ID, s.Forename, s.Surname, s.Email, s.Emergency_Contact, 
-    GROUP_CONCAT(DISTINCT d.Disability_Name SEPARATOR ', ') AS Disabilities, 
-    GROUP_CONCAT(DISTINCT a.Assistance_Name SEPARATOR ', ') AS Assistance, 
-    DATE_FORMAT(s.DOB, '%Y-%m-%d') AS DOB, 
-    s.Gender
-    FROM Student s 
-    LEFT JOIN Student_Disability_Support sds ON s.Student_ID = sds.Student_ID 
-    LEFT JOIN Assistance a ON sds.Assistance_ID = a.Assistance_ID 
-    LEFT JOIN Disability d ON sds.Disability_ID = d.Disability_ID 
-    WHERE s.Forename LIKE '${searchText}%' OR s.Surname LIKE '${searchText}%' 
-    GROUP BY s.Student_ID 
-    ORDER BY s.Student_ID`;
+const sql = `SELECT s.Student_ID, s.Forename, s.Surname, s.Email, s.Emergency_Contact, 
+  GROUP_CONCAT(DISTINCT d.Disability_Name SEPARATOR ', ') AS Disabilities, 
+  GROUP_CONCAT(DISTINCT a.Assistance_Name SEPARATOR ', ') AS Assistance, 
+  GROUP_CONCAT(DISTINCT c.Class_Name SEPARATOR ', ') AS Classes,
+  DATE_FORMAT(s.DOB, '%Y-%m-%d') AS DOB, 
+  s.Gender
+  FROM Student s 
+  LEFT JOIN Student_Disability_Support sds ON s.Student_ID = sds.Student_ID 
+  LEFT JOIN Assistance a ON sds.Assistance_ID = a.Assistance_ID 
+  LEFT JOIN Disability d ON sds.Disability_ID = d.Disability_ID 
+  LEFT JOIN Student_Class sc ON s.Student_ID = sc.Student_ID
+  LEFT JOIN Class c ON sc.Class_ID = c.Class_ID
+  WHERE s.Forename LIKE '${searchText}%' OR s.Surname LIKE '${searchText}%' 
+  GROUP BY s.Student_ID 
+  ORDER BY s.Student_ID`;
 
     const result = await runQuery(sql);
 
