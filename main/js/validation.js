@@ -31,8 +31,7 @@ const validateStudent = (student) => {
     } else {
         return "Emergency contact is required.";
     }
-
-    console.log(firstName);
+    
     // check if first name is provided
     if (firstName == "") {
         return "First name is required.";
@@ -49,10 +48,9 @@ const validateStudent = (student) => {
     }
 
     // check length of last name
-    if (!lastName.length > 50) {
+    if (lastName.length > 50) {
         return "Last name cannot exceed 50 characters.";
     }
-    console.log(dob);
     // check if dob is a valid date
     if (isNaN(dob.getDate())) {
         return "Date of birth must be a valid date.";
