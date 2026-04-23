@@ -560,11 +560,21 @@ const createCheckboxes = (container, options, type) => {
 
           const result = await editStudentFromTable(document.querySelector("#studentID").value, student);
 
-          if(result?.success) {
-            showMessage("Student record updated successfully.", "success");
-            resetForm();
-            printTable();
-          }
+if(result?.success) {
+  showMessage("Student record updated successfully.", "success");
+  resetForm();
+  printTable();
+
+  // re-enable all class checkboxes and reset their label colour
+  document.querySelectorAll('input[type="checkbox"].class-checkbox').forEach(cb => {
+    cb.disabled = false;
+    cb.parentElement.style.color = "black";
+  });
+}
+        });
+
+      document.getElementById('studentDOB').addEventListener('input', (e) => {
+            UpdateClassCheckBoxes(e.target.value);
         });
     });
 
@@ -616,6 +626,7 @@ const createCheckboxes = (container, options, type) => {
               classBox.parentElement.style.color = "black";
             } else {
               classBox.disabled = true;
+              classBox.checked = false;
               classBox.parentElement.style.color = "red";
             }
           })

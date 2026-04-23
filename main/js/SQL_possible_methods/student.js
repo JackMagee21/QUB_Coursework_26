@@ -148,6 +148,7 @@ const editStudentFromTable = async (studentId, newStudentRecords) => {
   await runQuery(`DELETE FROM Student_Class WHERE Student_ID = ${escapeSql(studentId)};`);
 
   const classes = newStudentRecords.classes || [];
+  console.log(classes);
   for (const classId of classes) {
     const insertClassSql = `
       INSERT INTO Student_Class (Class_ID, Student_ID)
