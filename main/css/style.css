@@ -6,8 +6,7 @@
 
 body {
     font-family: Arial, Helvetica, sans-serif;
-    background-color: #07393C;
-    padding: 20px 0;
+    background-color: #F0EDEE;
     line-height: 1.6;
 }
 
@@ -18,7 +17,7 @@ body {
 }
 
 .content {
-    max-width: 90%;
+    max-width: 900px;
     margin: 20px auto;
     background-color: white;
     border: 1px solid #ccc;
@@ -90,42 +89,63 @@ body {
     margin-bottom: 14px;
 }
 
-.links-table {
+.sections h3 {
+    color: #07393C;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.85rem;
+    margin-bottom: 16px;
+}
+
+.sections table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
 }
 
-.links-table th {
-    background-color: #2C666E;
-    color: white;
-    padding: 12px;
-    text-align: left;
+.sections table tr {
+    border-bottom: 1px solid #ddd;
 }
 
-.links-table td {
-    padding: 14px 12px;
-    border: 1px solid #ddd;
+.sections table tr:last-child {
+    border-bottom: none;
+}
+
+.sections table td {
+    padding: 16px 12px;
     vertical-align: middle;
 }
 
-.links-table tr:nth-child(even) td {
-    background-color: #f9f9f9;
+.sections table td:first-child {
+    width: 30%;
+    font-weight: bold;
+    color: #2C666E;
+    font-size: 0.95rem;
 }
 
-.links-table tr:hover td {
+.sections table td:nth-child(2) {
+    color: #555;
+    font-size: 0.9rem;
+}
+
+.sections table td:last-child {
+    width: 100px;
+    text-align: right;
+}
+
+.sections table tr:hover td {
     background-color: #eef9fa;
 }
 
-.links-table a {
-    color: white;
+.btn {
+    display: inline-block;
     background-color: #2C666E;
-    padding: 6px 14px;
+    color: white;
+    padding: 8px 16px;
     text-decoration: none;
     font-size: 0.85rem;
 }
 
-.links-table a:hover {
+.btn:hover {
     background-color: #07393C;
 }
 
