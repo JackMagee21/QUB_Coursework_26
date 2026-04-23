@@ -153,6 +153,8 @@
             document.querySelector("#studentEmail").value = student.Email;
             document.querySelector("#emergencyContact").value = student.Emergency_Contact;
 
+            UpdateClassCheckBoxes(student.DOB);
+
             
 
             console.log("run line");
@@ -461,6 +463,32 @@ const createCheckboxes = (container, options, type) => {
           break;
         }
       }
+
+      function getYearGroup(dob) {
+  if (!dob) return -1;
+
+  const today = new Date();
+  const dobDate = new Date(dob);
+  if (isNaN(dobDate)) return -1;
+
+  // Academic year starts 1 September
+  const academicYearStart = today.getMonth() >= 8
+    ? today.getFullYear()
+    : today.getFullYear() - 1;
+
+  // Actual age on 1 September of the academic year
+  const sept1 = new Date(academicYearStart, 8, 1);
+  let ageOnSept1 = sept1.getFullYear() - dobDate.getFullYear();
+  const hadBirthdayBySept1 =
+    dobDate.getMonth() < 8 ||
+    (dobDate.getMonth() === 8 && dobDate.getDate() === 1);
+  if (!hadBirthdayBySept1) ageOnSept1--;
+
+  const yearGroup = ageOnSept1 - 4;
+  if (yearGroup < 7 || yearGroup > 13) return -1;
+  return yearGroup;
+}
+
     // wait for page to load before adding event listeners to elements and creating the table
     document.addEventListener("DOMContentLoaded", async () => {
       // get the data to create the disability checkboxes
@@ -539,6 +567,59 @@ const createCheckboxes = (container, options, type) => {
           }
         });
     });
+
+    const UpdateClassCheckBoxes = (dob) =>{
+          const inputDOB = dob;
+
+          const yearGroupBasedOnDOB = getYearGroup(inputDOB);
+
+          let tag = null;
+
+          switch(yearGroupBasedOnDOB) {
+            case 7: {
+              tag = '7A';
+              break;
+            }
+            case 8: {
+              tag = '8A';
+              break;
+            }
+            case 9: {
+              tag = '9A'
+              break;
+            }
+            case 10: {
+              tag = '10A';
+              break;
+            }
+            case 11: {
+              tag = '11A';
+              break;
+            }
+            case 12: {
+              tag = 'L6';
+              break;
+            }
+            case 13: {
+              tag = 'U6';
+              break;
+            }
+          }
+          
+          const allCheckboxes = document.querySelectorAll('input[type="checkbox"].class-checkbox');
+
+          allCheckboxes.forEach(classBox => {
+            const name = classBox.name;
+            console.log(name);
+            if(name.includes(tag)) {
+              classBox.disabled = false;
+              classBox.parentElement.style.color = "black";
+            } else {
+              classBox.disabled = true;
+              classBox.parentElement.style.color = "red";
+            }
+          })
+    };
 
     document.querySelector("#studentID").addEventListener("input", async (event) => {
       event.preventDefault();

@@ -310,7 +310,7 @@
         const today = new Date();
         const dobDate = new Date(dob);
 
-        const academicYearStart = today.getMonth() >= 8 ? today.getFullYear : today.getFullYear() - 1;
+        const academicYearStart = today.getMonth() >= 8 ? today.getFullYear() : today.getFullYear() - 1;
 
         const ageOnSept1 = academicYearStart - dobDate.getFullYear();
 
