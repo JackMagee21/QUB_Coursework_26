@@ -96,7 +96,7 @@ const deleteStudentFromTable = async (studentId) => {
         return false;
 }
 
-const editStudentFromTable = (studentId, newStudentRecords) => {
+const editStudentFromTable = async (studentId, newStudentRecords) => {
     
     console.log(newStudentRecords);
     const sql = `
@@ -107,7 +107,7 @@ const editStudentFromTable = (studentId, newStudentRecords) => {
         DOB = '${escapeSql(newStudentRecords.dob)}',
         Email = '${escapeSql(newStudentRecords.email)}',
         Emergency_Contact = '${escapeSql(newStudentRecords.emergencyContact)}',
-        Attendance_Percentage = '${escapeSql(newStudentRecords.attendance)}'
+        Attendance_Percentage = '${newStudentRecords.attendance}'
         WHERE Student_ID='${escapeSql(studentId)}';
     `;
 
