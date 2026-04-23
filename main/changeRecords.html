@@ -82,6 +82,20 @@
                   <input type="text" class="form-input" id="emergencyContact" name="emergencyContact" placeholder="12345678901" required>
                 </div>
 
+                <div class="form-group">
+                   <label for="attendance" class="form-label" >Students attendance:</label>
+                   <input
+                      type="number" step="0.01" min="0" max="100"
+                      class="form-input"
+                      id="attendance"
+                      name="attendance"
+                      placeholder="0.00-100.00"
+                      required
+                      oninput="saveLocalValues()"
+                    />
+                </div>
+
+
                 <p class="form-label">Select any disabilities that apply:</p>
                 <div class="form-group checkbox-container" id="disabilityCheckboxesContainer">
                   <!-- checkboxes will be dynamically inserted here -->
@@ -152,6 +166,7 @@
             document.querySelector("#studentGender").value = student.Gender;
             document.querySelector("#studentEmail").value = student.Email;
             document.querySelector("#emergencyContact").value = student.Emergency_Contact;
+            document.querySelector("#attendance").value = student.Attendance;
 
             UpdateClassCheckBoxes(student.DOB);
 
@@ -203,7 +218,7 @@
             output.textContent = ""; // div surrounding table is reset
             
             // required sql
-            const sql = "SELECT s.Student_ID, s.Forename, s.Surname, s.Email, s.Emergency_Contact, GROUP_CONCAT(DISTINCT d.Disability_Name SEPARATOR ', ') AS Disabilities, GROUP_CONCAT(DISTINCT a.Assistance_Name SEPARATOR ', ') AS Assistance, GROUP_CONCAT(DISTINCT c.Class_Name SEPARATOR ', ') AS Classes, DATE_FORMAT(s.DOB, '%Y-%m-%d') AS DOB, s.Gender FROM Student s LEFT JOIN Student_Disability_Support sds ON s.Student_ID = sds.Student_ID LEFT JOIN Assistance a ON sds.Assistance_ID = a.Assistance_ID LEFT JOIN Disability d ON sds.Disability_ID = d.Disability_ID LEFT JOIN Student_Class sc ON s.Student_ID = sc.Student_ID LEFT JOIN Class c ON sc.Class_ID = c.Class_ID GROUP BY s.Student_ID ORDER BY s.Student_ID";
+            const sql = "SELECT s.Student_ID, s.Forename, s.Surname, s.Email, s.Emergency_Contact, GROUP_CONCAT(DISTINCT d.Disability_Name SEPARATOR ', ') AS Disabilities, GROUP_CONCAT(DISTINCT a.Assistance_Name SEPARATOR ', ') AS Assistance, GROUP_CONCAT(DISTINCT c.Class_Name SEPARATOR ', ') AS Classes, DATE_FORMAT(s.DOB, '%Y-%m-%d') AS DOB, s.Gender, s.Attendance_Percentage FROM Student s LEFT JOIN Student_Disability_Support sds ON s.Student_ID = sds.Student_ID LEFT JOIN Assistance a ON sds.Assistance_ID = a.Assistance_ID LEFT JOIN Disability d ON sds.Disability_ID = d.Disability_ID LEFT JOIN Student_Class sc ON s.Student_ID = sc.Student_ID LEFT JOIN Class c ON sc.Class_ID = c.Class_ID GROUP BY s.Student_ID ORDER BY s.Student_ID";
             const result = await runQuery(sql);
 
             // check if the data was returned properly
@@ -224,6 +239,7 @@
             "Emergency Contact", 
             "Disabilities", 
             "Assistance", 
+            "Attendance",
             "Action"];
 
             // create the table headings row
@@ -254,6 +270,7 @@
                 createCell(row.Emergency_Contact),
                 createCell(row.Disabilities),
                 createCell(row.Assistance),
+                createCell(row.Attendance_Percentage),
                 createActionCell(row)
               );
             }
@@ -317,7 +334,8 @@ const sql = `SELECT s.Student_ID, s.Forename, s.Surname, s.Email, s.Emergency_Co
   GROUP_CONCAT(DISTINCT a.Assistance_Name SEPARATOR ', ') AS Assistance, 
   GROUP_CONCAT(DISTINCT c.Class_Name SEPARATOR ', ') AS Classes,
   DATE_FORMAT(s.DOB, '%Y-%m-%d') AS DOB, 
-  s.Gender
+  s.Gender,
+  s.Attendance_Percentage
   FROM Student s 
   LEFT JOIN Student_Disability_Support sds ON s.Student_ID = sds.Student_ID 
   LEFT JOIN Assistance a ON sds.Assistance_ID = a.Assistance_ID 
@@ -345,7 +363,8 @@ const sql = `SELECT s.Student_ID, s.Forename, s.Surname, s.Email, s.Emergency_Co
       "Gender",
       "Emergency Contact", 
       "Disabilities", 
-      "Assistance", 
+      "Assistance",
+      "Attendance",
       "Action"];
 
     const thead = table.createTHead();
@@ -372,6 +391,7 @@ const sql = `SELECT s.Student_ID, s.Forename, s.Surname, s.Email, s.Emergency_Co
         createCell(row.Emergency_Contact),
         createCell(row.Disabilities),
         createCell(row.Assistance),
+        createCell(row.Attendance_Percentage),
         createActionCell(row)
       );
     }
@@ -547,6 +567,7 @@ const createCheckboxes = (container, options, type) => {
             email: document.querySelector("#studentEmail").value,
             dob: document.querySelector("#studentDOB").value,
             emergencyContact: document.getElementById("emergencyContact").value,
+            attendance: document.getElementById("attendance").value,
             disabilities: Array.from(document.querySelectorAll("input.disability-checkbox:checked")).map(cb => cb.value),
             assistance:   Array.from(document.querySelectorAll("input.support-checkbox:checked")).map(cb => cb.value),
             classes:      Array.from(document.querySelectorAll("input.class-checkbox:checked")).map(cb => cb.value)
@@ -647,6 +668,8 @@ if(result?.success) {
       document.querySelector("#studentEmail").value = data.Email
       document.querySelector("#studentDOB").value = data.DOB
       document.getElementById("emergencyContact").value = data.Emergency_Contact;
+      document.querySelector("#attendance").value = data.Attendance_Percentage;
+      UpdateClassCheckBoxes(data.DOB);
       console.log("run line");
 
       let disabilities = await getAllDisabilityNamesFromStudentId(currentStudentId);
