@@ -31,9 +31,7 @@ LEFT JOIN Student_Disability_Support sds ON s.Student_ID = sds.Student_ID
 GROUP BY Has_Assistance;
 
 /* Query to run it */
-SELECT * FROM Performance_By_Assistance;
-
-
+SELECT * FROM Performance_By_Assistance
 
 /*
 
