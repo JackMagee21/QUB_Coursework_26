@@ -76,6 +76,7 @@
     <script src="js/SQL_possible_methods/test.js"></script>
     <script>
 
+      let maxMarks = 0;
       document.getElementById('testSelect').disabled = true;
       document.getElementById('testResult').disabled = true;
 
@@ -198,6 +199,7 @@
           }
 
           const testDetails = result.data[0];
+          maxMarks = testDetails.Total_Marks;
 
           if (testDetails) {
             testDetailsElement.textContent =
@@ -218,6 +220,10 @@
           const studentId      = document.querySelector("#studentSelect").value;
           const testResult     = document.querySelector("#testResult").value;
 
+          if(Number(testResult) > Number(maxMarks)) {
+            showMessage("Error, test result cannot be higher than max marks", "error");
+            return;
+          }
           const selectedTestDetailsResult = await getSelectedTestDetails();
           if (!selectedTestDetailsResult || selectedTestDetailsResult.error) {
             showMessage("Error fetching test details for validation: " + (selectedTestDetailsResult ? selectedTestDetailsResult.error : "Unknown error"), "error");
@@ -272,7 +278,7 @@
         studentSelect.addEventListener("change", async (event) => {
 
           const testSelect = document.querySelector("#testSelect");
-          testSelect.innerHTML = `<option value="">-- Loading tests --</option>`;
+          testSelect.innerHTML = `<option value="">-- Select a test --</option>`;
 
           document.getElementById('testSelect').disabled = false;
           document.getElementById('testResult').disabled = false;
