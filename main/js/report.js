@@ -25,7 +25,7 @@ const getStudentsFromClass = async (Class_ID) => {
 
 
 const getAverageMarksOfAssistanceAndNonAssistance = async () => {
-    const sql = `SELECT * FROM vw_Performance_By_Assistance;`;
+    const sql = `SELECT * FROM Performance_By_Assistance;`;
     const result = await runQuery(sql);
     return result;
 }
