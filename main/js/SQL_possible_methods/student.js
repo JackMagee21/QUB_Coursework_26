@@ -36,14 +36,14 @@ const addStudentToTable = async (student) => {
 
     console.log(studentId);
 
-    const numberOfSupports = student.supportNeeds.length;
+    const numberOfSupports = student.assistance.length;
     const numberOfDisabilities = student.disabilities.length;
     let sqlStatements = [];
 
     for (let i = 0; i < Math.max(numberOfSupports, numberOfDisabilities); i++) {
         sqlStatements.push(`
             INSERT INTO Student_Disability_Support (Student_ID, Disability_ID, Assistance_ID)
-            VALUES (${studentId}, ${i < numberOfDisabilities ? student.disabilities[i] : numberOfDisabilities}, ${i < numberOfSupports ? student.supportNeeds[i] : numberOfSupports});`.trim());  
+            VALUES (${studentId}, ${i < numberOfDisabilities ? student.disabilities[i] : numberOfDisabilities}, ${i < numberOfSupports ? student.assistance[i] : numberOfSupports});`.trim());  
     }
     console.log(student.classes);
 
