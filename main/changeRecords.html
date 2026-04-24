@@ -165,7 +165,7 @@
             document.querySelector("#studentGender").value = student.Gender;
             document.querySelector("#studentEmail").value = student.Email;
             document.querySelector("#emergencyContact").value = student.Emergency_Contact;
-            document.querySelector("#attendance").value = student.Attendance;
+            document.querySelector("#attendance").value = student.Attendance_Percentage;
 
             UpdateClassCheckBoxes(student.DOB);
 
@@ -328,7 +328,7 @@
       return;
     }
   
-const sql = `SELECT s.Student_ID, s.Forename, s.Surname, s.Email, s.Emergency_Contact, 
+const sql = `SELECT s.Student_ID, s.Forename, s.Surname, s.Email, s.Emergency_Contact, s.Attendance_Percentage,
   GROUP_CONCAT(DISTINCT d.Disability_Name SEPARATOR ', ') AS Disabilities, 
   GROUP_CONCAT(DISTINCT a.Assistance_Name SEPARATOR ', ') AS Assistance, 
   GROUP_CONCAT(DISTINCT c.Class_Name SEPARATOR ', ') AS Classes,
@@ -573,7 +573,7 @@ const createCheckboxes = (container, options, type) => {
           };
           console.log("run line");
 
-          console.log(student);
+          console.log(student.assistance);
 
           const validationMessage = validateStudent(student);
           if(validationMessage) {

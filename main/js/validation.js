@@ -18,7 +18,7 @@ const validateStudent = (student) => {
     let emergencyContactName = "";
     let emergencyContactPNum = "";
 
-    const supportNeeds = Array.isArray(student.supportNeeds) ? student.supportNeeds : [];
+    const supportNeeds = Array.isArray(student.assistance) ? student.assistance : [];
     const disabilities = Array.isArray(student.disabilities) ? student.disabilities : [];
     const classes = Array.isArray(student.classes) ? student.classes : [];
     
