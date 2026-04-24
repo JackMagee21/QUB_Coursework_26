@@ -115,7 +115,7 @@
             LEFT JOIN Student_Disability_Support sds ON s.Student_ID = sds.Student_ID 
             LEFT JOIN Assistance a ON sds.Assistance_ID = a.Assistance_ID 
             LEFT JOIN Disability d ON sds.Disability_ID = d.Disability_ID 
-            WHERE s.Forename LIKE '${searchText}%' OR s.Surname LIKE '${searchText}%' 
+            WHERE s.Forename LIKE '${searchText}%' OR s.Surname LIKE '${searchText}%' OR s.Student_ID LIKE '${searchText}%'
             GROUP BY s.Student_ID 
             ORDER BY s.Student_ID`;
 

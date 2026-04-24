@@ -341,7 +341,7 @@ const sql = `SELECT s.Student_ID, s.Forename, s.Surname, s.Email, s.Emergency_Co
   LEFT JOIN Disability d ON sds.Disability_ID = d.Disability_ID 
   LEFT JOIN Student_Class sc ON s.Student_ID = sc.Student_ID
   LEFT JOIN Class c ON sc.Class_ID = c.Class_ID
-  WHERE s.Forename LIKE '${searchText}%' OR s.Surname LIKE '${searchText}%' 
+  WHERE s.Forename LIKE '${searchText}%' OR s.Surname LIKE '${searchText}%' OR s.Student_ID LIKE '${searchText}%'
   GROUP BY s.Student_ID 
   ORDER BY s.Student_ID`;
 
