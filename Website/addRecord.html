@@ -311,29 +311,28 @@
       });
 
       function getYearGroup(dob) {
-  if (!dob) return -1;
+          if (!dob) return -1;
 
-  const today = new Date();
-  const dobDate = new Date(dob);
-  if (isNaN(dobDate)) return -1;
+          const today = new Date();
+          const dobDate = new Date(dob);
+            if (isNaN(dobDate)) return -1;
 
-  // Academic year starts 1 September
-  const academicYearStart = today.getMonth() >= 8
-    ? today.getFullYear()
-    : today.getFullYear() - 1;
+          // Academic year starts 1 September
+          const academicYearStart = today.getMonth() >= 8
+                ? today.getFullYear()
+                : today.getFullYear() - 1;
 
-  // Actual age on 1 September of the academic year
-  const sept1 = new Date(academicYearStart, 8, 1);
-  let ageOnSept1 = sept1.getFullYear() - dobDate.getFullYear();
-  const hadBirthdayBySept1 =
-    dobDate.getMonth() < 8 ||
-    (dobDate.getMonth() === 8 && dobDate.getDate() === 1);
-  if (!hadBirthdayBySept1) ageOnSept1--;
+          // Actual age on 1 September of the academic year
+          const sept1 = new Date(academicYearStart, 8, 1);
+          let ageOnSept1 = sept1.getFullYear() - dobDate.getFullYear();
+          const hadBirthdayBySept1 = dobDate.getMonth() < 8 || (dobDate.getMonth() === 8 && dobDate.getDate() === 1);
+            if (!hadBirthdayBySept1) ageOnSept1--;
 
-  const yearGroup = ageOnSept1 - 4;
-  if (yearGroup < 7 || yearGroup > 13) return -1;
-  return yearGroup;
-}
+          const yearGroup = ageOnSept1 - 4;
+            if (yearGroup < 7 || yearGroup > 13) return -1;
+
+          return yearGroup;
+      }
 
       document.addEventListener('DOMContentLoaded', async () => {
         // get the data to create the disability checkboxes
