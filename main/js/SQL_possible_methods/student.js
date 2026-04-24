@@ -98,7 +98,7 @@ const deleteStudentFromTable = async (studentId) => {
 
 const editStudentFromTable = async (studentId, newStudentRecords) => {
     
-    console.log(newStudentRecords);
+    console.log(newStudentRecords.attendance);
     const sql = `
         UPDATE Student 
         SET
@@ -107,21 +107,11 @@ const editStudentFromTable = async (studentId, newStudentRecords) => {
         DOB = '${escapeSql(newStudentRecords.dob)}',
         Email = '${escapeSql(newStudentRecords.email)}',
         Emergency_Contact = '${escapeSql(newStudentRecords.emergencyContact)}',
-        Attendance_Percentage = '${newStudentRecords.attendance}'
+        Attendance_Percentage = '${newStudentRecords.attendance}' 
         WHERE Student_ID='${escapeSql(studentId)}';
     `;
 
-  // 1. Update the student's own fields
-  const updateStudentSql = `
-    UPDATE Student SET
-      Forename = '${escapeSql(newStudentRecords.firstName)}',
-      Surname = '${escapeSql(newStudentRecords.lastName)}',
-      DOB = '${escapeSql(newStudentRecords.dob)}',
-      Email = '${escapeSql(newStudentRecords.email)}',
-      Emergency_Contact = '${escapeSql(newStudentRecords.emergencyContact)}'
-    WHERE Student_ID = ${escapeSql(studentId)};
-  `;
-  await runQuery(updateStudentSql);
+  await runQuery(sql);
 
   // 2. Reset disability/assistance links, then re-insert the selected ones
   await runQuery(`DELETE FROM Student_Disability_Support WHERE Student_ID = ${escapeSql(studentId)};`);
