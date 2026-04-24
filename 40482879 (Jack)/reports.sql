@@ -18,7 +18,7 @@
 */
 
 
-CREATE OR REPLACE VIEW vw_Performance_By_Assistance AS
+CREATE OR REPLACE VIEW Performance_By_Assistance AS
 SELECT 
 CASE WHEN sds.Assistance_ID IS NOT NULL THEN 'True'
 ELSE 'False' END AS Has_Assistance,
@@ -31,7 +31,7 @@ LEFT JOIN Student_Disability_Support sds ON s.Student_ID = sds.Student_ID
 GROUP BY Has_Assistance;
 
 /* Query to run it */
-SELECT * FROM vw_Performance_By_Assistance;
+SELECT * FROM Performance_By_Assistance;
 
 
 
